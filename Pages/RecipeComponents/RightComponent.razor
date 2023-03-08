@@ -1,0 +1,13 @@
+<div>
+    @*<NotesComponent RecipeUser="@RecipeUser" Notes="@RightRecipe?.Notes"  />*@
+    <hr>
+    <CommentsComponent Comments="@RightRecipe?.Comments" />
+</div>
+
+
+@code {
+    [Parameter]
+    public Recipe? RightRecipe { get; set; }
+
+    
+}

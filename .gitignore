@@ -1,0 +1,6 @@
+﻿bin/
+obj/
+css/bootstrap/
+css/open-iconic/
+
+*.dll

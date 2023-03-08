@@ -1,0 +1,14 @@
+<div>
+    <h4>Ingredients</h4>
+    <h2>@RecipeIngredientsList?.Count()</h2>
+    <ul>
+        @foreach(RecipeIngredient ri in RecipeIngredientsList ?? Enumerable.Empty<RecipeIngredient>()) {
+            <li>@ri.Ingredient?.Name</li>
+        }
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public List<RecipeIngredient>? RecipeIngredientsList { get; set; }
+}

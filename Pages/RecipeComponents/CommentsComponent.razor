@@ -1,0 +1,14 @@
+<div>
+    <h1>@Comments?.Count()</h1>
+    @Comments?.Count() comments:
+    @foreach(Comment c in Comments ?? new List<Comment>()) {
+        @*<div>@c.User?.UserName says:</div>*@
+        <div>@c.Text</div>        
+        <hr>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<Comment>? Comments { get; set; }
+}

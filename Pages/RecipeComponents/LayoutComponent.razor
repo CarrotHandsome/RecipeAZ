@@ -1,0 +1,40 @@
+﻿@page "/recipe/{id}"
+@using RecipeAZ.Models
+@inject DataContext dataContext
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+
+    private Recipe? recipe;
+    //private ApplicationUser? user;
+
+    protected override async Task OnInitializedAsync() {
+        if (long.TryParse(Id, out long recipeId)) {
+            recipe = await dataContext.Recipes
+                .Include(r => r.Comments)
+                .Include(r => r.Ingredients).ThenInclude( ri => ri.Ingredient)
+                .Include(r => r.Steps)
+                .FirstOrDefaultAsync(r => r.RecipeId == recipeId);
+        }
+
+        if (recipe != null) {
+            //user = await dataContext.Users.FindAsync(recipe.UserId) ?? new ApplicationUser { };
+        }
+    }
+}
+
+@if (recipe != null) {
+    <div class="view-recipe-container m-2">
+        <h3>@recipe.Name</h3>
+        <div class="recipe-halves">
+            <LeftComponent LeftRecipe="@recipe" />
+            <RightComponent RightRecipe="@recipe" />
+            @*<component type="typeof(RecipeAZ.Components.RecipeLeft)" render-mode="Server" param-Recipe="@recipe" />
+            <component type="typeof(RecipeAZ.Components.RecipeRight)" render-mode="Server"
+                   param-Recipe="@recipe" param-RecipeUser="@user" />*@
+        </div>
+    </div>
+} else {
+    <p>Recipe not found.</p>
+}

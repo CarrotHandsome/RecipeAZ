@@ -1,0 +1,37 @@
+﻿
+
+<div>
+    <div class="recipe-left-nav">   
+        <button class="btn btn-primary" @onclick='@(() => NavigateHandler("overview"))' name="overview">Overview</button>
+        <button class="btn btn-primary" @onclick='@(() => NavigateHandler("ingredients"))' name="ingredients">Ingredients</button>
+        <button class="btn btn-primary" @onclick='@(() => NavigateHandler("steps"))' name="steps">Steps</button>
+        <button class="btn btn-primary" @onclick='@(() => NavigateHandler("actions"))' name="actions">Actions</button>
+    </div>
+    @switch(button) {
+        case "overview":
+            <OverViewComponent Description="@LeftRecipe?.Description"  />
+            break;
+        case "ingredients":
+            <IngredientsComponent RecipeIngredientsList="@LeftRecipe?.Ingredients" />
+            break;
+        case "steps":
+            <StepsComponent Steps="@LeftRecipe?.Steps" />
+            break;
+        case "actions":
+            <ActionsComponent />
+            break;
+        default:
+            <OverViewComponent Description="@LeftRecipe?.Description" />
+            break;
+    }
+
+</div>
+
+@code {
+    [Parameter]
+    public Recipe? LeftRecipe { get; set; }
+    public string? button;
+    public void NavigateHandler(string button) {
+        this.button = button;
+    }
+}

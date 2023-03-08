@@ -1,0 +1,14 @@
+<div>
+    <h4>Steps</h4>
+    <ul>
+        @foreach (RecipeStep step in Steps ?? Enumerable.Empty<RecipeStep>())
+        {
+            <li>@step.Description</li>
+        }
+    </ul>
+</div>
+
+@code {
+    [Parameter]
+    public List<RecipeStep>? Steps { get; set; }
+}

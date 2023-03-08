@@ -1,0 +1,15 @@
+﻿.recipe-halves {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.recipe-left-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+span.link:hover {
+    cursor: pointer;
+}
