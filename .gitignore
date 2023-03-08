@@ -1,6 +1,6 @@
 ﻿bin/
 obj/
-css/bootstrap/
-css/open-iconic/
+wwwroot/css/bootstrap/
+wwwroot/css/open-iconic/
 
 *.dll
