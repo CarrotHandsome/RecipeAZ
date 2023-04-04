@@ -1,14 +1,78 @@
+@using Microsoft.AspNetCore.Identity;
+@inject DataContext dataContext
+@inject UserManager<AppUser> userManager
+
 <div>
-    <h1>@Comments?.Count()</h1>
-    @Comments?.Count() comments:
-    @foreach(Comment c in Comments ?? new List<Comment>()) {
-        @*<div>@c.User?.UserName says:</div>*@
-        <div>@c.Text</div>        
-        <hr>
+    @Recipe?.Comments?.Count() comments:
+    @{
+        var orderedComments = Recipe?.Comments?.OrderBy(c => c.CreatedAt);
+        @if (orderedComments != null) {
+            @foreach (Comment c in orderedComments) {
+                
+                <div>@c.User?.UserName said at @c.CreatedAt.ToString("yyyy-MM-dd HH:mm"):</div>
+                <div>@c.Text</div>
+                @if (CommentUser == c.User) {
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                commentEditOpen = true;
+                EditComment = c;
+            }" />
+                }
+                <hr>
+            }
+        }        
+    }
+    
+    <MudToggleIconButton @bind-Toggled="addingComment" 
+        Icon="@Icons.Material.Filled.Comment" 
+        ToggledIcon="@Icons.Material.Filled.ExpandLess" 
+        Size="Size.Small"
+        />
+    @if (addingComment) {
+        <MudTextField @bind-Value="CurrentComment" Variant="Variant.Outlined" Lines="2" />
+        <MudIconButton Icon="@Icons.Material.Filled.AddComment" Size="Size.Small" OnClick="AddComment" />
     }
 </div>
 
+<MudPopover Open="@commentEditOpen" Fixed="false" Class="px-4 pt-4">
+    <div class="d-flex flex-column">
+        <MudTextField @bind-Value="EditComment!.Text" Lines="3"/>
+        <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {       
+            commentEditOpen = false;
+            await UpdateAndSaveRecipe();            
+        }" />
+    </div>
+</MudPopover>
+
 @code {
-    [Parameter]
-    public List<Comment>? Comments { get; set; }
+    [CascadingParameter(Name = "RecipeParam")]
+    public Recipe? Recipe { get; set; }
+    [CascadingParameter(Name = "UserParam")]
+    public AppUser? CommentUser { get; set; }
+    public bool addingComment = false;
+    public bool commentEditOpen = false;
+    public string CurrentComment { get; set; } = string.Empty;
+    private Comment? EditComment { get; set; }
+
+
+    private async Task AddComment() {
+        addingComment = false;
+        if (Recipe != null && Recipe.Comments != null) {
+            Recipe.Comments.Add(new Comment {
+                UserId = CommentUser?.Id ?? "1",                
+                User = CommentUser,
+                Text = CurrentComment
+                });
+            await UpdateAndSaveRecipe();
+        }        
+    }
+
+    private async Task UpdateAndSaveRecipe() {
+        if (Recipe != null) {
+            dataContext.Update(Recipe);
+            await dataContext.SaveChangesAsync();
+            StateHasChanged();
+        }
+    }
+
+    
 }

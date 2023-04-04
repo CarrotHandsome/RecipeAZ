@@ -1,8 +1,12 @@
-﻿namespace RecipeAZ.Models {
-    public class RecipeStep {
-        public long RecipeStepId { get; set; }
-        public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;        
-        public long RecipeId { get; set; }
+﻿using RecipeAZ.Interfaces;
+
+namespace RecipeAZ.Models {
+    public class RecipeStep : IEditableListItem {
+        public string RecipeStepId { get; set; }
+        public string Name { get; set; } = string.Empty;        
+        public string Description { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
+        public string RecipeId { get; set; }
+        public Recipe? Recipe { get; set; }
     }
 }

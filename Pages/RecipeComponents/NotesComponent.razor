@@ -1,12 +1,42 @@
+
+@inject DataContext dataContext
+
 <div>
-    @*<h4>@RecipeUser?.UserName</h4>*@
-    <p />
-    @Notes
+    <h4>@Recipe?.User?.UserName</h4>
+    @Recipe?.Notes
+    @if (Edit) {
+        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                notesEditOpen = true;                
+        }" />
+    }
+    
 </div>
-
+@if (Recipe != null) {
+    <MudPopover Open="@notesEditOpen" Fixed="false" Class="px-4 pt-4">
+        <div class="d-flex flex-column">
+            <MudTextField @bind-Value="Recipe.Notes" Lines="3" />
+            <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
+            notesEditOpen = false;
+            await UpdateAndSaveRecipe();
+        }" />
+        </div>
+    </MudPopover>
+}
 @code {
-    [Parameter]
-    public string? Notes { get; set; }
 
-   
+    [CascadingParameter(Name = "RecipeParam")]
+    public Recipe? Recipe { get; set; }
+    [CascadingParameter(Name = "EditParam")]
+    public bool Edit { get; set; }
+    [Parameter]
+    public bool Editing { get; set; }
+    private bool notesEditOpen = false;
+
+    private async Task UpdateAndSaveRecipe() {
+        if (Recipe != null) {
+            dataContext.Update(Recipe);
+            await dataContext.SaveChangesAsync();
+            StateHasChanged();
+        }
+    }   
 }

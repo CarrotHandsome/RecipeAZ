@@ -1,5 +1,12 @@
-﻿<MudNavMenu>
-    <MudNavLink Href="/" Match="NavLinkMatch.All">Dashboard</MudNavLink>
-    <MudNavLink Href="/test" Match="NavLinkMatch.Prefix">Test</MudNavLink>   
-    <MudNavLink Href="/about"  Match="NavLinkMatch.Prefix">About</MudNavLink>
-</MudNavMenu>
+﻿<AuthorizeView>
+    <Authorized>
+        <MudNavMenu>
+            <MudNavLink Href="/" Match="NavLinkMatch.All">Home</MudNavLink>
+            <MudNavLink Href="/myrecipes" Match="NavLinkMatch.Prefix">My Recipes</MudNavLink>
+            <MudNavLink Href="/theirrecipes" Match="NavLinkMatch.Prefix">Their Recipes</MudNavLink>
+        </MudNavMenu>
+    </Authorized>
+    <NotAuthorized>
+        
+    </NotAuthorized>
+</AuthorizeView>

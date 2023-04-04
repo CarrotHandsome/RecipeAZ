@@ -1,13 +1,29 @@
+@inject EditService editService
+
 <div>
-    @*<NotesComponent RecipeUser="@RecipeUser" Notes="@RightRecipe?.Notes"  />*@
+    <NotesComponent />
     <hr>
-    <CommentsComponent Comments="@RightRecipe?.Comments" />
+    <CommentsComponent />
 </div>
 
 
 @code {
-    [Parameter]
-    public Recipe? RightRecipe { get; set; }
 
-    
+    [CascadingParameter(Name = "EditParam")]
+    public bool Edit { get; set; } = false;
+    [Parameter]
+    public bool Editing { get; set; }
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        editService.OnEditButtonClick += RefreshChildComponents;
+    }
+
+    public void Dispose() {
+        editService.OnEditButtonClick -= RefreshChildComponents;
+    }
+
+    private void RefreshChildComponents() {
+        StateHasChanged();
+    }
 }

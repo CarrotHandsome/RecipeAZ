@@ -10,36 +10,53 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Authentication;
-using RecipeAZ.Data;
-using RecipeAZ.Areas.Identity.Data;
-using RecipeAZ.Areas.Identity;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("IdentityContextConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 
-builder.Services.AddDbContext<IdentityContext>(opts => {
+//builder.Services.AddDbContext<IdentityContext>(opts => {
+//    opts.UseSqlServer(connectionString);
+//    opts.EnableSensitiveDataLogging(true);
+//});
+builder.Services.AddDbContext<DataContext>(opts => {
     opts.UseSqlServer(connectionString);
     opts.EnableSensitiveDataLogging(true);
-});
-builder.Services.AddDbContext<DataContext>(opts => {
-    opts.UseSqlServer(builder.Configuration["ConnectionStrings:RecipeConnection"]!);
-    opts.EnableSensitiveDataLogging(true);
+    opts.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+    
 });
 
-builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<IdentityContext>();
+//builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+//    .AddRoles<IdentityRole>()
+//    .AddEntityFrameworkStores<DataContext>();
+builder.Services.AddIdentity<AppUser, IdentityRole>( opts => {
+    opts.SignIn.RequireConfirmedAccount = false;
+    opts.SignIn.RequireConfirmedEmail = false;
+    opts.Tokens.EmailConfirmationTokenProvider = "Email";
+    opts.Password.RequireNonAlphanumeric = false;
+    opts.Password.RequireUppercase= false;
+    opts.SignIn.RequireConfirmedAccount = false;
+    opts.SignIn.RequireConfirmedEmail = false;
+})
+    .AddRoles<IdentityRole>()
+    .AddEntityFrameworkStores<DataContext>()
+    .AddDefaultTokenProviders()
+    .AddTokenProvider<EmailTokenProvider<AppUser>>("Email");
+builder.Services.AddScoped<UserManager<AppUser>>();
+builder.Services.AddScoped<RoleManager<IdentityRole>>();
+builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();
+builder.Services.AddSingleton<EditService>();
 
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-
 //builder.Services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<AppUser>>();
-
 builder.Services.AddMudServices();
-
-
 var app = builder.Build();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.MapRazorPages();
@@ -48,10 +65,14 @@ app.MapFallbackToPage("/_Host");
 app.UseAuthentication();
 app.UseAuthorization();
 
-
-var context = app.Services.CreateScope().ServiceProvider
+var userManager = app.Services.CreateScope().ServiceProvider
+    .GetRequiredService<UserManager<AppUser>>();
+var roleManager = app.Services.CreateScope().ServiceProvider
+    .GetRequiredService<RoleManager<IdentityRole>>();
+var dataContext = app.Services.CreateScope().ServiceProvider
     .GetRequiredService<DataContext>();
 
-SeedData.SeedDatabase(context);/*, userManager);*/
+
+await SeedData.InitializeAsync(userManager, roleManager, dataContext);/*, userManager);*/
 
 app.Run();

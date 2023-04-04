@@ -1,0 +1,56 @@
+﻿@page "/myrecipes"
+
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject DataContext dataContext
+
+<h1>My Recipes</h1>
+<AuthorizeView>
+    <Authorized>
+        <h2>Authorized</h2>       
+        <MudPaper MinWidth="600px">
+            <MudList Class="pl-16">
+                @if (Recipes != null) {
+                    @foreach (Recipe r in Recipes) {
+                        string href = "/recipe/" + r.RecipeId;
+                        
+                      <MudListItem Text="@r.Name"
+                             Class="ma-0 pa-0"
+                             Href=@href />
+                    }
+                }
+                
+            </MudList>
+        </MudPaper>        
+    </Authorized>
+    <NotAuthorized>
+        <h2>Not Authorized</h2>
+    </NotAuthorized>
+</AuthorizeView>
+
+
+@code {
+    public AppUser? User { get; set; }
+    private ICollection<Recipe>? Recipes { get; set; }
+
+
+    protected override async Task OnInitializedAsync() {
+        AuthenticationState authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user != null && user!.Identity != null && user!.Identity!.IsAuthenticated) {
+            var userIdClaim = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && userIdClaim.Value != null) {
+                Console.WriteLine("user authorized: ");
+                User = await dataContext.Users
+                    .Include(u => u.Recipes)
+                    .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
+                Console.WriteLine("welcome " + User.UserName);
+                Recipes = User.Recipes;
+
+            }
+
+        }
+    }
+
+}

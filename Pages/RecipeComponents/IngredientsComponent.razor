@@ -1,14 +1,121 @@
+@using RecipeAZ.Models
+@using Microsoft.EntityFrameworkCore
+@using RecipeAZ.Interfaces
+@inject DataContext dataContext
+@inherits EditableList<RecipeIngredient>
+
+
 <div>
     <h4>Ingredients</h4>
-    <h2>@RecipeIngredientsList?.Count()</h2>
-    <ul>
-        @foreach(RecipeIngredient ri in RecipeIngredientsList ?? Enumerable.Empty<RecipeIngredient>()) {
-            <li>@ri.Ingredient?.Name</li>
-        }
-    </ul>
+    
+        <MudPaper MinWidth="600px">
+            <MudList Class="pl-3">
+                @foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!) {
+                bool hasNoNotes = ri.Notes == string.Empty;
+                <MudListItem>
+                        <MudGrid>
+                            <MudItem>
+                                <div style="margin-top: 0.5rem; margin-bottom: 0;">@ri.Name:</div>
+                            </MudItem>
+                            <MudItem>
+                                    <div style="margin-top: 0.5rem; margin-bottom: 0;">@ri.Amount</div>
+                            </MudItem>
+                            <MudItem>
+                                <MudToggleIconButton @bind-Toggled="detailsOpen[ri]"
+                                    Icon="@Icons.Material.Filled.ChevronRight"
+                                    ToggledIcon="@Icons.Material.Filled.ExpandMore"
+                                    Disabled="@hasNoNotes" />
+                            </MudItem>
+                            @if (CanEdit && Editing) {
+                                <MudItem xs="1">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" 
+                                    Size="Size.Small"
+                                        aria-label="delete" 
+                                        @onclick="(e) => {
+                                            ItemRecipe!.RecipeIngredients.Remove(ri);
+                                            StateHasChanged();
+                                        }" />
+                                
+                                </MudItem>
+                                <MudItem xs="1">
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" 
+                                        Size="Size.Small"
+                                        aria-label="delete"
+                                        @onclick="() => {
+                                            ingredientEditOpen = true;
+                                            editingIngredient = ri;
+                                    }" />
+                                </MudItem>
+                            }                            
+                        </MudGrid>
+                        @if (detailsOpen[ri]) {
+                            <MudPaper Class="pa-3">@ri.Notes</MudPaper>
+                        }
+                    </MudListItem>
+                                                   
+                }
+            </MudList>
+        </MudPaper>
+        @if (CanEdit && Editing) {
+            <MudToggleIconButton @bind-Toggled="@ShowNewIngredientInput"
+                Icon="@Icons.Material.Filled.Add"
+                ToggledIcon="@Icons.Material.Filled.Remove" />
+            @if (ShowNewIngredientInput) {
+                        <MudTextField @bind-Value="LastItem.Name" Label="New Ingredient" Immediate="true"></MudTextField>
+                        <MudTextField @bind-Value="LastItem.Amount" Label="Amount"></MudTextField>
+                        <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add" @onclick="(e) => {
+                            RecipeIngredient newIngredient = new RecipeIngredient {
+                                Name = LastItem.Name,
+                                Amount = LastItem.Amount,
+                                Notes = LastItem.Notes,
+                                Recipe = ItemRecipe
+                            };
+                            ItemRecipe!.RecipeIngredients!.Add(newIngredient);
+                            detailsOpen[newIngredient] = true;
+                            LastItem = new();
+                            ShowNewIngredientInput = false;
+                            StateHasChanged();
+                }" />
+            }   
+        }         
 </div>
 
+@if (ItemRecipe != null) {
+    <MudPopover Open="@ingredientEditOpen" Fixed="false" Class="px-4 pt-4">
+        <div class="d-flex flex-column">
+            <MudTextField @bind-Value="editingIngredient.Name" Lines="1" />
+            <MudTextField @bind-Value="editingIngredient.Notes" Lines="5" />
+            <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
+                ingredientEditOpen = false;
+                //editingIngredient = null;
+                StateHasChanged();
+            }" />
+        </div>
+    </MudPopover>
+}
+
+
+
 @code {
-    [Parameter]
-    public List<RecipeIngredient>? RecipeIngredientsList { get; set; }
+    private bool ShowNewIngredientInput { get; set; } = false;
+    private Dictionary<RecipeIngredient, bool> detailsOpen = new Dictionary<RecipeIngredient, bool>();
+    private bool ingredientEditOpen = false;
+    private RecipeIngredient? editingIngredient;
+    
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        if (ItemRecipe != null && ItemRecipe.RecipeIngredients != null) {
+            foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!) {
+                detailsOpen[ri] = false;
+            }
+        }        
+    }
+    private async Task UpdateAndSaveRecipe() {
+        if (ItemRecipe != null) {
+            dataContext.Update(ItemRecipe);
+            await dataContext.SaveChangesAsync();
+            StateHasChanged();
+        }
+    }   
 }

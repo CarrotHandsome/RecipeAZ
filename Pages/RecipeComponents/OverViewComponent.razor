@@ -1,9 +1,46 @@
+@inject DataContext dataContext
+@inject EditService EditService
+
 <div>
     <h4>Overview</h4>
-    @Description
+    @Recipe?.Description
+    @if (CanEdit && Editing) {
+        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                overviewEditOpen = true;                
+    }" />
+    }
+    
 </div>
+@if (Recipe != null) {
+    <MudPopover Open="@overviewEditOpen" Fixed="false" Class="px-4 pt-4">
+        <div class="d-flex flex-column">
+            <MudTextField @bind-Value="Recipe.Description" Lines="3" />
+            <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
+            overviewEditOpen = false;
+            await UpdateAndSaveRecipe();
+        }" />
+        </div>
+    </MudPopover>
+}
+
 
 @code {
-    [Parameter]
-    public string? Description { get; set; }
+    [CascadingParameter(Name = "RecipeParam")]
+    public Recipe? Recipe { get; set; }
+    [CascadingParameter(Name = "CanEditParam")]
+    public bool CanEdit { get; set; }
+    [CascadingParameter(Name = "EditingParam")]
+    public bool Editing { get; set; }
+    private bool overviewEditOpen = false;  
+    
+
+    
+
+    private async Task UpdateAndSaveRecipe() {
+        if (Recipe != null) {
+            dataContext.Update(Recipe);
+            await dataContext.SaveChangesAsync();
+            StateHasChanged();
+        }
+    }
 }

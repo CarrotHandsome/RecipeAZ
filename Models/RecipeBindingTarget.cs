@@ -6,15 +6,15 @@ namespace RecipeAZ.Models {
         public string Name { get; set; } = "";
         public string Description { get; set; } = "";
         public string Notes { get; set; } = "";
-        public List<RecipeIngredient>? Ingredients { get; set; }
-        public List<RecipeStep>? Steps { get; set; }
+        public ICollection<RecipeIngredient>? RecipeIngredients { get; set; }
+        public ICollection<RecipeStep>? RecipeSteps { get; set; }
 
         public Recipe ToRecipe() => new Recipe() {
             Name = this.Name,
             Description = this.Description,
             Notes = this.Notes,
-            Ingredients = this.Ingredients ?? new List<RecipeIngredient>(),
-            Steps = this.Steps
+            RecipeIngredients = this.RecipeIngredients ?? new List<RecipeIngredient>(),
+            RecipeSteps = this.RecipeSteps
         };
     }
 }

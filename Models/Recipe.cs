@@ -1,13 +1,24 @@
-﻿namespace RecipeAZ.Models {
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace RecipeAZ.Models
+{
     public class Recipe {
-        public long RecipeId { get; set; }
-        public string UserId { get; set; } = string.Empty;
+        public string RecipeId { get; set; }
+            
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
+        public string? UserId { get; set; } = string.Empty;
+        public AppUser? User { get; set; }
+        public ICollection<RecipeIngredient>? RecipeIngredients { get; set; } 
+        public ICollection<RecipeStep>? RecipeSteps { get; set; } 
+        public ICollection<Comment>? Comments { get; set; }
+        public HashSet<RecipeLike>? UsersWhoLikeMe { get; set; }
 
-        public List<RecipeIngredient> Ingredients { get; set; } = new List<RecipeIngredient>();
-        public List<RecipeStep>? Steps { get; set; }
-        public List<Comment> Comments { get; set; } = new List<Comment>();
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public DateTime CreatedAt { get; set; }
+        
     }
 }

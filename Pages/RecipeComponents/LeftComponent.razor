@@ -1,37 +1,81 @@
 ﻿
+@inject DataContext dataContext
+@inject NavigationManager navigationManager
+@inject ISnackbar snackBar
 
-<div>
-    <div class="recipe-left-nav">   
-        <button class="btn btn-primary" @onclick='@(() => NavigateHandler("overview"))' name="overview">Overview</button>
-        <button class="btn btn-primary" @onclick='@(() => NavigateHandler("ingredients"))' name="ingredients">Ingredients</button>
-        <button class="btn btn-primary" @onclick='@(() => NavigateHandler("steps"))' name="steps">Steps</button>
-        <button class="btn btn-primary" @onclick='@(() => NavigateHandler("actions"))' name="actions">Actions</button>
-    </div>
-    @switch(button) {
-        case "overview":
-            <OverViewComponent Description="@LeftRecipe?.Description"  />
-            break;
-        case "ingredients":
-            <IngredientsComponent RecipeIngredientsList="@LeftRecipe?.Ingredients" />
-            break;
-        case "steps":
-            <StepsComponent Steps="@LeftRecipe?.Steps" />
-            break;
-        case "actions":
-            <ActionsComponent />
-            break;
-        default:
-            <OverViewComponent Description="@LeftRecipe?.Description" />
-            break;
-    }
+<MudPaper Class="ml-0 pl-0">
+    <MudGrid Spacing="0">
+        <MudItem xs="10">
+            <MudTabs Rounded="true" ApplyEffectsToContainer="true" 
+                PanelClass="pa-6"  MinimumTabWidth="100px">
+                <MudTabPanel Text="Overview">
+                    <OverViewComponent />
+                </MudTabPanel>
+                <MudTabPanel Text="Ingredients">
+                    <IngredientsComponent />
+                </MudTabPanel>
+                <MudTabPanel Text="Steps">
+                    <StepsComponent />
+                </MudTabPanel>               
+            </MudTabs>
+        </MudItem>
+        <MudItem>
+            <MudMenu Icon="@Icons.Material.Filled.MoreVert">
+                @if (CanEdit) {
+                    <MudMenuItem Icon="@Icons.Material.Filled.Edit" @onclick="OnEditClick" />
+                    <MudMenuItem>Save</MudMenuItem>
+                    <MudMenuItem>Delete</MudMenuItem>
+                }                
+                <MudMenuItem>Copy</MudMenuItem>
+            </MudMenu>
+        </MudItem>
+    </MudGrid>
+</MudPaper>
 
-</div>
 
 @code {
     [Parameter]
-    public Recipe? LeftRecipe { get; set; }
+    public string Id { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> OnEditUpdate { get; set; }
+
+    [CascadingParameter(Name = "EditingParam")]
+    protected bool Editing { get; set; }
+    [CascadingParameter(Name = "CanEditParam")]
+    protected bool CanEdit { get; set; }
+    [CascadingParameter(Name = "RecipeParam")]
+    public Recipe Recipe { get; set; }
+
     public string? button;
+    private bool ActionsVisible { get; set; }
     public void NavigateHandler(string button) {
         this.button = button;
     }
+
+    private async Task OnEditClick() {
+        Editing = !Editing;
+        await OnEditUpdate.InvokeAsync(Editing);
+    }
+
+    private async Task SaveRecipe(bool fromCreator = true) {
+
+        if (Id != null) {
+            dataContext.Recipes.Update(Recipe!);
+        } else {
+            await dataContext.Recipes.AddAsync(Recipe!);
+            Console.WriteLine("added recipe..");
+            //dataContext.Recipes.Update(EditRecipe!);
+        }
+        Console.WriteLine("Saving changes...");
+        await dataContext.SaveChangesAsync();
+        Console.WriteLine("Saved");
+        if (fromCreator) {
+            snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomCenter;
+            snackBar.Configuration.VisibleStateDuration = 500;
+            snackBar.Add("Saved Recipe", MudBlazor.Severity.Success);
+        }
+        navigationManager.NavigateTo($"/recipe/{Recipe!.RecipeId}");
+    }
+    
 }

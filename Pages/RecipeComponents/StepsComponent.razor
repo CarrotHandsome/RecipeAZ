@@ -1,14 +1,98 @@
+@using RecipeAZ.Models
+@using Microsoft.EntityFrameworkCore
+@using RecipeAZ.Interfaces
+@inject DataContext dataContext
+@inherits EditableList<RecipeStep>
+
 <div>
     <h4>Steps</h4>
-    <ul>
-        @foreach (RecipeStep step in Steps ?? Enumerable.Empty<RecipeStep>())
-        {
-            <li>@step.Description</li>
+        <MudPaper MinWidth="600px">
+            <MudList Class="pl-16">
+                @foreach (RecipeStep rs in ItemRecipe!.RecipeSteps!) {
+                    <MudListItem Text="@rs.Description" Class="ma-0 pa-0" />
+
+                    @if (rs.Details != string.Empty) {
+                        <MudToggleIconButton @bind-Toggled="detailsOpen[rs]"
+                            Icon="@Icons.Material.Filled.ChevronRight"
+                            ToggledIcon="@Icons.Material.Filled.ExpandMore" />
+
+                    }
+                    @if (detailsOpen[rs]) {
+                        <MudPaper>@rs.Details</MudPaper>
+                    }
+                    @if (CanEdit && Editing) {
+                        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="(e) => {
+                            ItemRecipe!.RecipeSteps.Remove(rs);
+                            StateHasChanged();
+                        }" />
+                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                            stepEditOpen = true;
+                            editingStep = rs;
+                        }" />
+                    }
+                                    
+                }
+            </MudList>
+        </MudPaper>   
+        @if (CanEdit && Editing) {
+            <MudToggleIconButton @bind-Toggled="@ShowNewStepInput"
+                Icon="@Icons.Material.Filled.Add"
+                ToggledIcon="@Icons.Material.Filled.Remove" />
+        @if (ShowNewStepInput) {
+            <MudTextField @bind-Value="LastItem.Name" Label="New Step" Immediate="true"></MudTextField>
+            <MudTextField @bind-Value="LastItem.Description" Label="New Step" Lines="3"></MudTextField>
+            <MudTextField @bind-Value="LastItem.Details" Label="Details" Lines="5"></MudTextField>
+            <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add" @onclick="(e) => {
+                    RecipeStep newStep = new RecipeStep {
+                        Name = LastItem.Name,
+                        Description = LastItem.Description,
+                        Details = LastItem.Details,
+                        Recipe = ItemRecipe
+                    };
+                    ItemRecipe!.RecipeSteps!.Add(newStep);
+                    detailsOpen[newStep] = true;
+                    LastItem = new();
+                    ShowNewStepInput = false;
+                    StateHasChanged();
+            }" />
         }
-    </ul>
+    }            
 </div>
 
+@if (ItemRecipe != null) {
+    <MudPopover Open="@stepEditOpen" Fixed="false" Class="px-4 pt-4">
+        <div class="d-flex flex-column">
+            <MudTextField @bind-Value="editingStep.Name" Lines="1" />
+            <MudTextField @bind-Value="editingStep.Description" Lines="3" />
+            <MudTextField @bind-Value="editingStep.Details" Lines="5" />
+            <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
+                stepEditOpen = false;
+                StateHasChanged();
+            }" />
+        </div>
+    </MudPopover>
+}
+
 @code {
-    [Parameter]
-    public List<RecipeStep>? Steps { get; set; }
+    private bool ShowNewStepInput { get; set; } = false;
+    private Dictionary<RecipeStep, bool> detailsOpen = new Dictionary<RecipeStep, bool>();
+    private bool stepEditOpen = false;
+    private RecipeStep? editingStep;
+
+    protected override void OnInitialized() {
+        base.OnInitialized();
+        if (ItemRecipe != null && ItemRecipe.RecipeSteps != null) {
+            foreach (RecipeStep rs in ItemRecipe.RecipeSteps) {
+                detailsOpen[rs] = false;
+            }
+        }
+    }
+    private async Task UpdateAndSaveRecipe() {
+        if (ItemRecipe != null) {
+            dataContext.Update(ItemRecipe);
+            await dataContext.SaveChangesAsync();
+            RecipeSnack.Add("Saved Recipe");
+            StateHasChanged();
+        }
+    }
 }

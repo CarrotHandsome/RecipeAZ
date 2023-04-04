@@ -1,40 +1,78 @@
 ﻿@page "/recipe/{id}"
-@using RecipeAZ.Models
+@page "/recipe"
+
+@using Microsoft.AspNetCore.Identity;
 @inject DataContext dataContext
+@inject UserManager<AppUser> userManager
+@inject NavigationManager navigationManager
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject ISnackbar snackBar
+
+
+@if (Recipe != null) {
+    
+    
+    <div class="view-recipe-container m-2">
+        <MudGrid>
+            <MudItem>
+                <h3 style="margin-top: 0.5rem; margin-bottom: 0;">@Recipe.Name</h3>
+            </MudItem>
+            <MudItem>
+                <MudToggleIconButton Icon="@Icons.Material.Filled.Favorite"
+                    ToggledIcon="@Icons.Material.Filled.Favorite" ToggledColor="Color.Secondary"
+                    Toggled="@Liked"
+                    ToggledChanged='async (bool toggled) => {
+                        if (User != null) {
+                            RecipeLike rl = new RecipeLike {
+                                AppUserId = UserId!, RecipeId = Recipe.RecipeId
+                            };
+                            if (toggled) {
+                                await dataContext.AddAsync(rl);
+                            } else {
+                                // Retrieve the existing RecipeLike object from the database
+                                var existingRl = await dataContext.FindAsync<RecipeLike>(UserId!, Recipe.RecipeId);
+                                if (existingRl != null) {
+                                    dataContext.Remove(existingRl);
+                                }
+                            }
+                        }
+                        Liked = toggled;
+                        if (UserId != Recipe.UserId) {
+                            await SaveRecipe(false);
+                            Console.WriteLine($"Recipe is Liked:{Liked} ");
+                        }
+                }' />
+            </MudItem>            
+        </MudGrid>
+
+        
+        <div class="recipe-halves">
+            <CascadingValue Value="@User" Name="UserParam">
+                <CascadingValue Value="@Recipe" Name="RecipeParam">   
+                    <CascadingValue Value="@CanEdit" Name="CanEditParam">
+                        <CascadingValue Value="@Editing" Name="EditingParam" >
+                            <LeftComponent Id="Id" OnEditUpdate="@UpdateEditState"/>
+                            <RightComponent />
+                        </CascadingValue>                        
+                    </CascadingValue>                                                   
+                </CascadingValue>               
+            </CascadingValue>
+                   
+        </div>       
+    </div>
+} else {
+    <p>Recipe not found.</p>
+}
 
 @code {
     [Parameter]
     public string? Id { get; set; }
+    public AppUser? User { get; set; }
+    private Recipe? Recipe;
 
-    private Recipe? recipe;
-    //private ApplicationUser? user;
+    public bool Liked { get; set; }
+    private bool CanEdit { get; set; } = false;
+    private bool Editing { get; set; } = false;
 
-    protected override async Task OnInitializedAsync() {
-        if (long.TryParse(Id, out long recipeId)) {
-            recipe = await dataContext.Recipes
-                .Include(r => r.Comments)
-                .Include(r => r.Ingredients).ThenInclude( ri => ri.Ingredient)
-                .Include(r => r.Steps)
-                .FirstOrDefaultAsync(r => r.RecipeId == recipeId);
-        }
-
-        if (recipe != null) {
-            //user = await dataContext.Users.FindAsync(recipe.UserId) ?? new ApplicationUser { };
-        }
-    }
-}
-
-@if (recipe != null) {
-    <div class="view-recipe-container m-2">
-        <h3>@recipe.Name</h3>
-        <div class="recipe-halves">
-            <LeftComponent LeftRecipe="@recipe" />
-            <RightComponent RightRecipe="@recipe" />
-            @*<component type="typeof(RecipeAZ.Components.RecipeLeft)" render-mode="Server" param-Recipe="@recipe" />
-            <component type="typeof(RecipeAZ.Components.RecipeRight)" render-mode="Server"
-                   param-Recipe="@recipe" param-RecipeUser="@user" />*@
-        </div>
-    </div>
-} else {
-    <p>Recipe not found.</p>
+    private string? UserId { get; set; }   
 }
