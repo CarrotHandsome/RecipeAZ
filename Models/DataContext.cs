@@ -18,6 +18,8 @@ namespace RecipeAZ.Models {
         public DbSet<RecipeStep> RecipeSteps => Set<RecipeStep>();     
         public DbSet<RecipeIngredient> RecipeIngredients => Set<RecipeIngredient>();
         public DbSet<Comment> Comments => Set<Comment>();
+        public DbSet<Tag> Tags => Set<Tag>();
+        public DbSet<RecipeTag> RecipeTags => Set<RecipeTag>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
@@ -116,6 +118,9 @@ namespace RecipeAZ.Models {
                     CreatedAt = DateTime.Now,
                 }
             );
+            modelBuilder.Entity<Tag>()
+                .Property(t => t.TagId)
+                .ValueGeneratedOnAdd();
             modelBuilder.Entity<Comment>()
                 .Property(c => c.CommentId)
                 .ValueGeneratedOnAdd();
@@ -140,6 +145,17 @@ namespace RecipeAZ.Models {
                 .HasIndex(l => l.AppUserId);
             modelBuilder.Entity<RecipeLike>()
                 .HasIndex(l => l.RecipeId);
+
+            modelBuilder.Entity<RecipeTag>()
+                .HasKey(t => new { t.RecipeId, t.TagId });
+            modelBuilder.Entity<RecipeTag>()
+                .HasOne(rt => rt.Recipe)
+                .WithMany(r => r.RecipeTags)
+                .HasForeignKey(rt => rt.RecipeId);
+            modelBuilder.Entity<RecipeTag>()
+                .HasOne(rt => rt.Tag)
+                .WithMany(t => t.RecipeTags)
+                .HasForeignKey(rt => rt.TagId);
         }
 
         public override void Dispose() {

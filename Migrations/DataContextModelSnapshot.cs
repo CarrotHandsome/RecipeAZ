@@ -240,14 +240,14 @@ namespace RecipeAZ.Migrations
                         {
                             Id = "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "9df6193d-6b90-4599-a989-88981e4cb764",
+                            ConcurrencyStamp = "1d109ccb-35b7-4fb2-9f85-aa739a22f00e",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHM/SNlYf1uYm+JcstFvBRuOITt5B5qEmvvi1Gujc/XE7kmoTvfUHZYdWuXf/PnzUQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEA3JvbtTYo9F4pY8L1TrjvHHcO4PeRPR5/A7xznyl+MqwvyPbCdxLr9ghYebrV8e4A==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "edde2359-c850-451f-8620-584d1f8564ac",
+                            SecurityStamp = "0e8eed00-07f4-44fe-96d1-8b034363eff4",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -288,7 +288,7 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             CommentId = "1",
-                            CreatedAt = new DateTime(2023, 3, 26, 17, 42, 56, 563, DateTimeKind.Local).AddTicks(1739),
+                            CreatedAt = new DateTime(2023, 4, 11, 22, 57, 33, 275, DateTimeKind.Local).AddTicks(608),
                             RecipeId = "1",
                             Text = "nice recipe",
                             UserId = "02174cf0–9412–4cfe - afbf - 59f706d72cf6"
@@ -324,6 +324,9 @@ namespace RecipeAZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImagePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -345,7 +348,7 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             RecipeId = "1",
-                            CreatedAt = new DateTime(2023, 3, 26, 17, 42, 56, 562, DateTimeKind.Local).AddTicks(9473),
+                            CreatedAt = new DateTime(2023, 4, 11, 22, 57, 33, 274, DateTimeKind.Local).AddTicks(8816),
                             Description = "Nulla turpis risus, mollis sed mi non, congue posuere enim. Fusce vehicula ligula nec nibh vehicula tempor. Maecenas accumsan quis mauris a imperdiet. Phasellus venenatis, dolor vitae venenatis aliquet, mi nisi consequat ligula, vel facilisis arcu eros id justo. Vestibulum id porta tellus, nec porttitor diam. Praesent hendrerit nulla sed eros finibus, eu sodales mauris semper. Praesent eros velit, sollicitudin a ex id, sagittis eleifend turpis. Pellentesque facilisis sem eu varius elementum. Sed ac justo dolor. Donec malesuada justo eu urna luctus, et cursus magna laoreet. Vivamus a accumsan risus. Nullam rutrum porta elementum. Curabitur lectus odio, euismod et dolor sit amet, efficitur elementum felis. Mauris quam sapien, commodo sed libero facilisis, cursus feugiat ligula.",
                             Name = "Tarka Dal",
                             Notes = "Donec quis ullamcorper erat, id tempor ante. Integer ut lorem viverra, laoreet orci nec, aliquam nisl. Fusce placerat nisl ac mauris condimentum, sed efficitur urna faucibus. Suspendisse laoreet laoreet malesuada. Quisque congue ut leo ac rhoncus. Aenean commodo dui ut urna ullamcorper tristique. Proin ac feugiat enim, vitae tempus magna. Nam suscipit luctus maximus. Sed laoreet dolor nibh, quis vestibulum leo facilisis a. Integer at mi convallis, porttitor leo non, eleifend enim. Mauris et dolor diam. Morbi metus ligula, pretium ac lectus in, tempus ullamcorper leo.",
@@ -477,6 +480,36 @@ namespace RecipeAZ.Migrations
                         });
                 });
 
+            modelBuilder.Entity("RecipeAZ.Models.RecipeTag", b =>
+                {
+                    b.Property<string>("RecipeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TagId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("RecipeId", "TagId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("RecipeTags");
+                });
+
+            modelBuilder.Entity("RecipeAZ.Models.Tag", b =>
+                {
+                    b.Property<string>("TagId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("TagId");
+
+                    b.ToTable("Tags");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -597,6 +630,25 @@ namespace RecipeAZ.Migrations
                     b.Navigation("Recipe");
                 });
 
+            modelBuilder.Entity("RecipeAZ.Models.RecipeTag", b =>
+                {
+                    b.HasOne("RecipeAZ.Models.Recipe", "Recipe")
+                        .WithMany("RecipeTags")
+                        .HasForeignKey("RecipeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RecipeAZ.Models.Tag", "Tag")
+                        .WithMany("RecipeTags")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Recipe");
+
+                    b.Navigation("Tag");
+                });
+
             modelBuilder.Entity("RecipeAZ.Models.AppUser", b =>
                 {
                     b.Navigation("Comments");
@@ -614,7 +666,14 @@ namespace RecipeAZ.Migrations
 
                     b.Navigation("RecipeSteps");
 
+                    b.Navigation("RecipeTags");
+
                     b.Navigation("UsersWhoLikeMe");
+                });
+
+            modelBuilder.Entity("RecipeAZ.Models.Tag", b =>
+                {
+                    b.Navigation("RecipeTags");
                 });
 #pragma warning restore 612, 618
         }

@@ -33,18 +33,17 @@ builder.Services.AddDbContext<DataContext>(opts => {
 //    .AddRoles<IdentityRole>()
 //    .AddEntityFrameworkStores<DataContext>();
 builder.Services.AddIdentity<AppUser, IdentityRole>( opts => {
-    opts.SignIn.RequireConfirmedAccount = false;
-    opts.SignIn.RequireConfirmedEmail = false;
+    opts.SignIn.RequireConfirmedAccount = true;
+    opts.SignIn.RequireConfirmedEmail = true;
     opts.Tokens.EmailConfirmationTokenProvider = "Email";
     opts.Password.RequireNonAlphanumeric = false;
     opts.Password.RequireUppercase= false;
-    opts.SignIn.RequireConfirmedAccount = false;
-    opts.SignIn.RequireConfirmedEmail = false;
 })
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<DataContext>()
     .AddDefaultTokenProviders()
     .AddTokenProvider<EmailTokenProvider<AppUser>>("Email");
+
 builder.Services.AddScoped<UserManager<AppUser>>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
 builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();

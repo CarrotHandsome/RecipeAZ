@@ -7,10 +7,13 @@
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject ISnackbar snackBar
+@inject IWebHostEnvironment env
+@inject ILogger<LayoutComponent> Logger
 
 
 @if (Recipe != null) {
-    
+    <InputFile OnChange="OnImageUpload" />
+    <MudImage Src="@Recipe.ImagePath" Height="150" Class="rounded-lg ma-5" />
     
     <div class="view-recipe-container m-2">
         <MudGrid>
@@ -42,9 +45,34 @@
                             Console.WriteLine($"Recipe is Liked:{Liked} ");
                         }
                 }' />
-            </MudItem>            
-        </MudGrid>
+            </MudItem>
+            <MudItem Class="d-flex align-center flex-grow-1 gap-0">
+                @foreach (RecipeTag recipeTag in Recipe.RecipeTags) {
+                    <MudChip Size="Size.Small">
+                        <MudText>@recipeTag.Tag.Name</MudText>
+                        @if (CanEdit && Editing) {
+                            <MudIconButton Icon="@Icons.Material.Outlined.Cancel" 
+                                Color="Color.Default" Size="Size.Small"
+                                OnClick="@(() => HandleChipClose(recipeTag))" />
+                        }
+                    </MudChip>
+                }
+            </MudItem>
+            @if (CanEdit && Editing && Recipe.RecipeTags.Count < maxTags) {
+                <MudItem Class="d-flex align-center flex-grow-1 gap-4">
+                    <MudButton Size="Size.Small" Variant="Variant.Outlined"
+                       @onclick="() => { NewTagOpen = true; }"
+                    >+New Tag</MudButton>
+                </MudItem>
+            }
 
+        </MudGrid>
+        <MudPopover Open="@NewTagOpen" Fixed="false" Class="px-4 pt4">
+            <div class="d-flex flex-column">
+                <MudTextField @bind-Value="NewTagName" Lines="1" />
+                <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@AddTag"/>
+            </div>
+        </MudPopover>
         
         <div class="recipe-halves">
             <CascadingValue Value="@User" Name="UserParam">
@@ -73,6 +101,9 @@
     public bool Liked { get; set; }
     private bool CanEdit { get; set; } = false;
     private bool Editing { get; set; } = false;
-
-    private string? UserId { get; set; }   
+    private bool NewTagOpen { get; set; } = false;
+    private string NewTagName { get; set; } = string.Empty;
+    private string? UserId { get; set; }
+    private int maxTags = 5;
+    
 }

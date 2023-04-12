@@ -4,7 +4,7 @@
 <div>
     <h4>@Recipe?.User?.UserName</h4>
     @Recipe?.Notes
-    @if (Edit) {
+    @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
                 notesEditOpen = true;                
         }" />
@@ -26,9 +26,9 @@
 
     [CascadingParameter(Name = "RecipeParam")]
     public Recipe? Recipe { get; set; }
-    [CascadingParameter(Name = "EditParam")]
-    public bool Edit { get; set; }
-    [Parameter]
+    [CascadingParameter(Name = "CanEditParam")]
+    public bool CanEdit { get; set; }
+    [CascadingParameter(Name = "EditingParam")]
     public bool Editing { get; set; }
     private bool notesEditOpen = false;
 

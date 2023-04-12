@@ -4,6 +4,7 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -82,7 +83,7 @@ namespace RecipeAZ.Pages.Account
             {
                 Input = new InputModel
                 {
-                    Code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code))
+                    Code = WebUtility.UrlDecode(code)
                 };
                 return Page();
             }
@@ -96,16 +97,17 @@ namespace RecipeAZ.Pages.Account
             }
 
             var user = await _userManager.FindByEmailAsync(Input.Email);
+            TempData["StatusMessage"] = "You have reset your password, if the user exists";
             if (user == null)
             {
                 // Don't reveal that the user does not exist
-                return RedirectToPage("./ResetPasswordConfirmation");
+                return RedirectToPage("./Login");
             }
 
             var result = await _userManager.ResetPasswordAsync(user, Input.Code, Input.Password);
             if (result.Succeeded)
             {
-                return RedirectToPage("./ResetPasswordConfirmation");
+                return RedirectToPage("./Login");
             }
 
             foreach (var error in result.Errors)

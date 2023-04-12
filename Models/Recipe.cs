@@ -11,11 +11,13 @@ namespace RecipeAZ.Models
         public string Description { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
         public string? UserId { get; set; } = string.Empty;
+        public string? ImagePath { get; set; }
         public AppUser? User { get; set; }
         public ICollection<RecipeIngredient>? RecipeIngredients { get; set; } 
         public ICollection<RecipeStep>? RecipeSteps { get; set; } 
         public ICollection<Comment>? Comments { get; set; }
         public HashSet<RecipeLike>? UsersWhoLikeMe { get; set; }
+        public ICollection<RecipeTag> RecipeTags { get; set; }
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }
