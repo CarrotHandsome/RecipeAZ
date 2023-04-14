@@ -95,10 +95,10 @@ namespace RecipeAZ.Pages.RecipeComponents {
             navigationManager.NavigateTo($"/recipe/{Recipe!.RecipeId}");
         }
 
-        private async Task OnImageUpload(InputFileChangeEventArgs e) {
+        private async Task OnImageUpload(IBrowserFile file) {
 
             try {
-                IBrowserFile uploadedImage = e.File;
+                IBrowserFile uploadedImage = file;
                 if (uploadedImage.Size <= imageSizeMaxBytes) {
                     string imageFolder = "images";
                     string fileName = $"{Guid.NewGuid()}{Path.GetExtension(uploadedImage.Name)}";

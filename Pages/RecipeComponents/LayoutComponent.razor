@@ -2,6 +2,7 @@
 @page "/recipe"
 
 @using Microsoft.AspNetCore.Identity;
+@using Microsoft.AspNetCore.Components.Forms
 @inject DataContext dataContext
 @inject UserManager<AppUser> userManager
 @inject NavigationManager navigationManager
@@ -12,8 +13,23 @@
 
 
 @if (Recipe != null) {
-    <InputFile OnChange="OnImageUpload" />
-    <MudImage Src="@Recipe.ImagePath" Height="150" Class="rounded-lg ma-5" />
+    <MudGrid>
+        <MudItem><MudImage Src="@Recipe.ImagePath" Height="200" /></MudItem>
+        @if(CanEdit && Editing) {
+            <MudItem>
+                <MudFileUpload T="IBrowserFile" FilesChanged="OnImageUpload">
+                    <ButtonTemplate>
+                        <MudButton HtmlTag="label"
+                           Color="Color.Info"
+                           StartIcon="@Icons.Material.Filled.UploadFile"
+                           Size="Size.Large"
+                           for="@context" />
+                    </ButtonTemplate>
+                </MudFileUpload>
+            </MudItem>
+        }        
+    </MudGrid>
+    
     
     <div class="view-recipe-container m-2">
         <MudGrid>
