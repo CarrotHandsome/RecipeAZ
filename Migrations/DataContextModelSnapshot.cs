@@ -240,14 +240,14 @@ namespace RecipeAZ.Migrations
                         {
                             Id = "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1d109ccb-35b7-4fb2-9f85-aa739a22f00e",
+                            ConcurrencyStamp = "05f03e8f-29ed-4523-9d6d-22c310fad19d",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEA3JvbtTYo9F4pY8L1TrjvHHcO4PeRPR5/A7xznyl+MqwvyPbCdxLr9ghYebrV8e4A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAELZLzt7n2/vB8wb2QX//AJ/OK+XewmHpmNrFiFSzzVI58dvTjwCjH+evlW5f4fe0bA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0e8eed00-07f4-44fe-96d1-8b034363eff4",
+                            SecurityStamp = "b18beda3-2403-4a07-a041-74df3073f6a1",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -288,7 +288,7 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             CommentId = "1",
-                            CreatedAt = new DateTime(2023, 4, 11, 22, 57, 33, 275, DateTimeKind.Local).AddTicks(608),
+                            CreatedAt = new DateTime(2023, 4, 14, 0, 23, 30, 980, DateTimeKind.Local).AddTicks(1243),
                             RecipeId = "1",
                             Text = "nice recipe",
                             UserId = "02174cf0–9412–4cfe - afbf - 59f706d72cf6"
@@ -348,8 +348,9 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             RecipeId = "1",
-                            CreatedAt = new DateTime(2023, 4, 11, 22, 57, 33, 274, DateTimeKind.Local).AddTicks(8816),
+                            CreatedAt = new DateTime(2023, 4, 14, 0, 23, 30, 979, DateTimeKind.Local).AddTicks(9365),
                             Description = "Nulla turpis risus, mollis sed mi non, congue posuere enim. Fusce vehicula ligula nec nibh vehicula tempor. Maecenas accumsan quis mauris a imperdiet. Phasellus venenatis, dolor vitae venenatis aliquet, mi nisi consequat ligula, vel facilisis arcu eros id justo. Vestibulum id porta tellus, nec porttitor diam. Praesent hendrerit nulla sed eros finibus, eu sodales mauris semper. Praesent eros velit, sollicitudin a ex id, sagittis eleifend turpis. Pellentesque facilisis sem eu varius elementum. Sed ac justo dolor. Donec malesuada justo eu urna luctus, et cursus magna laoreet. Vivamus a accumsan risus. Nullam rutrum porta elementum. Curabitur lectus odio, euismod et dolor sit amet, efficitur elementum felis. Mauris quam sapien, commodo sed libero facilisis, cursus feugiat ligula.",
+                            ImagePath = "images/recipe_default.png",
                             Name = "Tarka Dal",
                             Notes = "Donec quis ullamcorper erat, id tempor ante. Integer ut lorem viverra, laoreet orci nec, aliquam nisl. Fusce placerat nisl ac mauris condimentum, sed efficitur urna faucibus. Suspendisse laoreet laoreet malesuada. Quisque congue ut leo ac rhoncus. Aenean commodo dui ut urna ullamcorper tristique. Proin ac feugiat enim, vitae tempus magna. Nam suscipit luctus maximus. Sed laoreet dolor nibh, quis vestibulum leo facilisis a. Integer at mi convallis, porttitor leo non, eleifend enim. Mauris et dolor diam. Morbi metus ligula, pretium ac lectus in, tempus ullamcorper leo.",
                             UserId = "02174cf0–9412–4cfe - afbf - 59f706d72cf6"

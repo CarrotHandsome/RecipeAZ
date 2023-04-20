@@ -17,7 +17,9 @@
         <MudItem><MudImage Src="@Recipe.ImagePath" Height="200" /></MudItem>
         @if(CanEdit && Editing) {
             <MudItem>
-                <MudFileUpload T="IBrowserFile" FilesChanged="OnImageUpload">
+                <MudFileUpload T="IBrowserFile" 
+                    FilesChanged="OnImageUpload"
+                    Accept="image/jpeg,image/png,image/gif,image/bmp">
                     <ButtonTemplate>
                         <MudButton HtmlTag="label"
                            Color="Color.Info"

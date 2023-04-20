@@ -1,11 +1,189 @@
 ﻿@page "/"
+@inject DataContext dataContext
+@inject NavigationManager navigationManager
+
+<PageTitle>RecipeAZ</PageTitle>
 
 
-<PageTitle>Index</PageTitle>
+    @if (FeaturedRecipe != null) {
+        <MudGrid>
+            <MudItem xs="12" sm="4" md="3">
+                <div class="clickable image-container" @onclick="@(() => NavigateToRecipe(FeaturedRecipe.RecipeId))">
+                    <MudImage Src="@FeaturedRecipe.ImagePath" Class="rounded-lg mud-image-cropped" />
+                </div>                
+            </MudItem>
+            <MudItem xs="12" sm="8" md="9">
+                <MudGrid>
+                    <MudItem xs="12">
+                        <MudLink @onclick="@(() => NavigateToRecipe(FeaturedRecipe.RecipeId))" 
+                            Typo="Typo.h3" 
+                            Color="Color.Dark"
+                            Underline="Underline.None">Featured Recipe: @FeaturedRecipe.Name
+                        </MudLink>
+                         <p/>
+                        <MudLink @onclick="@(() => NavigateToProfile(FeaturedRecipe.User.Id))"
+                                         Typo="Typo.h6"
+                                         Color="Color.Dark"
+                                         Underline="Underline.None">
+                            by @FeaturedRecipe.User.UserName
+                        </MudLink>
+                    </MudItem>
+                    <MudItem xs="12">
+                        @foreach (RecipeTag recipeTag in FeaturedRecipe.RecipeTags) {
+                            <MudChip Size="Size.Small">
+                                <MudText>@recipeTag.Tag.Name</MudText>
+                            </MudChip>
+                        }
+                    </MudItem>
+                    <MudItem xs="12">
+                        <div class="text-truncate-height">@FeaturedRecipe.Description</div>
+                    </MudItem>
+                </MudGrid>
+            </MudItem>
+        </MudGrid>
+    }    
 
-<h1>Hello, world!</h1>
+<p />
+<h6>Browse popular Tags:</h6>
+<p/>
+<div>
+    <MudGrid>
+        @foreach (Tag tag in TopTags) {
+            <MudItem Class="pa-0">
+                <MudChip Size="Size.Medium" Color="Color.Success">
+                    <MudText>@tag.Name</MudText>
+                </MudChip>
+            </MudItem>            
+        }
+    </MudGrid>
+</div>
+<p />
+<MudGrid Spacing="10">
+    <MudItem>
+        <MudList>
+            <MudListSubheader>Browse popular recipes</MudListSubheader>
+            @foreach (Recipe recipe in TopRecipes) {
+                <MudListItem>
+                    <MudGrid>
+                        <MudItem>
+                            <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))">
+                                <MudImage Src="@recipe.ImagePath" Height="50"/>
+                            </div>
+                        </MudItem>
+                        <MudItem>
+                            <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
+                                Typo="Typo.h6"
+                                Color="Color.Dark"
+                                Underline="Underline.None">
+                             @recipe.Name
+                            </MudLink>
+                            <MudLink @onclick="@(() => NavigateToProfile(recipe.User.Id))"
+                                Typo="Typo.h6"
+                                Color="Color.Dark"
+                                Underline="Underline.None">
+                                by @recipe.User.UserName
+                            </MudLink>                           
+                            <p/>
+                            @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
+                                <MudChip Size="Size.Small">
+                                    <MudText>@recipeTag.Tag.Name</MudText>
+                                </MudChip>
+                            }
+                        </MudItem>
+                    </MudGrid>
+                    <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Error" />
+                    @recipe.UsersWhoLikeMe.Count
+                </MudListItem>
+            }
+        </MudList>
+    </MudItem>
+    <MudItem>
+        <MudList>
+            <MudListSubheader>Browse recent recipes</MudListSubheader>
+            @foreach (Recipe recipe in RecentRecipes) {
+                <MudListItem>
+                    <MudGrid>
+                        <MudItem>
+                            <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))">
+                                <MudImage Src="@recipe.ImagePath" Height="50" />
+                            </div>
+                        </MudItem>
+                        <MudItem>
+                            <h5>@recipe.Name by @recipe.User.UserName</h5>
+                            @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
+                                <MudChip Size="Size.Small">
+                                    <MudText>@recipeTag.Tag.Name</MudText>
+                                </MudChip>
+                            }
+                        </MudItem>
+                    </MudGrid>
+                    Created on @recipe.CreatedAt
+                </MudListItem>
+            }
+        </MudList>
+    </MudItem>
+</MudGrid>
 
-Welcome to your new app.
+@code {
+    Recipe? FeaturedRecipe { get; set; }
+    List<Tag>? TopTags { get; set; } = new();
+    List<Recipe> TopRecipes { get; set; } = new();
+    List<Recipe> RecentRecipes { get; set; } = new();
+    protected override async Task OnInitializedAsync() {
+        string featuredRecipeId = await GetRandomRecipeIdAsync();
+        FeaturedRecipe = await GetRecipeWithUserAsync(featuredRecipeId);
+        TopTags = await GetTopTagsAsync();
 
+        TopRecipes = await dataContext.Recipes
+            .Include(r => r.User)
+            .Include(r => r.UsersWhoLikeMe)
+            .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
+            .OrderByDescending(r => r.UsersWhoLikeMe.Count)
+            .Take(10)
+            .ToListAsync();
 
+        RecentRecipes = await dataContext.Recipes
+            .Include(r => r.User)            
+            .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
+            .OrderByDescending(r => r.CreatedAt)
+            .Take(10)
+            .ToListAsync();        
+    }
 
+    private void NavigateToRecipe(string recipeId) {
+        navigationManager.NavigateTo("/recipe/" + recipeId);            
+    }
+
+    private void NavigateToProfile(string userId) {
+        navigationManager.NavigateTo("/profile/" + userId);
+    }
+
+    public async Task<string> GetRandomRecipeIdAsync() {
+        string? randomRecipeId = await dataContext.Recipes
+       .OrderBy(r => Guid.NewGuid())
+       .Select(r => r.RecipeId)
+       .FirstOrDefaultAsync();
+
+        return randomRecipeId;
+    }
+    public async Task<Recipe> GetRecipeWithUserAsync(string recipeId) {
+        Recipe? recipe = await dataContext.Recipes
+            .Include(r => r.User)
+            .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
+            .FirstOrDefaultAsync(r => r.RecipeId == recipeId);
+
+        return recipe;
+    }
+
+    private async Task<List<Tag>> GetTopTagsAsync() {
+        List<Tag> topTags = await dataContext.Tags
+            .Include(t => t.RecipeTags)
+            .OrderByDescending(t => t.RecipeTags.Count)
+            .Take(10)
+            .ToListAsync();
+        return topTags;
+    }
+}

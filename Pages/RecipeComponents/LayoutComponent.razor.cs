@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.CodeAnalysis.Elfie.Diagnostics;
 using System.Globalization;
 using Microsoft.AspNetCore.Components.Forms;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
+using System.IO;
 
 namespace RecipeAZ.Pages.RecipeComponents {
     public partial class LayoutComponent {
@@ -35,7 +38,8 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     Description = "description",
                     Notes = "notes",
                     RecipeIngredients = new List<RecipeIngredient>(),
-                    RecipeSteps = new List<RecipeStep>()
+                    RecipeSteps = new List<RecipeStep>(),
+                    RecipeTags = new List<RecipeTag>()
                 };
                 CanEdit = true;
                 Editing = true;
@@ -105,6 +109,17 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     string folderPath = Path.Combine(env.WebRootPath, imageFolder);
                     string fullPath = Path.Combine(folderPath, fileName);
 
+                    using var memoryStream = new MemoryStream();
+                    await uploadedImage.OpenReadStream().CopyToAsync(memoryStream);
+
+                    memoryStream.Position = 0; // Reset the memory stream position
+                    using var image = Image.Load(memoryStream);
+                    
+                    if (image.Width > image.Height * 2) {
+                        snackBar.Add("Image width must not be more than double image height.");
+                        return;
+                    }
+
                     if (!Directory.Exists(folderPath)) {
                         Directory.CreateDirectory(folderPath);
                     }
@@ -117,7 +132,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     if (!string.IsNullOrEmpty(Recipe.ImagePath)) {
                         string oldImagePath = Path.Combine(env.WebRootPath, Recipe.ImagePath);
 
-                        if (System.IO.File.Exists(oldImagePath)) {
+                        if (System.IO.File.Exists(oldImagePath) && oldImagePath != "images/recipe_default.png") {
                             System.IO.File.Delete(oldImagePath);
                         }
                     }
@@ -172,6 +187,10 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 NewTagName = string.Empty;
                 NewTagOpen = false;
             }
+        }
+
+        private void NavigateToProfile(string userId) {
+            navigationManager.NavigateTo("/profile/" + userId);
         }
 
         public string ToTitleCase(string input) {

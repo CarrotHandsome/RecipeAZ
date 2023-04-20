@@ -1,0 +1,52 @@
+﻿@page "/profile/{id}"
+
+@using Microsoft.EntityFrameworkCore
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Identity;
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject DataContext dataContext
+@inject NavigationManager navigationManager
+@inject UserManager<AppUser> userManager
+
+
+<h3>Recipes by @User?.UserName</h3>
+<MudButton @onclick="@(() => Sort("like", false))">Likes(Ascending)</MudButton>
+<MudButton @onclick="@(() => Sort("like", true))">Likes(Descending)</MudButton>
+<MudButton @onclick="@(() => Sort("date", false))">Date(Ascending)</MudButton>
+<MudButton @onclick="@(() => Sort("date", true))">Date(Descending)</MudButton>
+
+<MudList>
+    @foreach (Recipe recipe in Recipes) {
+        <MudListItem>
+            <MudGrid>
+                <MudItem>
+                    <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))">
+                        <MudImage Src="@recipe.ImagePath" Height="50" />
+                    </div>
+                </MudItem>
+                <MudItem>
+                    <h5>@recipe.Name by @recipe.User.UserName</h5>
+                    @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
+                        <MudChip Size="Size.Small" Color="Color.Success">
+                            <MudText>@recipeTag.Tag.Name</MudText>
+                        </MudChip>
+                    }
+                </MudItem>
+            </MudGrid>
+            @recipe.CreatedAt
+            <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Error" />
+            
+            @recipe.UsersWhoLikeMe.Count
+            
+        </MudListItem>
+    }
+</MudList>
+
+@code {
+    [Parameter]
+    public string? Id { get; set; }
+    public AppUser? User { get; set; } = new();
+    private List<Recipe>? Recipes { get; set; } = new();
+
+
+}
