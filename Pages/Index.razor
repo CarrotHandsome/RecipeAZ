@@ -109,7 +109,18 @@
                             </div>
                         </MudItem>
                         <MudItem>
-                            <h5>@recipe.Name by @recipe.User.UserName</h5>
+                            <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
+                                Typo="Typo.h6"
+                                Color="Color.Dark"
+                                Underline="Underline.None">
+                                @recipe.Name
+                            </MudLink>
+                            <MudLink @onclick="@(() => NavigateToProfile(recipe.User.Id))"
+                                Typo="Typo.h6"
+                                Color="Color.Dark"
+                                Underline="Underline.None">
+                                by @recipe.User.UserName
+                            </MudLink>  
                             @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
                                 <MudChip Size="Size.Small">
                                     <MudText>@recipeTag.Tag.Name</MudText>
