@@ -25,7 +25,7 @@
                     </div>
                 </MudItem>
                 <MudItem>
-                    <h5>@recipe.Name by @recipe.User.UserName</h5>
+                    <h5>@recipe.Name</h5>
                     @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
                         <MudChip Size="Size.Small" Color="Color.Success">
                             <MudText>@recipeTag.Tag.Name</MudText>

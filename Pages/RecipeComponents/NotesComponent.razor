@@ -1,8 +1,14 @@
-
+@inject NavigationManager navigationManager
 @inject DataContext dataContext
 
 <div>
-    <h4>@Recipe?.User?.UserName</h4>
+    <MudLink @onclick="@(() => NavigateToUser())"
+             Typo="Typo.h6"
+             Color="Color.Dark"
+             Underline="Underline.None">
+        @Recipe?.User?.UserName
+    </MudLink>
+    <p />   
     @Recipe?.Notes
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
@@ -38,5 +44,8 @@
             await dataContext.SaveChangesAsync();
             StateHasChanged();
         }
-    }   
+    } 
+    private void NavigateToUser() {
+        navigationManager.NavigateTo("/profile/" + Recipe.User.Id);
+    }
 }
