@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Components.Forms;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
+using static MudBlazor.Colors;
 
 namespace RecipeAZ.Pages.RecipeComponents {
     public partial class LayoutComponent {
@@ -71,12 +72,12 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     }
             }
             if (UserId != null && UserId == Recipe.UserId) {
-                CanEdit = true;
-                
+                CanEdit = true;                
             }
             Liked = await dataContext.Users
                 .Where(u => u.Id == UserId)
                 .AnyAsync(u => u.RecipesILike.Any(rl => rl.RecipeId == Recipe.RecipeId));
+            //tags = dataContext.Tags.Select(t => t.Name).ToList();
         }
 
         private async Task SaveRecipe(bool fromCreator=true) {
@@ -180,12 +181,15 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     tagToAdd = existingTag;
                 }
 
-                RecipeTag recipeTag = new RecipeTag { RecipeId = Recipe.RecipeId, TagId = tagToAdd.TagId };
-                dataContext.RecipeTags.Add(recipeTag);
-                await dataContext.SaveChangesAsync();
-                Recipe.RecipeTags.Add(recipeTag);
+                if (!dataContext.RecipeTags.Any(rt => rt.RecipeId == Id && rt.TagId == tagToAdd.TagId)) {
+                    RecipeTag recipeTag = new RecipeTag { RecipeId = Recipe.RecipeId, TagId = tagToAdd.TagId };
+                    dataContext.RecipeTags.Add(recipeTag);
+                    await dataContext.SaveChangesAsync();
+                    Recipe.RecipeTags.Add(recipeTag);                    
+                }
                 NewTagName = string.Empty;
                 NewTagOpen = false;
+
             }
         }
 
@@ -196,6 +200,16 @@ namespace RecipeAZ.Pages.RecipeComponents {
         public string ToTitleCase(string input) {
             TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
             return textInfo.ToTitleCase(input.ToLower());
+        }
+        private async Task<IEnumerable<string>> TagSearch(string value) {
+            List<string> tags = await dataContext.Tags.Select(t => t.Name).ToListAsync();
+            //foreach(RecipeTag rt in Recipe.RecipeTags) {
+            //    tags.Remove(dataContext.Tags.FirstOrDefault(t => t.TagId == rt.TagId).Name);                
+            //}
+            if (string.IsNullOrEmpty(value)) {
+                return new List<string>();
+            }                
+            return tags.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
         }
     }
 }

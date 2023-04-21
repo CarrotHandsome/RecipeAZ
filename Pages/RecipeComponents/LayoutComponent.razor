@@ -87,7 +87,12 @@
         </MudGrid>
         <MudPopover Open="@NewTagOpen" Fixed="false" Class="px-4 pt4">
             <div class="d-flex flex-column">
-                <MudTextField @bind-Value="NewTagName" Lines="1" />
+                <MudAutocomplete 
+                    T="string" Label="Enter Tag" @bind-Value="NewTagName"
+                    CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
+                    SearchFunc="TagSearch"
+                    />
+                @*<MudTextField @bind-Value="NewTagName" Lines="1" />*@
                 <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@AddTag"/>
             </div>
         </MudPopover>
@@ -123,5 +128,6 @@
     private string NewTagName { get; set; } = string.Empty;
     private string? UserId { get; set; }
     private int maxTags = 5;
-    
+    //private List<string> tags { get; set; } = new();
+
 }
