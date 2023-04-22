@@ -22,7 +22,7 @@
             <MudMenu Icon="@Icons.Material.Filled.MoreVert">
                 @if (CanEdit) {
                     <MudMenuItem Icon="@Icons.Material.Filled.Edit" @onclick="OnEditClick" />
-                    <MudMenuItem>Save</MudMenuItem>
+                    <MudMenuItem @onclick="() => SaveRecipe(true)">Save</MudMenuItem>
                     <MudMenuItem>Delete</MudMenuItem>
                 }                
                 <MudMenuItem>Copy</MudMenuItem>

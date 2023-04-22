@@ -8,7 +8,7 @@
     <h4>Steps</h4>
         <MudPaper MinWidth="600px">
             <MudList Class="pl-16">
-                @foreach (RecipeStep rs in ItemRecipe!.RecipeSteps!) {
+                @foreach (RecipeStep rs in ItemRecipe!.RecipeSteps!.OrderBy(rs => rs.Order)) {
                     <MudListItem Text="@rs.Description" Class="ma-0 pa-0" />
 
                     @if (rs.Details != string.Empty) {
@@ -39,7 +39,7 @@
                 Icon="@Icons.Material.Filled.Add"
                 ToggledIcon="@Icons.Material.Filled.Remove" />
         @if (ShowNewStepInput) {
-            <MudTextField @bind-Value="LastItem.Name" Label="New Step" Immediate="true"></MudTextField>
+            @*<MudTextField @bind-Value="LastItem.Name" Label="New Step" Immediate="true"></MudTextField>*@
             <MudTextField @bind-Value="LastItem.Description" Label="New Step" Lines="3"></MudTextField>
             <MudTextField @bind-Value="LastItem.Details" Label="Details" Lines="5"></MudTextField>
             <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add" @onclick="(e) => {
@@ -62,7 +62,7 @@
 @if (ItemRecipe != null) {
     <MudPopover Open="@stepEditOpen" Fixed="false" Class="px-4 pt-4">
         <div class="d-flex flex-column">
-            <MudTextField @bind-Value="editingStep.Name" Lines="1" />
+            @*<MudTextField @bind-Value="editingStep.Name" Lines="1" />*@
             <MudTextField @bind-Value="editingStep.Description" Lines="3" />
             <MudTextField @bind-Value="editingStep.Details" Lines="5" />
             <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {

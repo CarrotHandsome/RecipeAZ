@@ -73,13 +73,15 @@ namespace RecipeAZ.Models {
                     RecipeIngredientId = "1", 
                     RecipeId = "1", 
                     Name = "Lentils",
-                    Amount = "4 cups"
+                    Amount = "4 cups",
+                    Order = 1
                 },
                 new RecipeIngredient {
                     RecipeIngredientId = "2",
                     RecipeId = "1",
                     Name = "Water",
-                    Amount = "to cover"
+                    Amount = "to cover",
+                    Order = 2
                 }
             );
             modelBuilder.Entity<RecipeIngredient>()
@@ -91,18 +93,21 @@ namespace RecipeAZ.Models {
                     RecipeStepId = "1",
                     RecipeId = "1",
                     Name = "Step 1",
-                    Description = "Rinse Lentils"
+                    Description = "Rinse Lentils",
+                    Order = 1
                 },
                 new RecipeStep {
                     RecipeStepId = "2",
                     RecipeId = "1",
                     Name = "Step 2",
-                    Description = "Add lentils and water to pot"
+                    Description = "Add lentils and water to pot",
+                    Order = 2
                 }, new RecipeStep {
                     RecipeStepId = "3",
                     RecipeId = "1",
                     Name = "Step 3",
-                    Description = "Boil till cooked"
+                    Description = "Boil till cooked",
+                    Order = 3
                 }
             );
             modelBuilder.Entity<RecipeStep>()

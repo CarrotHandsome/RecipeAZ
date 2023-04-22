@@ -21,7 +21,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
         
         public bool CannotAddItem {
             get {
-                return LastItem == null || LastItem.Name == string.Empty;
+                return LastItem == null;
             }
         }
     }

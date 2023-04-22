@@ -8,8 +8,6 @@ namespace RecipeAZ.Models {
         public string Notes { get; set; } = string.Empty;
         public Recipe? Recipe { get; set; }
         public string Amount { get; set; } = string.Empty;
-        
-
-
+        public int Order { get; set; }
     }
 }
