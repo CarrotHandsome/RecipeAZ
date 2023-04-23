@@ -35,9 +35,16 @@
     
     <div class="view-recipe-container m-2">
         <MudGrid>
-            <MudItem>
-                <h3 style="margin-top: 0.5rem; margin-bottom: 0;">@Recipe.Name</h3>
+            <MudItem Class="pr-1">
+                <h3 style="margin-top: 0.5rem; margin-bottom: 0; margin-right: 0;">@Recipe.Name</h3>
             </MudItem>
+            @if (CanEdit && Editing) {
+                <MudItem Class="pl-0">
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                        titleEditOpen = true;
+                    }" style="margin-top: 0.75rem;" />
+                </MudItem>
+            }
             <MudItem>
                 <MudToggleIconButton Icon="@Icons.Material.Filled.Favorite"
                     ToggledIcon="@Icons.Material.Filled.Favorite" ToggledColor="Color.Secondary"
@@ -97,6 +104,15 @@
             </div>
         </MudPopover>
         
+        <MudPopover Open="@titleEditOpen" Fixed="false" Class="px-4 pt-4">
+            <div class="d-flex flex-column">
+                <MudTextField @bind-Value="Recipe.Name" Lines="1" />
+                <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
+                titleEditOpen = false;
+            }" />
+            </div>
+        </MudPopover>
+
         <div class="recipe-halves">
             <CascadingValue Value="@User" Name="UserParam">
                 <CascadingValue Value="@Recipe" Name="RecipeParam">   
@@ -128,6 +144,7 @@
     private string NewTagName { get; set; } = string.Empty;
     private string? UserId { get; set; }
     private int maxTags = 5;
+    private bool titleEditOpen { get; set; } = false;
     //private List<string> tags { get; set; } = new();
 
 }

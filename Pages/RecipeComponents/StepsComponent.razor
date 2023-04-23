@@ -9,29 +9,34 @@
         <MudPaper MinWidth="600px">
             <MudList Class="pl-16">
                 @foreach (RecipeStep rs in ItemRecipe!.RecipeSteps!.OrderBy(rs => rs.Order)) {
-                    <MudListItem Text="@rs.Description" Class="ma-0 pa-0" />
-
-                    @if (rs.Details != string.Empty) {
-                        <MudToggleIconButton @bind-Toggled="detailsOpen[rs]"
-                            Icon="@Icons.Material.Filled.ChevronRight"
-                            ToggledIcon="@Icons.Material.Filled.ExpandMore" />
-
-                    }
-                    @if (detailsOpen[rs]) {
-                        <MudPaper>@rs.Details</MudPaper>
-                    }
-                    @if (CanEdit && Editing) {
-                        <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="(e) => {
-                            ItemRecipe!.RecipeSteps.Remove(rs);
-                            StateHasChanged();
-                        }" />
-                        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
-                            stepEditOpen = true;
-                            editingStep = rs;
-                        }" />
-                    }
-                                    
-                }
+                    bool hasNoDetails = rs.Details == string.Empty;
+                    <MudListItem>
+                        <MudGrid>
+                            <MudItem>                                
+                                <div style="margin-top: 0.75rem; margin-bottom: 0;">@rs.Description</div>                                
+                            </MudItem>
+                            <MudItem>
+                                <MudToggleIconButton @bind-Toggled="detailsOpen[rs]"
+                                    Icon="@Icons.Material.Filled.ChevronRight"
+                                    ToggledIcon="@Icons.Material.Filled.ExpandMore"
+                                    Disabled="@hasNoDetails" />
+                            </MudItem>
+                        </MudGrid>                    
+                        @if (detailsOpen[rs]) {
+                            <MudPaper Class="pa-3">@rs.Details</MudPaper>
+                        }
+                        @if (CanEdit && Editing) {
+                            <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="(e) => {
+                                ItemRecipe!.RecipeSteps.Remove(rs);
+                                StateHasChanged();
+                            }" />
+                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                                stepEditOpen = true;
+                                editingStep = rs;
+                            }" />
+                        }
+                    </MudListItem>
+                }                
             </MudList>
         </MudPaper>   
         @if (CanEdit && Editing) {

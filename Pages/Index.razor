@@ -74,16 +74,18 @@
                             <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
                                 Typo="Typo.h6"
                                 Color="Color.Dark"
-                                Underline="Underline.None">
+                                Underline="Underline.None"
+                                Class="index-recipe-ellipsis">
                              @recipe.Name
                             </MudLink>
+                            <p style="margin: 0;"/>
                             <MudLink @onclick="@(() => NavigateToProfile(recipe.User.Id))"
-                                Typo="Typo.h6"
+                                Typo="Typo.caption"
                                 Color="Color.Dark"
                                 Underline="Underline.None">
                                 by @recipe.User.UserName
-                            </MudLink>                           
-                            <p/>
+                            </MudLink>
+                            <p style="margin: 0;" />
                             @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
                                 <MudChip Size="Size.Small">
                                     <MudText>@recipeTag.Tag.Name</MudText>
@@ -100,7 +102,7 @@
     <MudItem>
         <MudList>
             <MudListSubheader>Browse recent recipes</MudListSubheader>
-            @foreach (Recipe recipe in RecentRecipes) {
+            @foreach (Recipe recipe in RecentRecipes) {               
                 <MudListItem>
                     <MudGrid>
                         <MudItem>
@@ -110,17 +112,20 @@
                         </MudItem>
                         <MudItem>
                             <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
-                                Typo="Typo.h6"
-                                Color="Color.Dark"
-                                Underline="Underline.None">
+                                 Typo="Typo.h6"
+                                 Color="Color.Dark"
+                                 Underline="Underline.None"
+                                 Class="index-recipe-ellipsis">
                                 @recipe.Name
                             </MudLink>
+                            <p style="margin: 0;" />
                             <MudLink @onclick="@(() => NavigateToProfile(recipe.User.Id))"
-                                Typo="Typo.h6"
-                                Color="Color.Dark"
-                                Underline="Underline.None">
+                                 Typo="Typo.caption"
+                                 Color="Color.Dark"
+                                 Underline="Underline.None">
                                 by @recipe.User.UserName
-                            </MudLink>  
+                            </MudLink>
+                            <p style="margin: 0;" />
                             @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
                                 <MudChip Size="Size.Small">
                                     <MudText>@recipeTag.Tag.Name</MudText>
