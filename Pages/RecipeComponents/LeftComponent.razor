@@ -11,7 +11,7 @@
                     <OverViewComponent />
                 </MudTabPanel>
                 <MudTabPanel Text="Ingredients">
-                    <IngredientsComponent />
+                    <IngredientsComponent @ref="_ingredientsRef" />
                 </MudTabPanel>
                 <MudTabPanel Text="Steps">
                     <StepsComponent />
@@ -23,7 +23,7 @@
                 @if (CanEdit) {
                     <MudMenuItem Icon="@Icons.Material.Filled.Edit" @onclick="OnEditClick" />
                     <MudMenuItem @onclick="() => SaveRecipe(true)">Save</MudMenuItem>
-                    <MudMenuItem>Delete</MudMenuItem>
+                    <MudMenuItem @onclick="() => RemoveRecipe()">Delete</MudMenuItem>
                 }                
                 <MudMenuItem>Copy</MudMenuItem>
             </MudMenu>
@@ -45,7 +45,9 @@
     protected bool CanEdit { get; set; }
     [CascadingParameter(Name = "RecipeParam")]
     public Recipe Recipe { get; set; }
-
+    [CascadingParameter(Name = "UserParam")]
+    public AppUser User { get; set; }
+    private IngredientsComponent _ingredientsRef;
     public string? button;
     private bool ActionsVisible { get; set; }
     public void NavigateHandler(string button) {
@@ -57,24 +59,54 @@
         await OnEditUpdate.InvokeAsync(Editing);
     }
 
-    private async Task SaveRecipe(bool fromCreator = true) {
-
-        if (Id != null) {
+    private async Task SaveRecipe(bool fromCreator = true)
+    {
+        Console.WriteLine("Saving Ingredients");
+        //await _ingredientsRef.UpdateAddedIngredient();
+        if (Id != null)
+        {
             dataContext.Recipes.Update(Recipe!);
-        } else {
+            Console.WriteLine("updating recipe");
+        }
+        else
+        {
             await dataContext.Recipes.AddAsync(Recipe!);
             Console.WriteLine("added recipe..");
             //dataContext.Recipes.Update(EditRecipe!);
         }
+
         Console.WriteLine("Saving changes...");
-        await dataContext.SaveChangesAsync();
+        try {
+            await dataContext.SaveChangesAsync();
+        } catch (Exception ex) {
+            Console.WriteLine($"EXCEPTION: {ex}");
+        }
+        _ingredientsRef.LastItem = new();
         Console.WriteLine("Saved");
-        if (fromCreator) {
+        if (fromCreator)
+        {
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomCenter;
             snackBar.Configuration.VisibleStateDuration = 500;
             snackBar.Add("Saved Recipe", MudBlazor.Severity.Success);
         }
         navigationManager.NavigateTo($"/recipe/{Recipe!.RecipeId}");
     }
-    
+
+    private async Task RemoveRecipe() {
+        if (Recipe.RecipeId == null) {
+            snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;            
+            snackBar.Configuration.VisibleStateDuration = 400;
+            snackBar.Configuration.ShowTransitionDuration = 300;
+            snackBar.Add("Recipe has not been saved yet.", MudBlazor.Severity.Warning);
+        } else {
+            dataContext.Recipes.Remove(Recipe);
+            dataContext.SaveChanges();
+            navigationManager.NavigateTo($"/profile/{ User.Id }");
+            snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
+            snackBar.Configuration.VisibleStateDuration = 500;
+            snackBar.Configuration.ShowTransitionDuration = 300;
+            snackBar.Add("Recipe removed.", MudBlazor.Severity.Normal);
+        }
+    }
+
 }

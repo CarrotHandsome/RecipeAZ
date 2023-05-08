@@ -17,7 +17,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
         protected bool CanEdit { get; set; }
         [CascadingParameter(Name = "EditingParam")]
         protected bool Editing { get; set; }
-        public T LastItem { get; set; } = new();
+        public T LastItem { get; set; } = new(); //LastItem is the last item in the list, which means it is the only one that could be in the process of being added as a new ingredient
         
         public bool CannotAddItem {
             get {

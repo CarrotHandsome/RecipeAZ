@@ -20,7 +20,11 @@ namespace RecipeAZ.Models {
         public DbSet<Comment> Comments => Set<Comment>();
         public DbSet<Tag> Tags => Set<Tag>();
         public DbSet<RecipeTag> RecipeTags => Set<RecipeTag>();
+        public DbSet<IngredientModifier> Modifiers => Set<IngredientModifier>();
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
+            optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder) {
             base.OnModelCreating(modelBuilder);
 
@@ -52,6 +56,42 @@ namespace RecipeAZ.Models {
                 UserId = ADMIN_ID
             });
 
+            modelBuilder.Entity<Ingredient>()
+                .Property(i => i.IngredientId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<Ingredient>()
+                .HasKey(i => i.IngredientId);
+            modelBuilder.Entity<IngredientModifier>()
+                .Property(im => im.IngredientModifierId)
+                .ValueGeneratedOnAdd();
+            modelBuilder.Entity<IngredientModifier>()
+                .HasMany(im => im.BeforeRecipeIngredients)
+                .WithOne(ri => ri.Before)
+                .HasForeignKey(ri => ri.BeforeId);
+            modelBuilder.Entity<IngredientModifier>()
+                .HasMany(im => im.AfterRecipeIngredients)
+                .WithOne(ri => ri.After)
+                .HasForeignKey(ri => ri.AfterId);
+            modelBuilder.Entity<RecipeIngredient>()
+                .HasOne(ri => ri.Ingredient)
+                .WithMany(i => i.RecipeIngredients)
+                .HasForeignKey(ri => ri.IngredientId);
+            modelBuilder.Entity<Ingredient>().HasData(
+                new Ingredient {
+                    IngredientId = "1",
+                    Name = "water"
+                });
+            modelBuilder.Entity<Ingredient>().HasData(
+                new Ingredient {
+                    IngredientId = "2",
+                    Name = "lentils"
+                });
+            modelBuilder.Entity<IngredientModifier>().HasData(
+                new IngredientModifier {
+                    IngredientModifierId = "1",
+                    Name = string.Empty
+                });
+
             modelBuilder.Entity<Recipe>().HasData(
                 new Recipe { 
                     RecipeId = "1", 
@@ -68,18 +108,29 @@ namespace RecipeAZ.Models {
             modelBuilder.Entity<Recipe>()
                 .Property(c => c.CreatedAt)
                 .HasDefaultValueSql("getdate()");
+
+            modelBuilder.Entity<IngredientModifier>().HasData(
+                new IngredientModifier {
+                    IngredientModifierId = "2",
+                    Name = "red",
+                    IsBefore = true
+                });
             modelBuilder.Entity<RecipeIngredient>().HasData(
                 new RecipeIngredient { 
                     RecipeIngredientId = "1", 
                     RecipeId = "1", 
-                    Name = "Lentils",
+                    IngredientId = "2",
+                    BeforeId = "2",
+                    AfterId = "1",
                     Amount = "4 cups",
                     Order = 1
                 },
                 new RecipeIngredient {
                     RecipeIngredientId = "2",
                     RecipeId = "1",
-                    Name = "Water",
+                    IngredientId = "1",  
+                    BeforeId = "1",
+                    AfterId = "1",
                     Amount = "to cover",
                     Order = 2
                 }
@@ -113,6 +164,7 @@ namespace RecipeAZ.Models {
             modelBuilder.Entity<RecipeStep>()
                 .Property(r => r.RecipeStepId)
                 .ValueGeneratedOnAdd();
+            
 
             modelBuilder.Entity<Comment>().HasData(
                 new Comment {
@@ -132,7 +184,7 @@ namespace RecipeAZ.Models {
             modelBuilder.Entity<Comment>()
                 .Property(c => c.CreatedAt)
                 .HasDefaultValueSql("getdate()");
-
+            
             modelBuilder.Entity<RecipeLike>()
                 .HasKey(l => new { l.AppUserId, l.RecipeId });
             modelBuilder.Entity<RecipeLike>()

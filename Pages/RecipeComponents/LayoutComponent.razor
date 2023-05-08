@@ -13,6 +13,7 @@
 
 
 @if (Recipe != null) {
+    <h1>@NewTagName</h1>
     <MudGrid>
         <MudItem><MudImage Src="@Recipe.ImagePath" Height="200" /></MudItem>
         @if(CanEdit && Editing) {
@@ -92,14 +93,16 @@
             }
 
         </MudGrid>
-        <MudPopover Open="@NewTagOpen" Fixed="false" Class="px-4 pt4">
+        <MudPopover Open="@NewTagOpen" Fixed="false" Class="px-4">
             <div class="d-flex flex-column">
                 <MudAutocomplete 
-                    T="string" Label="Enter Tag" @bind-Value="NewTagName"
+                    T="string" Label="Enter Tag"
+                    Value="NewTagName"
+                    TextChanged="OnValueChanged"                    
                     CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
                     SearchFunc="TagSearch"
-                    />
-                @*<MudTextField @bind-Value="NewTagName" Lines="1" />*@
+                    />             
+                
                 <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@AddTag"/>
             </div>
         </MudPopover>
@@ -118,7 +121,7 @@
                 <CascadingValue Value="@Recipe" Name="RecipeParam">   
                     <CascadingValue Value="@CanEdit" Name="CanEditParam">
                         <CascadingValue Value="@Editing" Name="EditingParam" >
-                            <LeftComponent Id="Id" OnEditUpdate="@UpdateEditState"/>
+                            <LeftComponent Id="Id" OnEditUpdate="@UpdateEditState" />
                             <RightComponent />
                         </CascadingValue>                        
                     </CascadingValue>                                                   
@@ -145,6 +148,9 @@
     private string? UserId { get; set; }
     private int maxTags = 5;
     private bool titleEditOpen { get; set; } = false;
+    
     //private List<string> tags { get; set; } = new();
-
+    private void OnValueChanged(string value) {
+        NewTagName = value;
+    }
 }

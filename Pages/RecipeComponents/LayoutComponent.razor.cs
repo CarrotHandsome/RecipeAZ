@@ -47,8 +47,13 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 
             } else {
                 Recipe = await dataContext.Recipes                  
-                    .Include(r => r.RecipeIngredients)
-                    .Include(r => r.RecipeSteps)
+                    .Include(r => r.RecipeIngredients!)
+                        .ThenInclude(ri => ri.Ingredient)
+                    .Include(r => r.RecipeIngredients!)
+                        .ThenInclude(ri => ri.Before)
+                    .Include(r => r.RecipeIngredients!)
+                        .ThenInclude(ri => ri.After)
+                    .Include(r => r.RecipeSteps)                    
                     .Include(r => r.User)
                     .Include(r => r.UsersWhoLikeMe)
                     .Include(r => r.Comments!)
@@ -170,7 +175,10 @@ namespace RecipeAZ.Pages.RecipeComponents {
             await dataContext.SaveChangesAsync();   
         }
         private async Task AddTag() {
+            Console.WriteLine(NewTagName == null);
+            Console.WriteLine(NewTagName);
             if (!string.IsNullOrEmpty(NewTagName)) {
+                Console.WriteLine("adding tag");
                 Tag existingTag = await dataContext.Tags.FirstOrDefaultAsync(t => t.Name == ToTitleCase(NewTagName));
                 Tag tagToAdd;
                 if (existingTag == null) {
@@ -184,8 +192,9 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 if (!dataContext.RecipeTags.Any(rt => rt.RecipeId == Id && rt.TagId == tagToAdd.TagId)) {
                     RecipeTag recipeTag = new RecipeTag { RecipeId = Recipe.RecipeId, TagId = tagToAdd.TagId };
                     dataContext.RecipeTags.Add(recipeTag);
+                    Recipe.RecipeTags.Add(recipeTag);
                     await dataContext.SaveChangesAsync();
-                    Recipe.RecipeTags.Add(recipeTag);                    
+                                    
                 }
                 NewTagName = string.Empty;
                 NewTagOpen = false;
@@ -202,13 +211,15 @@ namespace RecipeAZ.Pages.RecipeComponents {
             return textInfo.ToTitleCase(input.ToLower());
         }
         private async Task<IEnumerable<string>> TagSearch(string value) {
+            if (string.IsNullOrEmpty(value)) {
+                return new List<string>();
+            }
+
             List<string> tags = await dataContext.Tags.Select(t => t.Name).ToListAsync();
             //foreach(RecipeTag rt in Recipe.RecipeTags) {
             //    tags.Remove(dataContext.Tags.FirstOrDefault(t => t.TagId == rt.TagId).Name);                
             //}
-            if (string.IsNullOrEmpty(value)) {
-                return new List<string>();
-            }                
+                          
             return tags.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));
         }
     }

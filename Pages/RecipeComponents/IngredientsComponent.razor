@@ -6,8 +6,7 @@
 
 
 <div>
-    <h4>Ingredients</h4>
-    
+    <h4>Ingredients</h4>    
         <MudPaper MinWidth="600px">
             <MudList Class="pl-3">
                 @foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!) {
@@ -15,7 +14,7 @@
                 <MudListItem>
                         <MudGrid>
                             <MudItem>
-                                <div style="margin-top: 0.75rem; margin-bottom: 0;">@ri.Name:</div>
+                                <div style="margin-top: 0.75rem; margin-bottom: 0;">@ri.Ingredient?.Name:</div>
                             </MudItem>
                             <MudItem>
                                     <div style="margin-top: 0.75rem; margin-bottom: 0;">@ri.Amount</div>
@@ -40,10 +39,10 @@
                                 <MudItem xs="1">
                                     <MudIconButton Icon="@Icons.Material.Filled.Edit" 
                                         Size="Size.Small"
-                                        aria-label="delete"
+                                        aria-label="edit"
                                         @onclick="() => {
-                                            ingredientEditOpen = true;
                                             editingIngredient = ri;
+                                            ingredientEditOpen = true;
                                     }" />
                                 </MudItem>
                             }                            
@@ -61,21 +60,15 @@
                 Icon="@Icons.Material.Filled.Add"
                 ToggledIcon="@Icons.Material.Filled.Remove" />
             @if (ShowNewIngredientInput) {
-                        <MudTextField @bind-Value="LastItem.Name" Label="New Ingredient" Immediate="true"></MudTextField>
-                        <MudTextField @bind-Value="LastItem.Amount" Label="Amount"></MudTextField>
-                        <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add" @onclick="(e) => {
-                            RecipeIngredient newIngredient = new RecipeIngredient {
-                                Name = LastItem.Name,
-                                Amount = LastItem.Amount,
-                                Notes = LastItem.Notes,
-                                Recipe = ItemRecipe
-                            };
-                            ItemRecipe!.RecipeIngredients!.Add(newIngredient);
-                            detailsOpen[newIngredient] = true;
-                            LastItem = new();
-                            ShowNewIngredientInput = false;
-                            StateHasChanged();
-                }" />
+                <MudAutocomplete T="string" Label="Name your ingredient" 
+                    Value="LastItem.Name" TextChanged="OnTextChanged"
+                    CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
+                    SearchFunc="FindIngredientMatches" />
+                @*<MudTextField @bind-Value="LastItem.Name" Label="New Ingredient" Immediate="true"></MudTextField>*@
+                <MudTextField @bind-Value="LastItem.Amount" Label="Amount"></MudTextField>
+                <MudTextField @bind-Value="LastItem.Notes" Label="Notes"></MudTextField>
+                <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add" 
+                    @onclick="async (e) => { await AddRecipeIngredient(LastItem); }" />
             }   
         }         
 </div>
@@ -83,39 +76,41 @@
 @if (ItemRecipe != null) {
     <MudPopover Open="@ingredientEditOpen" Fixed="false" Class="px-4 pt-4">
         <div class="d-flex flex-column">
-            <MudTextField @bind-Value="editingIngredient.Name" Lines="1" />
+            <h3>@editingIngredient.Name</h3>
+            <MudAutocomplete T="string" Label="Name your ingredient"
+                Value="editingIngredient.Name" TextChanged="UpdateEditingIngredient"
+                CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
+                SearchFunc="FindIngredientMatches" />
+            <MudTextField @bind-Value="editingIngredient.Amount" Lines="1" />
             <MudTextField @bind-Value="editingIngredient.Notes" Lines="5" />
-            <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
+                <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
+                AddRecipeIngredient(editingIngredient);
                 ingredientEditOpen = false;
-                //editingIngredient = null;
                 StateHasChanged();
             }" />
         </div>
     </MudPopover>
 }
 
-
-
 @code {
+
     private bool ShowNewIngredientInput { get; set; } = false;
     private Dictionary<RecipeIngredient, bool> detailsOpen = new Dictionary<RecipeIngredient, bool>();
     private bool ingredientEditOpen = false;
+    private string editingName;
+    private string editingAmount;
+    private string editingNotes;
+    private List<RecipeIngredient> RecipeIngredientsList => ItemRecipe.RecipeIngredients.ToList();
     private RecipeIngredient? editingIngredient;
-    
+    private int editingIngredientIndex;
+    private List<string> AllIngredients = new();
+    private Ingredient _newIngredientToRemove = null;
+    //private RecipeIngredient _newRI = new();
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
-        if (ItemRecipe != null && ItemRecipe.RecipeIngredients != null) {
-            foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!) {
-                detailsOpen[ri] = false;
-            }
-        }        
+    private void OnTextChanged(string value) {
+        LastItem.Name = value;
     }
-    private async Task UpdateAndSaveRecipe() {
-        if (ItemRecipe != null) {
-            dataContext.Update(ItemRecipe);
-            await dataContext.SaveChangesAsync();
-            StateHasChanged();
-        }
-    }   
+    private void UpdateEditingIngredient(string value) {
+        editingIngredient.Name = value;
+    }
 }

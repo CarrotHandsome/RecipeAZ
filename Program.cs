@@ -14,8 +14,11 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Logging.ClearProviders();
+builder.Logging.AddConsole();
 var connectionString = builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 
 //builder.Services.AddDbContext<IdentityContext>(opts => {

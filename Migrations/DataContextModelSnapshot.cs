@@ -240,14 +240,14 @@ namespace RecipeAZ.Migrations
                         {
                             Id = "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "05f03e8f-29ed-4523-9d6d-22c310fad19d",
+                            ConcurrencyStamp = "46389808-5369-48bc-bdd3-d012e763bb9f",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAELZLzt7n2/vB8wb2QX//AJ/OK+XewmHpmNrFiFSzzVI58dvTjwCjH+evlW5f4fe0bA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEEs5599zY7ktXyVFqNgceVwstzhHeOH6mkI+fT6bac7ZYS2bRewp1acOXKxcPsIkOQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "b18beda3-2403-4a07-a041-74df3073f6a1",
+                            SecurityStamp = "3e58afd2-ff34-421d-a86c-f2ebdd1b98e1",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -288,7 +288,7 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             CommentId = "1",
-                            CreatedAt = new DateTime(2023, 4, 14, 0, 23, 30, 980, DateTimeKind.Local).AddTicks(1243),
+                            CreatedAt = new DateTime(2023, 5, 4, 19, 45, 22, 802, DateTimeKind.Local).AddTicks(1298),
                             RecipeId = "1",
                             Text = "nice recipe",
                             UserId = "02174cf0–9412–4cfe - afbf - 59f706d72cf6"
@@ -298,6 +298,7 @@ namespace RecipeAZ.Migrations
             modelBuilder.Entity("RecipeAZ.Models.Ingredient", b =>
                 {
                     b.Property<string>("IngredientId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
@@ -307,6 +308,60 @@ namespace RecipeAZ.Migrations
                     b.HasKey("IngredientId");
 
                     b.ToTable("Ingredients");
+
+                    b.HasData(
+                        new
+                        {
+                            IngredientId = "1",
+                            Name = "water"
+                        },
+                        new
+                        {
+                            IngredientId = "2",
+                            Name = "lentils"
+                        });
+                });
+
+            modelBuilder.Entity("RecipeAZ.Models.IngredientModifier", b =>
+                {
+                    b.Property<string>("IngredientModifierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IngredientId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IngredientId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsBefore")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IngredientModifierId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.HasIndex("IngredientId1");
+
+                    b.ToTable("Modifiers");
+
+                    b.HasData(
+                        new
+                        {
+                            IngredientModifierId = "1",
+                            IsBefore = false,
+                            Name = ""
+                        },
+                        new
+                        {
+                            IngredientModifierId = "2",
+                            IsBefore = true,
+                            Name = "red"
+                        });
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Recipe", b =>
@@ -348,7 +403,7 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             RecipeId = "1",
-                            CreatedAt = new DateTime(2023, 4, 14, 0, 23, 30, 979, DateTimeKind.Local).AddTicks(9365),
+                            CreatedAt = new DateTime(2023, 5, 4, 19, 45, 22, 802, DateTimeKind.Local).AddTicks(159),
                             Description = "Nulla turpis risus, mollis sed mi non, congue posuere enim. Fusce vehicula ligula nec nibh vehicula tempor. Maecenas accumsan quis mauris a imperdiet. Phasellus venenatis, dolor vitae venenatis aliquet, mi nisi consequat ligula, vel facilisis arcu eros id justo. Vestibulum id porta tellus, nec porttitor diam. Praesent hendrerit nulla sed eros finibus, eu sodales mauris semper. Praesent eros velit, sollicitudin a ex id, sagittis eleifend turpis. Pellentesque facilisis sem eu varius elementum. Sed ac justo dolor. Donec malesuada justo eu urna luctus, et cursus magna laoreet. Vivamus a accumsan risus. Nullam rutrum porta elementum. Curabitur lectus odio, euismod et dolor sit amet, efficitur elementum felis. Mauris quam sapien, commodo sed libero facilisis, cursus feugiat ligula.",
                             ImagePath = "images/recipe_default.png",
                             Name = "Tarka Dal",
@@ -363,9 +418,20 @@ namespace RecipeAZ.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AfterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Amount")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeforeId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IngredientId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -375,11 +441,20 @@ namespace RecipeAZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.Property<string>("RecipeId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("RecipeIngredientId");
+
+                    b.HasIndex("AfterId");
+
+                    b.HasIndex("BeforeId");
+
+                    b.HasIndex("IngredientId");
 
                     b.HasIndex("RecipeId");
 
@@ -389,17 +464,25 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             RecipeIngredientId = "1",
+                            AfterId = "1",
                             Amount = "4 cups",
-                            Name = "Lentils",
+                            BeforeId = "2",
+                            IngredientId = "2",
+                            Name = "",
                             Notes = "",
+                            Order = 1,
                             RecipeId = "1"
                         },
                         new
                         {
                             RecipeIngredientId = "2",
+                            AfterId = "1",
                             Amount = "to cover",
-                            Name = "Water",
+                            BeforeId = "1",
+                            IngredientId = "1",
+                            Name = "",
                             Notes = "",
+                            Order = 2,
                             RecipeId = "1"
                         });
                 });
@@ -444,6 +527,9 @@ namespace RecipeAZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.Property<string>("RecipeId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -461,6 +547,7 @@ namespace RecipeAZ.Migrations
                             Description = "Rinse Lentils",
                             Details = "",
                             Name = "Step 1",
+                            Order = 1,
                             RecipeId = "1"
                         },
                         new
@@ -469,6 +556,7 @@ namespace RecipeAZ.Migrations
                             Description = "Add lentils and water to pot",
                             Details = "",
                             Name = "Step 2",
+                            Order = 2,
                             RecipeId = "1"
                         },
                         new
@@ -477,6 +565,7 @@ namespace RecipeAZ.Migrations
                             Description = "Boil till cooked",
                             Details = "",
                             Name = "Step 3",
+                            Order = 3,
                             RecipeId = "1"
                         });
                 });
@@ -581,6 +670,17 @@ namespace RecipeAZ.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("RecipeAZ.Models.IngredientModifier", b =>
+                {
+                    b.HasOne("RecipeAZ.Models.Ingredient", null)
+                        .WithMany("Afters")
+                        .HasForeignKey("IngredientId");
+
+                    b.HasOne("RecipeAZ.Models.Ingredient", null)
+                        .WithMany("Befores")
+                        .HasForeignKey("IngredientId1");
+                });
+
             modelBuilder.Entity("RecipeAZ.Models.Recipe", b =>
                 {
                     b.HasOne("RecipeAZ.Models.AppUser", "User")
@@ -592,11 +692,33 @@ namespace RecipeAZ.Migrations
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeIngredient", b =>
                 {
+                    b.HasOne("RecipeAZ.Models.IngredientModifier", "After")
+                        .WithMany("AfterRecipeIngredients")
+                        .HasForeignKey("AfterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RecipeAZ.Models.IngredientModifier", "Before")
+                        .WithMany("BeforeRecipeIngredients")
+                        .HasForeignKey("BeforeId");
+
+                    b.HasOne("RecipeAZ.Models.Ingredient", "Ingredient")
+                        .WithMany("RecipeIngredients")
+                        .HasForeignKey("IngredientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("RecipeAZ.Models.Recipe", "Recipe")
                         .WithMany("RecipeIngredients")
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("After");
+
+                    b.Navigation("Before");
+
+                    b.Navigation("Ingredient");
 
                     b.Navigation("Recipe");
                 });
@@ -657,6 +779,22 @@ namespace RecipeAZ.Migrations
                     b.Navigation("Recipes");
 
                     b.Navigation("RecipesILike");
+                });
+
+            modelBuilder.Entity("RecipeAZ.Models.Ingredient", b =>
+                {
+                    b.Navigation("Afters");
+
+                    b.Navigation("Befores");
+
+                    b.Navigation("RecipeIngredients");
+                });
+
+            modelBuilder.Entity("RecipeAZ.Models.IngredientModifier", b =>
+                {
+                    b.Navigation("AfterRecipeIngredients");
+
+                    b.Navigation("BeforeRecipeIngredients");
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Recipe", b =>
