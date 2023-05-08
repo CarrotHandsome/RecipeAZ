@@ -58,11 +58,11 @@ namespace RecipeAZ.Pages.RecipeComponents {
             }
         }
 
-        private async Task AddRecipeIngredient(RecipeIngredient ri) {
-            bool adding = ri == LastItem;
-            Console.WriteLine(ri.Name);
+        private void AddRecipeIngredient(RecipeIngredient ri) {
+            bool adding = ri.RecipeIngredientId == null;
+            Console.WriteLine("recipe ingredient: " + ri.Name);
             Ingredient existingIngredient = dataContext.Ingredients.FirstOrDefault(i => i.Name == ri.Name);
-            Console.WriteLine(existingIngredient?.Name ?? "no existing ingredient");
+            Console.WriteLine("existing ingredient" + (existingIngredient?.Name ?? "no existing ingredient"));
             if (existingIngredient == null) {
                 Console.WriteLine("adding new ingredient");
                 ri.Ingredient = new Ingredient {

@@ -21,20 +21,23 @@
                                     ToggledIcon="@Icons.Material.Filled.ExpandMore"
                                     Disabled="@hasNoDetails" />
                             </MudItem>
+                            @if (CanEdit && Editing) {
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="(e) => {
+                                    ItemRecipe!.RecipeSteps.Remove(rs);
+                                    StateHasChanged();
+                                }" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                                    originalDescription = rs.Description;
+                                    originalDetails = rs.Details;
+                                    stepEditOpen = true;
+                                    editingStep = rs;
+                                }" />
+                            }
                         </MudGrid>                    
                         @if (detailsOpen[rs]) {
                             <MudPaper Class="pa-3">@rs.Details</MudPaper>
                         }
-                        @if (CanEdit && Editing) {
-                            <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="(e) => {
-                                ItemRecipe!.RecipeSteps.Remove(rs);
-                                StateHasChanged();
-                            }" />
-                            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
-                                stepEditOpen = true;
-                                editingStep = rs;
-                            }" />
-                        }
+                        
                     </MudListItem>
                 }                
             </MudList>
@@ -54,6 +57,7 @@
                         Details = LastItem.Details,
                         Recipe = ItemRecipe
                     };
+                    newStep.Order = ItemRecipe.RecipeSteps.Count() + 1;
                     ItemRecipe!.RecipeSteps!.Add(newStep);
                     detailsOpen[newStep] = true;
                     LastItem = new();
@@ -70,10 +74,20 @@
             @*<MudTextField @bind-Value="editingStep.Name" Lines="1" />*@
             <MudTextField @bind-Value="editingStep.Description" Lines="3" />
             <MudTextField @bind-Value="editingStep.Details" Lines="5" />
-            <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
-                stepEditOpen = false;
-                StateHasChanged();
-            }" />
+            <div class="d-flex d-row">
+                <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="async () => {
+                    stepEditOpen = false;
+                    StateHasChanged();
+                }" />
+                <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error" Size="Size.Large" @onclick="async () => {
+                    editingStep.Description = originalDescription;
+                    editingStep.Details = originalDetails;
+                    
+                    stepEditOpen = false;
+                    StateHasChanged();
+                }" />
+            </div>
+            
         </div>
     </MudPopover>
 }
@@ -83,6 +97,9 @@
     private Dictionary<RecipeStep, bool> detailsOpen = new Dictionary<RecipeStep, bool>();
     private bool stepEditOpen = false;
     private RecipeStep? editingStep;
+    private string originalDescription;
+    private string originalDetails;
+    private RecipeStep tempStep;
 
     protected override void OnInitialized() {
         base.OnInitialized();

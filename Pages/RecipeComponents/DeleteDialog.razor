@@ -1,0 +1,23 @@
+﻿@inherits ComponentBase
+
+<MudDialogContent>
+    <p>Are you sure you want to delete this recipe? This cannot be undone.</p>
+</MudDialogContent>
+<MudDialogActions>
+    <MudButton Color="Color.Primary" OnClick="@(() => DialogOk())">Delete</MudButton>
+    <MudButton Color="Color.Default" OnClick="@(() => DialogCancel())">Cancel</MudButton>
+</MudDialogActions>
+
+@code {
+    [CascadingParameter] MudDialogInstance MudDialog { get; set; }
+
+    void DialogOk()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+
+    void DialogCancel()
+    {
+        MudDialog.Close(DialogResult.Cancel());
+    }
+}
