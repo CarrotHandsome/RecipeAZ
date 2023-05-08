@@ -84,7 +84,7 @@ namespace RecipeAZ.Models {
             modelBuilder.Entity<Ingredient>().HasData(
                 new Ingredient {
                     IngredientId = "2",
-                    Name = "lentils"
+                    Name = "red lentils"
                 });
             modelBuilder.Entity<IngredientModifier>().HasData(
                 new IngredientModifier {

@@ -73,12 +73,13 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 ri.Ingredient = existingIngredient;
             }            
             if (adding) {
+                ri.Order = ItemRecipe.RecipeIngredients.Count() + 1;
                 ItemRecipe?.RecipeIngredients?.Add(ri);
             } else {
 
             }            
             
-            detailsOpen[ri] = true;
+            detailsOpen[ri] = ri.Notes != string.Empty;
             
             ShowNewIngredientInput = false;           
             
@@ -151,8 +152,9 @@ namespace RecipeAZ.Pages.RecipeComponents {
             if (string.IsNullOrEmpty(matchTo)) {
                 return new List<string>();
             }
-            List<string> candidates = await dataContext.RecipeIngredients.Select(ri => ri.FullName).ToListAsync();
-            return candidates.Where(x => x.Contains(matchTo, StringComparison.InvariantCultureIgnoreCase));
+            List<string> candidates = await dataContext.Ingredients.Select(i => i.Name).ToListAsync();
+           
+            return candidates.Where(x => (x.Contains(matchTo, StringComparison.InvariantCultureIgnoreCase) || matchTo.Contains(x, StringComparison.InvariantCultureIgnoreCase)));
         } 
     }
 }

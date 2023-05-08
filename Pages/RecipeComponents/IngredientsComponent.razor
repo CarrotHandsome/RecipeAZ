@@ -9,7 +9,7 @@
     <h4>Ingredients</h4>    
         <MudPaper MinWidth="600px">
             <MudList Class="pl-3">
-                @foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!) {
+                @foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!.OrderBy(ri => ri.Order)) {
                 bool hasNoNotes = ri.Notes == string.Empty;
                 <MudListItem>
                         <MudGrid>
