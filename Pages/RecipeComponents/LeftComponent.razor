@@ -24,7 +24,7 @@
                 @if (CanEdit) {
                     <MudMenuItem Icon="@Icons.Material.Filled.Edit" @onclick="OnEditClick" />
                     <MudMenuItem @onclick="() => SaveRecipe(true)">Save</MudMenuItem>
-                    <MudMenuItem OnClick="() => RemoveRecipe()">Delete</MudMenuItem>
+                    <MudMenuItem OnClick="async () => await ShowDeleteConfirmation()">Delete</MudMenuItem>
                 }                
                 <MudMenuItem>Copy</MudMenuItem>
             </MudMenu>
@@ -95,8 +95,8 @@
         navigationManager.NavigateTo($"/recipe/{Recipe!.RecipeId}");
     }
 
-    private async Task RemoveRecipe() {
-        
+    private void RemoveRecipe() {
+
         if (Recipe.RecipeId == null) {
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
             snackBar.Configuration.VisibleStateDuration = 400;
@@ -111,16 +111,18 @@
             snackBar.Configuration.ShowTransitionDuration = 300;
             snackBar.Add("Recipe removed.", MudBlazor.Severity.Normal);
         }
-    }        
-    private async Task ShowDeleteConfirmation() {
-        var parameters = new DialogParameters();
-        var options = new DialogOptions() { CloseButton = false, MaxWidth = MaxWidth.Small };
-        var dialog = dialogService.Show<DeleteDialog>("Confirm Delete", parameters, options);
-        var result = await dialog.Result;
-
-        if (!result.Cancelled) {
-            await RemoveRecipe();
-        }
     }
+    private async Task ShowDeleteConfirmation() {
+        bool? result = await dialogService.ShowMessageBox(
+            "Are you sure?",
+            "Deleting your recipe cannot be undone.",
+            yesText:"Delete it", noText:"I take it back");
+        if (result ?? false) {
+            RemoveRecipe(); 
+        }
+
+
+    }
+
     
 }
