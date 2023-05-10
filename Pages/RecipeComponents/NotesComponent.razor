@@ -12,19 +12,29 @@
     @Recipe?.Notes
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
-                notesEditOpen = true;                
+            OriginalNotes = Recipe?.Notes ?? string.Empty;    
+            notesEditOpen = true;                
         }" />
     }
     
 </div>
 @if (Recipe != null) {
-    <MudPopover Open="@notesEditOpen" Fixed="false" Class="px-4 pt-4">
+    <MudPopover Open="@notesEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft"
+        Style="width:300px;height:490px"
+    >
         <div class="d-flex flex-column">
-            <MudTextField @bind-Value="Recipe.Notes" Lines="3" />
-            <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
-            notesEditOpen = false;
-            await UpdateAndSaveRecipe();
-        }" />
+            <MudTextField @bind-Value="Recipe.Notes" Lines="20" />
+            <div class="d-flex d-row">
+                Don't forget to save your recipe!
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Size="Size.Large" Color="Color.Success" @onclick="async () => {
+                    notesEditOpen = false;
+                    await UpdateAndSaveRecipe();
+                }" />
+                <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Size="Size.Large" Color="Color.Error" @onclick="async () => {
+                    Recipe.Notes = OriginalNotes;
+                    notesEditOpen = false;                    
+                }" />
+            </div>            
         </div>
     </MudPopover>
 }
@@ -36,6 +46,7 @@
     public bool CanEdit { get; set; }
     [CascadingParameter(Name = "EditingParam")]
     public bool Editing { get; set; }
+    private string OriginalNotes { get; set; } = string.Empty;
     private bool notesEditOpen = false;
     private DataContext? _dataContext;
 
@@ -45,8 +56,8 @@
     }
     private async Task UpdateAndSaveRecipe() {
         if (Recipe != null) {
-            _dataContext.Update(Recipe);
-            await _dataContext.SaveChangesAsync();
+            //_dataContext.Update(Recipe);
+            //await _dataContext.SaveChangesAsync();
             StateHasChanged();
         }
     } 

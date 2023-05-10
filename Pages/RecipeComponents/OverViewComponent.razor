@@ -6,19 +6,31 @@
     @Recipe?.Description
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
-                overviewEditOpen = true;                
+            OriginalOverview = Recipe?.Description ?? string.Empty;
+            overviewEditOpen = true;                
         }" />
     }
     
 </div>
 @if (Recipe != null) {
-    <MudPopover Open="@overviewEditOpen" Fixed="false" Class="px-4 pt-4">
+    <MudPopover Open="@overviewEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft" 
+        Style="width:500px;height:390px;"        
+    >
         <div class="d-flex flex-column">
-            <MudTextField @bind-Value="Recipe.Description" Lines="3" />
-            <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
-            overviewEditOpen = false;
-            await UpdateAndSaveRecipe();
-        }" />
+            <MudTextField @bind-Value="Recipe.Description" Lines="15" />
+            <div class="d-flex d-row">
+                Don't forget to save your recipe!
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="async () => {                
+                    overviewEditOpen = false;
+                    StateHasChanged();
+                }" />
+                <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error" Size="Size.Large" @onclick="async () => {
+                    Recipe.Description = OriginalOverview;
+                    overviewEditOpen = false;
+                    StateHasChanged();
+                }" />
+            </div>
+            
         </div>
     </MudPopover>
 }
@@ -31,6 +43,7 @@
     public bool CanEdit { get; set; }
     [CascadingParameter(Name = "EditingParam")]
     public bool Editing { get; set; }
+    private string OriginalOverview { get; set; } = string.Empty;
     private DataContext? _dataContext;
     private bool overviewEditOpen = false;  
 
@@ -42,8 +55,8 @@
 
     private async Task UpdateAndSaveRecipe() {
         if (Recipe != null) {
-            _dataContext.Update(Recipe);
-            await _dataContext.SaveChangesAsync();
+            //_dataContext.Update(Recipe);
+            //await _dataContext.SaveChangesAsync();
             StateHasChanged();
         }
     }

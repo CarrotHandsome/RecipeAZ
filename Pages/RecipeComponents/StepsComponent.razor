@@ -6,8 +6,8 @@
 
 <div>
     <h4>Steps</h4>
-        <MudPaper MinWidth="600px">
-            <MudList Class="pl-16">
+        <MudPaper MinWidth="400px" Elevation="0">
+            <MudList Class="pl-0">
                 @foreach (RecipeStep rs in ItemRecipe!.RecipeSteps!.OrderBy(rs => rs.Order)) {
                     bool hasNoDetails = rs.Details == string.Empty;
                     <MudListItem>
@@ -17,7 +17,7 @@
                             </MudItem>
                             <MudItem>
                                 <MudToggleIconButton @bind-Toggled="detailsOpen[rs]"
-                                    Icon="@Icons.Material.Filled.ChevronRight"
+                                    Icon="@DetailsToggleIcon(rs)"
                                     ToggledIcon="@Icons.Material.Filled.ExpandMore"
                                     Disabled="@hasNoDetails" />
                             </MudItem>
@@ -35,7 +35,7 @@
                             }
                         </MudGrid>                    
                         @if (detailsOpen[rs]) {
-                            <MudPaper Class="pa-3">@rs.Details</MudPaper>
+                        <MudPaper Class="pl-3" Elevation="0" Style="font-style:italic;">@rs.Details</MudPaper>
                         }
                         
                     </MudListItem>
@@ -71,11 +71,12 @@
 @if (ItemRecipe != null) {
     <MudPopover Open="@stepEditOpen" Fixed="false" Class="px-4 pt-4">
         <div class="d-flex flex-column">
-            @*<MudTextField @bind-Value="editingStep.Name" Lines="1" />*@
-            <MudTextField @bind-Value="editingStep.Description" Lines="3" />
-            <MudTextField @bind-Value="editingStep.Details" Lines="5" />
+            
+            <MudTextField @bind-Value="editingStep.Description" Variant="Variant.Text" Label="Describe the step" Lines="3" />
+            <MudTextField @bind-Value="editingStep.Details" Variant="Variant.Text" Label="Give more specific instructions" Lines="5" />
             <div class="d-flex d-row">
-                <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="async () => {
+                Dont forget to save your recipe!
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="async () => {
                     stepEditOpen = false;
                     StateHasChanged();
                 }" />
@@ -118,5 +119,8 @@
             RecipeSnack.Add("Saved Recipe");
             StateHasChanged();
         }
+    }
+    private string DetailsToggleIcon(RecipeStep rs) {
+        return rs.Details == string.Empty ? null : Icons.Material.Filled.ChevronRight;
     }
 }

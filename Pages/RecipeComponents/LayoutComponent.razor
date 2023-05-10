@@ -42,6 +42,7 @@
             @if (CanEdit && Editing) {
                 <MudItem Class="pl-0">
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                        OriginalTitle = Recipe?.Name ?? string.Empty;
                         titleEditOpen = true;
                     }" style="margin-top: 0.75rem;" />
                 </MudItem>
@@ -108,12 +109,21 @@
             </div>
         </MudPopover>
         
-        <MudPopover Open="@titleEditOpen" Fixed="false" Class="px-4 pt-4">
+        <MudPopover Open="@titleEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft">
             <div class="d-flex flex-column">
-                <MudTextField @bind-Value="Recipe.Name" Lines="1" />
-                <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {
-                titleEditOpen = false;
-            }" />
+                <MudTextField @bind-Value="Recipe.Name" Variant="Variant.Text" Lines="1" Label="Recipe Title"></MudTextField>
+                <div class="d-flex d-row">
+                    <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="async () => {
+                        titleEditOpen = false;
+                        StateHasChanged();
+                    }" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error" Size="Size.Large" @onclick="async () => {
+                        Recipe.Name = OriginalTitle;
+                        titleEditOpen = false;
+                        StateHasChanged();
+                    }" />
+                </div>
+                
             </div>
         </MudPopover>
 
@@ -146,6 +156,7 @@
     private bool Editing { get; set; } = false;
     private bool NewTagOpen { get; set; } = false;
     private string NewTagName { get; set; } = string.Empty;
+    private string OriginalTitle { get; set; } = string.Empty;
     //private string? UserId { get; set; }
     private int maxTags = 5;
     private bool titleEditOpen { get; set; } = false;

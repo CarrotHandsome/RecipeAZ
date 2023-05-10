@@ -7,11 +7,11 @@
 
 <div>
     <h4>Ingredients</h4>    
-        <MudPaper MinWidth="600px">
-            <MudList Class="pl-3">
+        <MudPaper MinWidth="400px" Elevation="0">
+            <MudList Class="pl-0">
                 @foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!.OrderBy(ri => ri.Order)) {
-                bool hasNoNotes = ri.Notes == string.Empty;
-                <MudListItem>
+                    bool hasNoNotes = ri.Notes == string.Empty;
+                    <MudListItem>
                         <MudGrid>
                             <MudItem>
                                 <div style="margin-top: 0.75rem; margin-bottom: 0;">@ri.Ingredient?.Name:</div>
@@ -21,7 +21,7 @@
                             </MudItem>
                             <MudItem>
                                 <MudToggleIconButton @bind-Toggled="detailsOpen[ri]"
-                                    Icon="@Icons.Material.Filled.ChevronRight"
+                                    Icon="@DetailsToggleIcon(ri)"
                                     ToggledIcon="@Icons.Material.Filled.ExpandMore"
                                     Disabled="@hasNoNotes" />
                             </MudItem>
@@ -58,10 +58,9 @@
                             }                            
                         </MudGrid>
                         @if (detailsOpen[ri]) {
-                            <MudPaper Class="pa-3">@ri.Notes</MudPaper>
+                            <MudPaper Class="pl-3" Elevation="0" Style="font-style:italic;">@ri.Notes</MudPaper>
                         }
-                    </MudListItem>
-                                                   
+                    </MudListItem>                                                   
                 }
             </MudList>
         </MudPaper>
@@ -93,7 +92,8 @@
             <MudTextField @bind-Value="tempIngredient.Amount" Lines="1" />
             <MudTextField @bind-Value="tempIngredient.Notes" Lines="5" />
             <div class="d-flex d-row">
-                <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="() => {
+                Dont forget to save your recipe!
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="() => {
                     editingIngredient.Name = tempIngredient.Name;
                     editingIngredient.Notes = tempIngredient.Notes;
                     editingIngredient.Amount = tempIngredient.Amount;
@@ -120,6 +120,7 @@
 
     private bool ShowNewIngredientInput { get; set; } = false;
     private DataContext? _dataContext;
+
     private Dictionary<RecipeIngredient, bool> detailsOpen = new Dictionary<RecipeIngredient, bool>();
     private bool ingredientEditOpen = false;
     private string editingName;
@@ -132,12 +133,16 @@
     private List<string> AllIngredients = new();
     private Ingredient _newIngredientToRemove = null;
     //private RecipeIngredient _newRI = new();
-    
+
     private void OnTextChanged(string value) {
         LastItem.Name = value;
     }
     private void UpdateEditingIngredient(string value) {
         tempIngredient.Name = value;
+    }
+
+    private string DetailsToggleIcon(RecipeIngredient ri) {
+        return ri.Notes == string.Empty ? null : Icons.Material.Filled.ChevronRight;
     }
     
 }
