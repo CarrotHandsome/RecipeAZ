@@ -2,18 +2,24 @@
 <AuthorizeView>
     <Authorized>
         <MudButton Class="mr-5" OnClick="NewRecipe">+New Recipe</MudButton>
-        <a href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>
+        @*<a href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>*@
+        <MudAvatar Class="clickable" @onclick="() => GoToProfile()">@context.User.Identity?.Name!.Substring(0, 1).ToUpper()</MudAvatar>
         <form method="POST" action="/Account/Logout">
             <button type="submit" class="nav-link btn btn-link">Log out</button>
         </form>
     </Authorized>
     <NotAuthorized>
-        <a href="/Account/Register">Register</a>
-        <a href="/Account/Login">Log in</a>
+        <a href="/Account/Register" style="margin-right: 5px;">Register</a>|
+        <a href="/Account/Login" style="margin-left: 5px;">Log in</a>
     </NotAuthorized>
 </AuthorizeView>
 
 @code {
+    [CascadingParameter(Name = "UserParam")]
+    protected AppUser User { get; set; }
+    private void GoToProfile() {
+        navigationManager.NavigateTo($"/profile/{User.Id}");
+    }
     private void NewRecipe() {
         navigationManager.NavigateTo("/recipe");
 

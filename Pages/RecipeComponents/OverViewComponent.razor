@@ -1,4 +1,4 @@
-@inject DataContext dataContext
+@inject IDbContextFactory<DataContext> _contextFactory
 @inject EditService EditService
 
 <div>
@@ -31,15 +31,19 @@
     public bool CanEdit { get; set; }
     [CascadingParameter(Name = "EditingParam")]
     public bool Editing { get; set; }
+    private DataContext? _dataContext;
     private bool overviewEditOpen = false;  
-    
 
-    
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+        _dataContext = await _contextFactory.CreateDbContextAsync();
+    }
+
 
     private async Task UpdateAndSaveRecipe() {
         if (Recipe != null) {
-            dataContext.Update(Recipe);
-            await dataContext.SaveChangesAsync();
+            _dataContext.Update(Recipe);
+            await _dataContext.SaveChangesAsync();
             StateHasChanged();
         }
     }

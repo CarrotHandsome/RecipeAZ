@@ -1,7 +1,7 @@
 @using RecipeAZ.Models
 @using Microsoft.EntityFrameworkCore
 @using RecipeAZ.Interfaces
-@inject DataContext dataContext
+@inject IDbContextFactory<DataContext> _contextFactory
 @inherits EditableList<RecipeIngredient>
 
 
@@ -119,6 +119,7 @@
 @code {
 
     private bool ShowNewIngredientInput { get; set; } = false;
+    private DataContext? _dataContext;
     private Dictionary<RecipeIngredient, bool> detailsOpen = new Dictionary<RecipeIngredient, bool>();
     private bool ingredientEditOpen = false;
     private string editingName;
@@ -131,7 +132,7 @@
     private List<string> AllIngredients = new();
     private Ingredient _newIngredientToRemove = null;
     //private RecipeIngredient _newRI = new();
-
+    
     private void OnTextChanged(string value) {
         LastItem.Name = value;
     }

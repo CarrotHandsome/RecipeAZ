@@ -25,16 +25,23 @@ var connectionString = builder.Configuration.GetConnectionString("RecipeConnecti
 //    opts.UseSqlServer(connectionString);
 //    opts.EnableSensitiveDataLogging(true);
 //});
-builder.Services.AddDbContext<DataContext>(opts => {
-    opts.UseSqlServer(connectionString);
-    opts.EnableSensitiveDataLogging(true);
-    opts.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+//builder.Services.AddDbContext<DataContext>(opts => {
+//    opts.UseSqlServer(connectionString);
+//    opts.EnableSensitiveDataLogging(true);
+//    opts.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
     
-});
+//});
 
 //builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
 //    .AddRoles<IdentityRole>()
 //    .AddEntityFrameworkStores<DataContext>();
+builder.Services.AddDbContextFactory<DataContext>(opts => {
+    opts.UseSqlServer(connectionString);
+    opts.EnableSensitiveDataLogging(true);
+    opts.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+});
+
+
 builder.Services.AddIdentity<AppUser, IdentityRole>( opts => {
     opts.SignIn.RequireConfirmedAccount = true;
     opts.SignIn.RequireConfirmedEmail = true;

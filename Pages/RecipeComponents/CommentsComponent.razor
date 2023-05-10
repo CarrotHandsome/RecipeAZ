@@ -1,5 +1,5 @@
 @using Microsoft.AspNetCore.Identity;
-@inject DataContext dataContext
+@inject IDbContextFactory<DataContext> _contextFactory
 @inject UserManager<AppUser> userManager
 
 <div>
@@ -52,7 +52,12 @@
     public bool commentEditOpen = false;
     public string CurrentComment { get; set; } = string.Empty;
     private Comment? EditComment { get; set; }
+    private DataContext? _dataContext;
 
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+        _dataContext = await _contextFactory.CreateDbContextAsync();
+    }
 
     private async Task AddComment() {
         addingComment = false;
@@ -68,8 +73,8 @@
 
     private async Task UpdateAndSaveRecipe() {
         if (Recipe != null) {
-            dataContext.Update(Recipe);
-            await dataContext.SaveChangesAsync();
+            _dataContext.Update(Recipe);
+            await _dataContext.SaveChangesAsync();
             StateHasChanged();
         }
     }

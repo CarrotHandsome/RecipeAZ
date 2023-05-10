@@ -1,5 +1,5 @@
 ﻿@page "/"
-@inject DataContext dataContext
+@inject IDbContextFactory<DataContext> _contextFactory
 @inject NavigationManager navigationManager
 
 <PageTitle>RecipeAZ</PageTitle>
@@ -145,12 +145,15 @@
     List<Tag>? TopTags { get; set; } = new();
     List<Recipe> TopRecipes { get; set; } = new();
     List<Recipe> RecentRecipes { get; set; } = new();
+    private DataContext? _dataContext;
     protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+        _dataContext = await _contextFactory.CreateDbContextAsync();
         string featuredRecipeId = await GetRandomRecipeIdAsync();
         FeaturedRecipe = await GetRecipeWithUserAsync(featuredRecipeId);
         TopTags = await GetTopTagsAsync();
 
-        TopRecipes = await dataContext.Recipes
+        TopRecipes = await _dataContext.Recipes
             .Include(r => r.User)
             .Include(r => r.UsersWhoLikeMe)
             .Include(r => r.RecipeTags)
@@ -159,7 +162,7 @@
             .Take(10)
             .ToListAsync();
 
-        RecentRecipes = await dataContext.Recipes
+        RecentRecipes = await _dataContext.Recipes
             .Include(r => r.User)            
             .Include(r => r.RecipeTags)
                 .ThenInclude(rt => rt.Tag)
@@ -177,7 +180,7 @@
     }
 
     public async Task<string> GetRandomRecipeIdAsync() {
-        string? randomRecipeId = await dataContext.Recipes
+        string? randomRecipeId = await _dataContext.Recipes
        .OrderBy(r => Guid.NewGuid())
        .Select(r => r.RecipeId)
        .FirstOrDefaultAsync();
@@ -185,7 +188,7 @@
         return randomRecipeId;
     }
     public async Task<Recipe> GetRecipeWithUserAsync(string recipeId) {
-        Recipe? recipe = await dataContext.Recipes
+        Recipe? recipe = await _dataContext.Recipes
             .Include(r => r.User)
             .Include(r => r.RecipeTags)
                 .ThenInclude(rt => rt.Tag)
@@ -195,7 +198,7 @@
     }
 
     private async Task<List<Tag>> GetTopTagsAsync() {
-        List<Tag> topTags = await dataContext.Tags
+        List<Tag> topTags = await _dataContext.Tags
             .Include(t => t.RecipeTags)
             .OrderByDescending(t => t.RecipeTags.Count)
             .Take(10)

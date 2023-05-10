@@ -1,4 +1,4 @@
-﻿@inject DataContext dataContext
+﻿@inject IDbContextFactory<DataContext> _contextFactory
 @inject NavigationManager navigationManager
 @inject ISnackbar snackBar
 @inject IDialogService dialogService
@@ -49,10 +49,15 @@
     public Recipe Recipe { get; set; }
     [CascadingParameter(Name = "UserParam")]
     public AppUser User { get; set; }
+    private DataContext? _dataContext;
     private IngredientsComponent _ingredientsRef;
     public string? button;
     private bool ActionsVisible { get; set; }
 
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+        _dataContext = await _contextFactory.CreateDbContextAsync();
+    }
     public void NavigateHandler(string button) {
         this.button = button;
     }
@@ -68,19 +73,19 @@
         //await _ingredientsRef.UpdateAddedIngredient();
         if (Id != null)
         {
-            dataContext.Recipes.Update(Recipe!);
+            _dataContext.Recipes.Update(Recipe!);
             Console.WriteLine("updating recipe");
         }
         else
         {
-            await dataContext.Recipes.AddAsync(Recipe!);
+            await _dataContext.Recipes.AddAsync(Recipe!);
             Console.WriteLine("added recipe..");
-            //dataContext.Recipes.Update(EditRecipe!);
+            //_dataContext.Recipes.Update(EditRecipe!);
         }
 
         Console.WriteLine("Saving changes...");
         try {
-            await dataContext.SaveChangesAsync();
+            await _dataContext.SaveChangesAsync();
         } catch (Exception ex) {
             Console.WriteLine($"EXCEPTION: {ex}");
         }
@@ -103,8 +108,8 @@
             snackBar.Configuration.ShowTransitionDuration = 300;
             snackBar.Add("Recipe has not been saved yet.", MudBlazor.Severity.Warning);
         } else {
-            dataContext.Recipes.Remove(Recipe);
-            dataContext.SaveChanges();
+            _dataContext.Recipes.Remove(Recipe);
+            _dataContext.SaveChanges();
             navigationManager.NavigateTo($"/profile/{User.Id}");
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
             snackBar.Configuration.VisibleStateDuration = 500;

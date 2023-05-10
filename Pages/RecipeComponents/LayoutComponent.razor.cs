@@ -15,25 +15,26 @@ using static MudBlazor.Colors;
 
 namespace RecipeAZ.Pages.RecipeComponents {
     public partial class LayoutComponent {
-        //DataContext? DataContext { get; set; }
+        //_dataContext? _dataContext { get; set; }
         UserManager<AppUser>? UserManager { get; set; }
         private int imageSizeMaxBytes = 1024000;
         protected override async Task OnInitializedAsync() {
-            AuthenticationState authState = await authenticationStateProvider.GetAuthenticationStateAsync();            
-            var user = authState.User;
-            if (user != null && user!.Identity != null && user!.Identity!.IsAuthenticated) {
-                var userIdClaim = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
-                if (userIdClaim != null && userIdClaim.Value != null) {
-                    User = await dataContext.Users
-                        .Include(u => u.RecipesILike)
-                        .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
-                    UserId = User?.Id;
-                }
-            }
-
-            if (Id == null) {
+            await base.OnInitializedAsync();
+            _dataContext = await _contextFactory.CreateDbContextAsync();
+            //AuthenticationState authState = await authenticationStateProvider.GetAuthenticationStateAsync();            
+            //var user = authState.User;
+            //if (user != null && user!.Identity != null && user!.Identity!.IsAuthenticated) {
+            //    var userIdClaim = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
+            //    if (userIdClaim != null && userIdClaim.Value != null) {
+            //        User = await _dataContext.Users
+            //            .Include(u => u.RecipesILike)
+            //            .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
+            //        //UserId = User?.Id;
+            //    }
+            //}
+            Console.WriteLine("Entering recipe not logged in");
+            if (Id == null && User != null) {
                 Recipe = new Recipe {
-                    UserId = UserId,
                     User = User,
                     Name = "New Recipe",
                     Description = "description",
@@ -44,16 +45,19 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 };
                 CanEdit = true;
                 Editing = true;
-                
+
+
+            } else if (Id == null && User == null) {
+                navigationManager.NavigateTo("/");
             } else {
-                Recipe = await dataContext.Recipes                  
+                Recipe = await _dataContext.Recipes
                     .Include(r => r.RecipeIngredients!)
                         .ThenInclude(ri => ri.Ingredient)
                     .Include(r => r.RecipeIngredients!)
                         .ThenInclude(ri => ri.Before)
                     .Include(r => r.RecipeIngredients!)
                         .ThenInclude(ri => ri.After)
-                    .Include(r => r.RecipeSteps)                    
+                    .Include(r => r.RecipeSteps)
                     .Include(r => r.User)
                     .Include(r => r.UsersWhoLikeMe)
                     .Include(r => r.Comments!)
@@ -63,39 +67,40 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     .FirstOrDefaultAsync(r => r.RecipeId == Id);
                 Console.WriteLine("comments is null: " + (Recipe.Comments == null).ToString());
 
-                    if (Recipe == null) {
-                        Console.WriteLine("null recipe from Id");
-                        Recipe = new Recipe {
-                            UserId = UserId,
-                            Name = "New Recipe",
-                            Description = "description",
-                            Notes = "notes",
-                            RecipeIngredients = new List<RecipeIngredient>(),
-                            RecipeSteps = new List<RecipeStep>(),
-                            Comments = new List<Comment>()
-                        };
-                    }
+                if (Recipe == null) {
+                    Console.WriteLine("null recipe from Id");
+                    Recipe = new Recipe {
+                        UserId = User?.Id,
+                        Name = "New Recipe",
+                        Description = "description",
+                        Notes = "notes",
+                        RecipeIngredients = new List<RecipeIngredient>(),
+                        RecipeSteps = new List<RecipeStep>(),
+                        Comments = new List<Comment>()
+                    };
+                }
             }
-            if (UserId != null && UserId == Recipe.UserId) {
+            if (User != null && User.Id == Recipe.UserId) {
                 CanEdit = true;                
             }
-            Liked = await dataContext.Users
-                .Where(u => u.Id == UserId)
+            if (User != null) {
+                Liked = await _dataContext.Users
+                .Where(u => u.Id == User.Id)
                 .AnyAsync(u => u.RecipesILike.Any(rl => rl.RecipeId == Recipe.RecipeId));
-            //tags = dataContext.Tags.Select(t => t.Name).ToList();
+            }
         }
 
         private async Task SaveRecipe(bool fromCreator=true) {
 
             if (Id != null) {
-                dataContext.Recipes.Update(Recipe!);
+                _dataContext.Recipes.Update(Recipe!);
             } else {
-                await dataContext.Recipes.AddAsync(Recipe!);
+                await _dataContext.Recipes.AddAsync(Recipe!);
                 Console.WriteLine("added recipe..");
-                //dataContext.Recipes.Update(EditRecipe!);
+                //_dataContext.Recipes.Update(EditRecipe!);
             }
             Console.WriteLine("Saving changes...");
-            await dataContext.SaveChangesAsync();
+            await _dataContext.SaveChangesAsync();
             Console.WriteLine("Saved");
             if (fromCreator) {
                 snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomCenter;
@@ -144,8 +149,8 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     }
 
                     Recipe.ImagePath = $"{imageFolder}/{fileName}";
-                    dataContext.Update(Recipe);
-                    await dataContext.SaveChangesAsync();
+                    _dataContext.Update(Recipe);
+                    await _dataContext.SaveChangesAsync();
                 }
                 else {
                     snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
@@ -172,28 +177,28 @@ namespace RecipeAZ.Pages.RecipeComponents {
         
         private async Task HandleChipClose(RecipeTag recipeTag) {
             Recipe.RecipeTags.Remove(recipeTag);
-            await dataContext.SaveChangesAsync();   
+            await _dataContext.SaveChangesAsync();   
         }
         private async Task AddTag() {
             Console.WriteLine(NewTagName == null);
             Console.WriteLine(NewTagName);
             if (!string.IsNullOrEmpty(NewTagName)) {
                 Console.WriteLine("adding tag");
-                Tag existingTag = await dataContext.Tags.FirstOrDefaultAsync(t => t.Name == ToTitleCase(NewTagName));
+                Tag existingTag = await _dataContext.Tags.FirstOrDefaultAsync(t => t.Name == ToTitleCase(NewTagName));
                 Tag tagToAdd;
                 if (existingTag == null) {
                     tagToAdd = new Tag { Name = ToTitleCase(NewTagName) };
-                    dataContext.Tags.Add(tagToAdd);
-                    await dataContext.SaveChangesAsync();
+                    _dataContext.Tags.Add(tagToAdd);
+                    await _dataContext.SaveChangesAsync();
                 } else {
                     tagToAdd = existingTag;
                 }
 
-                if (!dataContext.RecipeTags.Any(rt => rt.RecipeId == Id && rt.TagId == tagToAdd.TagId)) {
+                if (!_dataContext.RecipeTags.Any(rt => rt.RecipeId == Id && rt.TagId == tagToAdd.TagId)) {
                     RecipeTag recipeTag = new RecipeTag { RecipeId = Recipe.RecipeId, TagId = tagToAdd.TagId };
-                    dataContext.RecipeTags.Add(recipeTag);
+                    _dataContext.RecipeTags.Add(recipeTag);
                     Recipe.RecipeTags.Add(recipeTag);
-                    await dataContext.SaveChangesAsync();
+                    await _dataContext.SaveChangesAsync();
                                     
                 }
                 NewTagName = string.Empty;
@@ -215,9 +220,9 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 return new List<string>();
             }
 
-            List<string> tags = await dataContext.Tags.Select(t => t.Name).ToListAsync();
+            List<string> tags = await _dataContext.Tags.Select(t => t.Name).ToListAsync();
             //foreach(RecipeTag rt in Recipe.RecipeTags) {
-            //    tags.Remove(dataContext.Tags.FirstOrDefault(t => t.TagId == rt.TagId).Name);                
+            //    tags.Remove(_dataContext.Tags.FirstOrDefault(t => t.TagId == rt.TagId).Name);                
             //}
                           
             return tags.Where(x => x.Contains(value, StringComparison.InvariantCultureIgnoreCase));

@@ -3,7 +3,7 @@
 
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Components.Forms
-@inject DataContext dataContext
+@inject IDbContextFactory<DataContext> _contextFactory
 @inject UserManager<AppUser> userManager
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider authenticationStateProvider
@@ -47,26 +47,27 @@
                 </MudItem>
             }
             <MudItem>
-                <MudToggleIconButton Icon="@Icons.Material.Filled.Favorite"
+                <MudToggleIconButton Icon="@Icons.Material.Filled.Favorite"                
                     ToggledIcon="@Icons.Material.Filled.Favorite" ToggledColor="Color.Secondary"
+                    Disabled="@(!CanEdit)"
                     Toggled="@Liked"
                     ToggledChanged='async (bool toggled) => {
                         if (User != null) {
                             RecipeLike rl = new RecipeLike {
-                                AppUserId = UserId!, RecipeId = Recipe.RecipeId
+                                AppUserId = User.Id!, RecipeId = Recipe.RecipeId
                             };
                             if (toggled) {
-                                await dataContext.AddAsync(rl);
+                                await _dataContext.AddAsync(rl);
                             } else {
                                 // Retrieve the existing RecipeLike object from the database
-                                var existingRl = await dataContext.FindAsync<RecipeLike>(UserId!, Recipe.RecipeId);
+                                var existingRl = await _dataContext.FindAsync<RecipeLike>(User.Id!, Recipe.RecipeId);
                                 if (existingRl != null) {
-                                    dataContext.Remove(existingRl);
+                                    _dataContext.Remove(existingRl);
                                 }
                             }
                         }
                         Liked = toggled;
-                        if (UserId != Recipe.UserId) {
+                        if (User?.Id != Recipe.UserId) {
                             await SaveRecipe(false);
                             Console.WriteLine($"Recipe is Liked:{Liked} ");
                         }
@@ -116,18 +117,15 @@
             </div>
         </MudPopover>
 
-        <div class="recipe-halves">
-            <CascadingValue Value="@User" Name="UserParam">
-                <CascadingValue Value="@Recipe" Name="RecipeParam">   
-                    <CascadingValue Value="@CanEdit" Name="CanEditParam">
-                        <CascadingValue Value="@Editing" Name="EditingParam" >
-                            <LeftComponent Id="Id" OnEditUpdate="@UpdateEditState" />
-                            <RightComponent />
-                        </CascadingValue>                        
-                    </CascadingValue>                                                   
-                </CascadingValue>               
+        <div class="recipe-halves">            
+            <CascadingValue Value="@Recipe" Name="RecipeParam">   
+                <CascadingValue Value="@CanEdit" Name="CanEditParam">
+                    <CascadingValue Value="@Editing" Name="EditingParam" >
+                        <LeftComponent Id="Id" OnEditUpdate="@UpdateEditState" />
+                        <RightComponent />
+                    </CascadingValue>                        
+                </CascadingValue>                                                   
             </CascadingValue>
-                   
         </div>       
     </div>
 } else {
@@ -135,19 +133,23 @@
 }
 
 @code {
+    [CascadingParameter(Name = "UserParam")]
+    protected AppUser? User { get; set; }
     [Parameter]
     public string? Id { get; set; }
-    public AppUser? User { get; set; }
+    private DataContext? _dataContext;
+
     private Recipe? Recipe;
 
     public bool Liked { get; set; }
-    private bool CanEdit { get; set; } = false;
+    private bool CanEdit { get; set; } = false; //logged in user is owner of recipe
     private bool Editing { get; set; } = false;
     private bool NewTagOpen { get; set; } = false;
     private string NewTagName { get; set; } = string.Empty;
-    private string? UserId { get; set; }
+    //private string? UserId { get; set; }
     private int maxTags = 5;
     private bool titleEditOpen { get; set; } = false;
+
     
     //private List<string> tags { get; set; } = new();
     private void OnValueChanged(string value) {

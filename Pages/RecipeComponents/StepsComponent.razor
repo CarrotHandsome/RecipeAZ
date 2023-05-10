@@ -1,7 +1,7 @@
 @using RecipeAZ.Models
 @using Microsoft.EntityFrameworkCore
 @using RecipeAZ.Interfaces
-@inject DataContext dataContext
+@inject IDbContextFactory<DataContext> _contextFactory
 @inherits EditableList<RecipeStep>
 
 <div>
@@ -94,6 +94,7 @@
 
 @code {
     private bool ShowNewStepInput { get; set; } = false;
+    private DataContext? _dataContext;
     private Dictionary<RecipeStep, bool> detailsOpen = new Dictionary<RecipeStep, bool>();
     private bool stepEditOpen = false;
     private RecipeStep? editingStep;
@@ -101,8 +102,9 @@
     private string originalDetails;
     private RecipeStep tempStep;
 
-    protected override void OnInitialized() {
-        base.OnInitialized();
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+        _dataContext = await _contextFactory.CreateDbContextAsync();
         if (ItemRecipe != null && ItemRecipe.RecipeSteps != null) {
             foreach (RecipeStep rs in ItemRecipe.RecipeSteps) {
                 detailsOpen[rs] = false;
@@ -111,8 +113,8 @@
     }
     private async Task UpdateAndSaveRecipe() {
         if (ItemRecipe != null) {
-            dataContext.Update(ItemRecipe);
-            await dataContext.SaveChangesAsync();
+            _dataContext.Update(ItemRecipe);
+            await _dataContext.SaveChangesAsync();
             RecipeSnack.Add("Saved Recipe");
             StateHasChanged();
         }

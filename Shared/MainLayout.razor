@@ -1,10 +1,15 @@
 ﻿@inherits LayoutComponentBase
 @inject NavigationManager navigationManager
+@inject AuthenticationStateProvider authenticationStateProvider
+@inject IDbContextFactory<DataContext> _contextFactory
+@using Microsoft.AspNetCore.Components.Authorization
+@using System.Security.Claims
 
 <MudThemeProvider />
 <MudDialogProvider />
 <MudSnackbarProvider />
 
+<CascadingValue Value="@User" Name="UserParam">    
 <MudLayout>
     <MudAppBar Elevation="1" Color="Color.Success">
         
@@ -22,13 +27,32 @@
         @Body
     </MudMainContent>
 </MudLayout>
+</CascadingValue>
 
 @code {
 
+    private AppUser? User { get; set; }
+    private string? UserId { get; set; }
+    private DataContext? _dataContext;
     private void ReturnToIndex() {
         navigationManager.NavigateTo("/");
     }
-    
+
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+        _dataContext = await _contextFactory.CreateDbContextAsync();
+        AuthenticationState authState = await authenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user != null && user!.Identity != null && user!.Identity!.IsAuthenticated) {
+            var userIdClaim = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
+            if (userIdClaim != null && userIdClaim.Value != null) {
+                User = await _dataContext.Users
+                    .Include(u => u.RecipesILike)
+                    .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
+                UserId = User?.Id;
+            }
+        }
+    }
 
 }
 

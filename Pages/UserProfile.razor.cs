@@ -6,21 +6,9 @@ using System.Security.Claims;
 namespace RecipeAZ.Pages {
     public partial class UserProfile {
         protected override async Task OnInitializedAsync() {
-            AuthenticationState authState = await authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-            if (user != null && user!.Identity != null && user!.Identity!.IsAuthenticated) {
-                var userIdClaim = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
-                if (userIdClaim != null && userIdClaim.Value != null) {
-                    Console.WriteLine("user authorized: ");
-                    
-                    Console.WriteLine("welcome " + User.UserName);
-                                        
-                }
-            }
-            User = await dataContext.Users
-                .Include(u => u.Recipes)
-                .FirstOrDefaultAsync(u => u.Id == Id);
-            Recipes = await dataContext.Recipes
+            await base.OnInitializedAsync();
+            _dataContext = await _contextFactory.CreateDbContextAsync();
+            Recipes = await _dataContext.Recipes
                 .Where(r => r.UserId == Id)
                 .Include(r => r.UsersWhoLikeMe)
                 .Include(r => r.User)
