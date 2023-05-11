@@ -11,9 +11,9 @@
 @inject IWebHostEnvironment env
 @inject ILogger<LayoutComponent> Logger
 
-
+<div style="background-color:white;padding:16px;border-radius:10px;">
 @if (Recipe != null) {
-    <h1>@NewTagName</h1>
+    
     <MudGrid>
         <MudItem><MudImage Src="@Recipe.ImagePath" Height="200" /></MudItem>
         @if(CanEdit && Editing) {
@@ -131,16 +131,22 @@
             <CascadingValue Value="@Recipe" Name="RecipeParam">   
                 <CascadingValue Value="@CanEdit" Name="CanEditParam">
                     <CascadingValue Value="@Editing" Name="EditingParam" >
-                        <LeftComponent Id="Id" OnEditUpdate="@UpdateEditState" />
+                        <LeftComponent Id="@Id" OnEditUpdate="@UpdateEditState" />
                         <RightComponent />
                     </CascadingValue>                        
                 </CascadingValue>                                                   
             </CascadingValue>
         </div>       
     </div>
+    <div>
+        @if (Recipe.ParentRecipe != null) {
+            <div @onclick="() => NavigateToParent()" class="clickable">Originally copied from @Recipe.ParentRecipe.Name by @Recipe.ParentRecipe.User.UserName</div>
+        } 
+        </div>
 } else {
     <p>Recipe not found.</p>
 }
+</div>
 
 @code {
     [CascadingParameter(Name = "UserParam")]
@@ -161,9 +167,13 @@
     private int maxTags = 5;
     private bool titleEditOpen { get; set; } = false;
 
-    
+
     //private List<string> tags { get; set; } = new();
     private void OnValueChanged(string value) {
         NewTagName = value;
+    }
+
+    private void NavigateToParent() {
+        navigationManager.NavigateTo($"/recipe/{ Recipe.ParentRecipeId }", true);
     }
 }

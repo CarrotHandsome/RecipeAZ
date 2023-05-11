@@ -26,7 +26,7 @@
                     <MudMenuItem @onclick="() => SaveRecipe(true)">Save</MudMenuItem>
                     <MudMenuItem OnClick="async () => await ShowDeleteConfirmation()">Delete</MudMenuItem>
                 }                
-                <MudMenuItem>Copy</MudMenuItem>
+                <MudMenuItem @onclick="async () => await CopyRecipe()">Copy</MudMenuItem>
             </MudMenu>
         </MudItem>
     </MudGrid>
@@ -70,6 +70,9 @@
     private async Task SaveRecipe(bool fromCreator = true)
     {
         Console.WriteLine("Saving Ingredients");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine("ID: " + Id);
+        Console.ResetColor();
         //await _ingredientsRef.UpdateAddedIngredient();
         if (Id != null)
         {
@@ -97,10 +100,11 @@
             snackBar.Configuration.VisibleStateDuration = 500;
             snackBar.Add("Saved Recipe", MudBlazor.Severity.Success);
         }
+        Console.WriteLine(Recipe!.RecipeId);
         navigationManager.NavigateTo($"/recipe/{Recipe!.RecipeId}");
     }
 
-    private void RemoveRecipe() {
+    private async Task RemoveRecipeAsync() {
 
         if (Recipe.RecipeId == null) {
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
@@ -109,7 +113,7 @@
             snackBar.Add("Recipe has not been saved yet.", MudBlazor.Severity.Warning);
         } else {
             _dataContext.Recipes.Remove(Recipe);
-            _dataContext.SaveChanges();
+            await _dataContext.SaveChangesAsync();
             navigationManager.NavigateTo($"/profile/{User.Id}");
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
             snackBar.Configuration.VisibleStateDuration = 500;
@@ -123,11 +127,57 @@
             "Deleting your recipe cannot be undone.",
             yesText:"Delete it", noText:"I take it back");
         if (result ?? false) {
-            RemoveRecipe(); 
+            await RemoveRecipeAsync(); 
         }
+    }
+    private async Task CopyRecipe() {
+        Console.WriteLine("copying");
+        Recipe copy = new Recipe {
+            Name = "Copy of " + Recipe.Name,
+            Description = Recipe.Description,
+            Notes = Recipe.Notes,
+            RecipeSteps = new List<RecipeStep>(),
+            RecipeIngredients = new List<RecipeIngredient>(),
+            ImagePath = Recipe.ImagePath,
+            ParentRecipeId = Recipe.RecipeId,
+            ChildRecipes = new List<Recipe>(),
+            RecipeTags = Recipe.RecipeTags
 
-
+        };
+        copy.RecipeSteps = new List<RecipeStep>();
+        foreach (RecipeStep step in Recipe.RecipeSteps) {
+            RecipeStep copyStep = new RecipeStep {
+                Name = step.Name,
+                Description = step.Description,
+                Details = step.Details,
+                Recipe = copy,
+                Order = step.Order
+            };
+            copy.RecipeSteps.Add(copyStep);
+        }
+        copy.RecipeIngredients = new List<RecipeIngredient>();
+        foreach (RecipeIngredient ri in Recipe.RecipeIngredients) {
+            RecipeIngredient copyIngredient = new RecipeIngredient {
+                    Name = ri.Name,
+                    IngredientId = ri.IngredientId,
+                    Notes = ri.Notes,
+                    Amount = ri.Amount,
+                    Order = ri.Order
+                };
+            copy.RecipeIngredients.Add(copyIngredient);
+        }
+        User.Recipes.Add(copy);
+        _dataContext.Users.Update(User);
+        try {
+            Console.WriteLine("adding to datacontext");
+            await _dataContext.Recipes.AddAsync(copy);
+            await _dataContext.SaveChangesAsync();
+            Console.WriteLine(copy.RecipeId);
+            navigationManager.NavigateTo($"/recipe/{copy.RecipeId}", true);
+            //StateHasChanged();
+        } catch(Exception e) {
+            Console.WriteLine(e);
+        }        
     }
 
-    
 }

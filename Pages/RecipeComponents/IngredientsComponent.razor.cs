@@ -62,6 +62,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
         private void AddRecipeIngredient(RecipeIngredient ri) {
             bool adding = ri.RecipeIngredientId == null;
             Console.WriteLine("recipe ingredient: " + ri.Name);
+            Console.WriteLine("recipe ingredient Id: " + ri.RecipeIngredientId);
             Ingredient existingIngredient = _dataContext.Ingredients.FirstOrDefault(i => i.Name == ri.Name);
             Console.WriteLine("existing ingredient" + (existingIngredient?.Name ?? "no existing ingredient"));
             if (existingIngredient == null) {

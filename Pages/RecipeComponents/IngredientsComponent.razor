@@ -57,9 +57,9 @@
                                 </MudItem>
                             }                            
                         </MudGrid>
-                        @if (detailsOpen[ri]) {
-                            <MudPaper Class="pl-3" Elevation="0" Style="font-style:italic;">@ri.Notes</MudPaper>
-                        }
+                    @if (detailsOpen.ContainsKey(ri) && detailsOpen[ri]) {
+                        <MudPaper Class="pl-3" Elevation="0" Style="font-style:italic;">@ri.Notes</MudPaper>
+                    }
                     </MudListItem>                                                   
                 }
             </MudList>

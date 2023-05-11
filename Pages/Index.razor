@@ -4,7 +4,7 @@
 
 <PageTitle>RecipeAZ</PageTitle>
 
-
+<div style="background-color:white;padding:16px;border-radius:10px;">
     @if (FeaturedRecipe != null) {
         <MudGrid>
             <MudItem xs="12" sm="4" md="3">
@@ -139,6 +139,7 @@
         </MudList>
     </MudItem>
 </MudGrid>
+</div>
 
 @code {
     Recipe? FeaturedRecipe { get; set; }

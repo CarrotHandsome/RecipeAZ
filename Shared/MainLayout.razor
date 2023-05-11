@@ -48,7 +48,9 @@
             if (userIdClaim != null && userIdClaim.Value != null) {
                 User = await _dataContext.Users
                     .Include(u => u.RecipesILike)
+                    .Include(u => u.Recipes)
                     .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
+                    
                 UserId = User?.Id;
             }
         }

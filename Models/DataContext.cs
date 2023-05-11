@@ -76,6 +76,10 @@ namespace RecipeAZ.Models {
                 .HasOne(ri => ri.Ingredient)
                 .WithMany(i => i.RecipeIngredients)
                 .HasForeignKey(ri => ri.IngredientId);
+            modelBuilder.Entity<Recipe>()
+                .HasOne(r => r.ParentRecipe)
+                .WithMany(r => r.ChildRecipes)
+                .HasForeignKey(r => r.ParentRecipeId);
             modelBuilder.Entity<Ingredient>().HasData(
                 new Ingredient {
                     IngredientId = "1",

@@ -12,84 +12,99 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.IO;
 using static MudBlazor.Colors;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace RecipeAZ.Pages.RecipeComponents {
     public partial class LayoutComponent {
         //_dataContext? _dataContext { get; set; }
         UserManager<AppUser>? UserManager { get; set; }
         private int imageSizeMaxBytes = 1024000;
+
+        protected override async Task OnParametersSetAsync() {
+            await base.OnParametersSetAsync();
+            //await LoadData();
+            
+        }
         protected override async Task OnInitializedAsync() {
             await base.OnInitializedAsync();
-            _dataContext = await _contextFactory.CreateDbContextAsync();
-            //AuthenticationState authState = await authenticationStateProvider.GetAuthenticationStateAsync();            
-            //var user = authState.User;
-            //if (user != null && user!.Identity != null && user!.Identity!.IsAuthenticated) {
-            //    var userIdClaim = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
-            //    if (userIdClaim != null && userIdClaim.Value != null) {
-            //        User = await _dataContext.Users
-            //            .Include(u => u.RecipesILike)
-            //            .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
-            //        //UserId = User?.Id;
-            //    }
-            //}
-            Console.WriteLine("Entering recipe not logged in");
-            if (Id == null && User != null) {
-                Recipe = new Recipe {
-                    User = User,
-                    Name = "New Recipe",
-                    Description = "description",
-                    Notes = "notes",
-                    RecipeIngredients = new List<RecipeIngredient>(),
-                    RecipeSteps = new List<RecipeStep>(),
-                    RecipeTags = new List<RecipeTag>()
-                };
-                CanEdit = true;
-                Editing = true;
+            if (_dataContext == null) {
+                _dataContext = await _contextFactory.CreateDbContextAsync();
+            }
+            await LoadData();
+        }
 
-
-            } else if (Id == null && User == null) {
-                navigationManager.NavigateTo("/");
-            } else {
-                Recipe = await _dataContext.Recipes
-                    .Include(r => r.RecipeIngredients!)
-                        .ThenInclude(ri => ri.Ingredient)
-                    .Include(r => r.RecipeIngredients!)
-                        .ThenInclude(ri => ri.Before)
-                    .Include(r => r.RecipeIngredients!)
-                        .ThenInclude(ri => ri.After)
-                    .Include(r => r.RecipeSteps)
-                    .Include(r => r.User)
-                    .Include(r => r.UsersWhoLikeMe)
-                    .Include(r => r.Comments!)
-                        .ThenInclude(c => c.User)
-                    .Include(r => r.RecipeTags)
-                        .ThenInclude(rt => rt.Tag)
-                    .FirstOrDefaultAsync(r => r.RecipeId == Id);
-                Console.WriteLine("comments is null: " + (Recipe.Comments == null).ToString());
-
-                if (Recipe == null) {
-                    Console.WriteLine("null recipe from Id");
+        private async Task LoadData() {
+            using (DataContext context = await _contextFactory.CreateDbContextAsync()) {
+                Console.WriteLine("Id: " + Id);
+                if (Id == null && User != null) {
+                    Console.WriteLine("ID NULL AND USER NOT NULL");
                     Recipe = new Recipe {
-                        UserId = User?.Id,
                         Name = "New Recipe",
                         Description = "description",
                         Notes = "notes",
                         RecipeIngredients = new List<RecipeIngredient>(),
                         RecipeSteps = new List<RecipeStep>(),
-                        Comments = new List<Comment>()
+                        RecipeTags = new List<RecipeTag>(),
+                        UserId = User?.Id
                     };
+
+                    CanEdit = true;
+                    Editing = true;
+                    Console.WriteLine("ADD RECIPE TO USER");
+                    Console.WriteLine(User == null);
+                    Console.WriteLine("ADDED");
+
+
+                } else if (Id == null && User == null) {
+                    navigationManager.NavigateTo("/");
+                } else {
+                    Recipe = await context.Recipes
+                        .Include(r => r.RecipeIngredients!)
+                            .ThenInclude(ri => ri.Ingredient)
+                        .Include(r => r.RecipeIngredients!)
+                            .ThenInclude(ri => ri.Before)
+                        .Include(r => r.RecipeIngredients!)
+                            .ThenInclude(ri => ri.After)
+                        .Include(r => r.RecipeSteps)
+                        .Include(r => r.User)
+                        .Include(r => r.UsersWhoLikeMe)
+                        .Include(r => r.Comments!)
+                            .ThenInclude(c => c.User)
+                        .Include(r => r.RecipeTags)
+                            .ThenInclude(rt => rt.Tag)
+                        .Include(r => r.ParentRecipe)
+                        .FirstOrDefaultAsync(r => r.RecipeId == Id);
+                    Console.WriteLine("comments is null: " + (Recipe.Comments == null).ToString());
+
+                    if (Recipe == null) {
+                        Console.WriteLine("null recipe from Id");
+                        Recipe = new Recipe {
+                            UserId = User?.Id,
+                            Name = "New Recipe",
+                            Description = "description",
+                            Notes = "notes",
+                            RecipeIngredients = new List<RecipeIngredient>(),
+                            RecipeSteps = new List<RecipeStep>(),
+                            Comments = new List<Comment>()
+                        };
+                    }
                 }
             }
-            if (User != null && User.Id == Recipe.UserId) {
-                CanEdit = true;                
-            }
-            if (User != null) {
-                Liked = await _dataContext.Users
-                .Where(u => u.Id == User.Id)
-                .AnyAsync(u => u.RecipesILike.Any(rl => rl.RecipeId == Recipe.RecipeId));
-            }
-        }
 
+            Console.WriteLine("FINISHED STEP 1");
+            if (User != null && User.Id == Recipe.UserId) {
+                CanEdit = true;
+            }
+            Console.WriteLine("GETTING LIKE STATUS");
+            using (DataContext context = await _contextFactory.CreateDbContextAsync()) {
+                if (User != null) {
+                    Liked = await context.Users
+                    .Where(u => u.Id == User.Id)
+                    .AnyAsync(u => u.RecipesILike.Any(rl => rl.RecipeId == Recipe.RecipeId));
+                }                
+            }
+            Console.WriteLine("FINISHED");
+        }
         private async Task SaveRecipe(bool fromCreator=true) {
 
             if (Id != null) {
