@@ -13,11 +13,15 @@
 <MudLayout>
     <MudAppBar Elevation="1" Color="Color.Success">
         
-        <MudText Typo="Typo.h5" Class="ml-3 clickable" @onclick="ReturnToIndex" >RecipeAZ</MudText>
+        <MudText Typo="Typo.h5" Class="ml-3 clickable" @onclick="ReturnToIndex" Style="margin-right:10px">RecipeAZ</MudText>
         
         <MudSpacer />
-        
-        
+        <MudIconButton Icon="@Icons.Material.Filled.Search" Size="Size.Large" Style="margin-left:auto;margin-right:0px"
+            OnClick="GoToSearch" />
+        <MudAutocomplete T="string" Variant="Variant.Text" DisableUnderLine="true" Margin="Margin.Dense" Label="Search Recipes" 
+            Style="margin-left:10px;margin-right:10px;width:300px;background-color:antiquewhite;border-radius:6px"
+            @bind-Text="_searchValue" SearchFunc="SearchRecipes"
+            ResetValueOnEmptyText="true" />
         <LoginDisplay />
     </MudAppBar>
     @*<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
@@ -34,6 +38,8 @@
     private AppUser? User { get; set; }
     private string? UserId { get; set; }
     private DataContext? _dataContext;
+    private string _searchValue = string.Empty;
+    
     private void ReturnToIndex() {
         navigationManager.NavigateTo("/");
     }
@@ -50,11 +56,41 @@
                     .Include(u => u.RecipesILike)
                     .Include(u => u.Recipes)
                     .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
-                    
+
                 UserId = User?.Id;
             }
         }
     }
+
+    private async Task<IEnumerable<string>> SearchRecipes(string searchText) {
+        Console.WriteLine("searching recipes");
+        if (searchText.Length < 2) {
+            return null;
+        }
+        searchText = searchText.ToLower();
+        return await _dataContext.Recipes
+        .Include(r => r.RecipeIngredients)
+        .Include(r => r.RecipeTags)
+            .ThenInclude(rt => rt.Tag)
+        .Where(r => r.Name.ToLower().Contains(searchText)
+        || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(searchText))
+        || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(searchText)))
+        .Select(r => r.Name).ToListAsync();
+    }
+    private void UpdateSearchText(string update) {
+        _searchValue = update;
+    }
+    private async Task GoToSearch() {
+        var recipes = await _dataContext.Recipes.Where(r => r.Name.ToLower() == _searchValue.ToLower()).Select(r => r.RecipeId).ToListAsync();
+        _searchValue = string.Empty;
+        
+        if (recipes.Count == 1) {
+            navigationManager.NavigateTo($"/recipe/{ recipes[0] }", true);
+        }
+ 
+    }
+
+   
 
 }
 
