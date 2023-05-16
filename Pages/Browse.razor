@@ -1,0 +1,61 @@
+﻿@page "/browse/{terms}"
+@page "/browse"
+
+@inject IDbContextFactory<DataContext> _contextFactory
+
+
+    
+
+<MudTable Items="@_recipes" Dense="true" RowsPerPage="@_rowsPerPage">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Results</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="_searchText" Label="Filter by search term" Variant="Variant.Outlined"></MudTextField>
+    </ToolBarContent>
+    <RowTemplate>
+        <MudTd>@context.Name</MudTd>
+        <MudTd>by @context.User.UserName</MudTd>
+        <MudTd><div class="browse-text-limit-width">@context.Description</div></MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+@code {
+    [Parameter]
+    public string Terms { get; set; } = string.Empty;
+    private string _searchText;
+    private List<Recipe>? _recipes = new();
+    private int _rowsPerPage = 15;
+    private DataContext _dataContext;
+    private List<Tag>? _tagsFilter = new();
+    private List<Ingredient>? _ingredientsFilter = new();
+
+    private List<Recipe> SearchResults {
+        get {
+            return _dataContext.Recipes
+            .Include(r => r.User)
+            .Include(r => r.RecipeIngredients)
+                .ThenInclude(ri => ri.Ingredient)
+            .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
+            .Where(r => (r.Name.ToLower().Contains(_searchText)
+            || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(_searchText))
+            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText)))
+            .Where(r => _tagsFilter.Count <=0 || r.RecipeTags.Any(rt => _tagsFilter.Contains(rt.Tag)))
+            .Where(r => _ingredientsFilter.Count <= 0 || r.RecipeIngredients.Any(ri => _ingredientsFilter.Contains(ri.Ingredient)))
+            .Select(r => r).ToList();
+        }
+    }
+
+    protected override async Task OnInitializedAsync() {
+        await base.OnInitializedAsync();
+        Console.WriteLine("finished browse init");
+        _dataContext = _contextFactory.CreateDbContext();
+        _searchText = Terms;
+        _recipes = SearchResults;
+    }
+
+    
+    
+}

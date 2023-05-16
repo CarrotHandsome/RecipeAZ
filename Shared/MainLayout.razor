@@ -1,11 +1,12 @@
 ﻿@inherits LayoutComponentBase
+@namespace RecipeAZ.Shared
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject IDbContextFactory<DataContext> _contextFactory
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 
-<MudThemeProvider />
+<MudThemeProvider Theme="RecipeTheme"/>
 <MudDialogProvider />
 <MudSnackbarProvider />
 
@@ -16,12 +17,32 @@
         <MudText Typo="Typo.h5" Class="ml-3 clickable" @onclick="ReturnToIndex" Style="margin-right:10px">RecipeAZ</MudText>
         
         <MudSpacer />
-        <MudIconButton Icon="@Icons.Material.Filled.Search" Size="Size.Large" Style="margin-left:auto;margin-right:0px"
-            OnClick="GoToSearch" />
-        <MudAutocomplete T="string" Variant="Variant.Text" DisableUnderLine="true" Margin="Margin.Dense" Label="Search Recipes" 
-            Style="margin-left:10px;margin-right:10px;width:300px;background-color:antiquewhite;border-radius:6px"
-            @bind-Text="_searchValue" SearchFunc="SearchRecipes"
-            ResetValueOnEmptyText="true" />
+        <MudGrid Spacing="1" Justify="Justify.FlexEnd">
+            <MudItem>
+                <MudIconButton Icon="@Icons.Material.Filled.Search" Size="Size.Large" Style="margin-right:0px"
+                    OnClick="GoToSearch" />
+            </MudItem>
+            <MudItem>
+                <MudAutocomplete T="string" Variant="Variant.Text" DisableUnderLine="true" Margin="Margin.Dense" Label="Search Recipes"
+                    Style="margin-left:0px;margin-right:0px;width:300px;background-color:#fff1ce;border-radius:6px"
+                    @bind-Text="_searchValue" SearchFunc="SearchRecipes"
+                    ResetValueOnEmptyText="true" CoerceText="false"/>
+            </MudItem>
+            <MudItem Class="vcenter mr-5">
+                <MudButton Size="Size.Small"
+                    @onclick="() => GoToBrowse()">
+                    Advanced search
+                </MudButton>
+            </MudItem>            
+            <MudItem Class="vcenter">
+                <AuthorizeView>
+                    <Authorized>
+                        <MudButton Class="mr-5" OnClick="NewRecipe" Variant="Variant.Outlined">+New Recipe</MudButton>
+                    </Authorized>
+                </AuthorizeView>
+            </MudItem>
+        </MudGrid>
+        <MudSpacer />
         <LoginDisplay />
     </MudAppBar>
     @*<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
@@ -39,7 +60,16 @@
     private string? UserId { get; set; }
     private DataContext? _dataContext;
     private string _searchValue = string.Empty;
-    
+    MudTheme RecipeTheme = new MudTheme()
+    {
+        Palette = new Palette() {
+            Primary = Colors.Blue.Default,
+            Secondary = Colors.Green.Accent4,
+            Error = Colors.Red.Default,
+            Warning = Colors.Orange.Accent1,
+            Success = Colors.Green.Lighten2
+        }
+    };
     private void ReturnToIndex() {
         navigationManager.NavigateTo("/");
     }
@@ -83,11 +113,20 @@
     private async Task GoToSearch() {
         var recipes = await _dataContext.Recipes.Where(r => r.Name.ToLower() == _searchValue.ToLower()).Select(r => r.RecipeId).ToListAsync();
         _searchValue = string.Empty;
-        
+
         if (recipes.Count == 1) {
             navigationManager.NavigateTo($"/recipe/{ recipes[0] }", true);
-        }
- 
+        } 
+    }
+    private void GoToBrowse() {
+        string sanitizedTerms = System.Net.WebUtility.UrlEncode(_searchValue);
+        Console.WriteLine("SANITIZED" + sanitizedTerms);
+        navigationManager.NavigateTo($"/browse/{ _searchValue }");
+    }
+
+    private void NewRecipe() {
+        navigationManager.NavigateTo("/recipe");
+
     }
 
    

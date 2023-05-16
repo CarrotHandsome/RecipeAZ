@@ -59,3 +59,15 @@ span.link:hover {
     width: 100%;
     height: auto;
 }
+
+.browse-text-limit-width {
+    width: 400px; /* adjust as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.vcenter {
+    display: flex;
+    align-items: center;
+}

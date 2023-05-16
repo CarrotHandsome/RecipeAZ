@@ -1,11 +1,9 @@
 ﻿@inject NavigationManager navigationManager
 <AuthorizeView>
     <Authorized>
-        <MudButton Class="mr-5" OnClick="NewRecipe">+New Recipe</MudButton>
-        @*<a href="Identity/Account/Manage">Hello, @context.User.Identity?.Name!</a>*@
-        <MudAvatar Class="clickable" @onclick="() => GoToProfile()">@context.User.Identity?.Name!.Substring(0, 1).ToUpper()</MudAvatar>
-        <form method="POST" action="/Account/Logout">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
+        <MudAvatar Color="Color.Warning" Class="clickable" @onclick="() => GoToProfile()">@context.User.Identity?.Name!.Substring(0, 1).ToUpper()</MudAvatar>
+        <form method="POST" action="/Account/Logout">            
+            <button type="submit" class="nav-link btn btn-link" style="color:black">Logout</button>
         </form>
     </Authorized>
     <NotAuthorized>
