@@ -4,14 +4,44 @@
 @inject IDbContextFactory<DataContext> _contextFactory
 
 
+
+
     
+<MudText Typo="Typo.h6">Search Results</MudText>
+<MudTextField @bind-Value="_searchText" Label="Filter by search term" Variant="Variant.Outlined"></MudTextField>
+<MudGrid>
+    <MudItem xs="12">
+        <MudGrid>
+            <MudItem>
+                <MudAutocomplete T="string" Label="Filter by tag" Immediate="true"
+                    Value="TagFilterSearchText" SearchFunc="TagAutoCompleteSearch" TextChanged="UpdateTagSearchText"/>
+            </MudItem>
+            <MudItem Class="d-flex align-center pl-0">
+                <MudIconButton Icon="@Icons.Material.Filled.Add" 
+                    OnClick="AddTagFilter" />
+                @foreach (Tag tag in _tagsFilter) {
+                    <MudChip Variant="Variant.Outlined" Size="Size.Small">@tag.Name</MudChip>
+                }
+            </MudItem>
+        </MudGrid>
+        
+    </MudItem>
+    <MudItem xs="12">
+        <MudGrid>
+            <MudItem>
+                <MudAutocomplete T="string" Label="Filter by ingredient"
+                    Value="IngredientFilterSearchText" SearchFunc="IngredientAutoCompleteSearch" />
+            </MudItem>
+            <MudItem Class="d-flex align-center pl-0">
+                <MudIconButton Icon="@Icons.Material.Filled.Add" />
+            </MudItem>
+        </MudGrid>
+    </MudItem>
+</MudGrid>
 
 <MudTable Items="@_recipes" Dense="true" RowsPerPage="@_rowsPerPage">
-    <ToolBarContent>
-        <MudText Typo="Typo.h6">Results</MudText>
-        <MudSpacer />
-        <MudTextField @bind-Value="_searchText" Label="Filter by search term" Variant="Variant.Outlined"></MudTextField>
-    </ToolBarContent>
+   
+   
     <RowTemplate>
         <MudTd>@context.Name</MudTd>
         <MudTd>by @context.User.UserName</MudTd>
@@ -25,6 +55,8 @@
     [Parameter]
     public string Terms { get; set; } = string.Empty;
     private string _searchText;
+    public string TagFilterSearchText { get; set; } = string.Empty;
+    public string IngredientFilterSearchText { get; set; } = string.Empty;
     private List<Recipe>? _recipes = new();
     private int _rowsPerPage = 15;
     private DataContext _dataContext;
@@ -33,7 +65,7 @@
 
     private List<Recipe> SearchResults {
         get {
-            return _dataContext.Recipes
+            List<Recipe> recipes = _dataContext.Recipes
             .Include(r => r.User)
             .Include(r => r.RecipeIngredients)
                 .ThenInclude(ri => ri.Ingredient)
@@ -41,10 +73,21 @@
                 .ThenInclude(rt => rt.Tag)
             .Where(r => (r.Name.ToLower().Contains(_searchText)
             || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(_searchText))
-            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText)))
-            .Where(r => _tagsFilter.Count <=0 || r.RecipeTags.Any(rt => _tagsFilter.Contains(rt.Tag)))
-            .Where(r => _ingredientsFilter.Count <= 0 || r.RecipeIngredients.Any(ri => _ingredientsFilter.Contains(ri.Ingredient)))
+            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText)))            
             .Select(r => r).ToList();
+
+            recipes = recipes.Where(r =>
+            {
+                return ((_tagsFilter.Count <= 0 || _tagsFilter.All(t => r.RecipeTags.Any(rt => rt.TagId == t.TagId)))
+                    && (_ingredientsFilter.Count <= 0 || _ingredientsFilter.All(i => r.RecipeIngredients.Any(ri => ri.IngredientId == i.IngredientId))));
+            }).Select(r => r).ToList();
+            //}((_tagsFilter.Count <= 0 || _tagsFilter.All(t => r.RecipeTags.Any(rt => rt.Tag == t))) 
+            //&& (_ingredientsFilter.Count <= 0 || r.RecipeIngredients.Any(ri => _ingredientsFilter.Contains(ri.Ingredient))))
+            //.Select(r => r).ToList();
+            //.Where(r => _tagsFilter.Count <= 0 || _tagsFilter.All(t => r.RecipeTags.Any(rt => rt.Tag == t)))
+            //.Where(r => )
+
+            return recipes;
         }
     }
 
@@ -56,6 +99,48 @@
         _recipes = SearchResults;
     }
 
-    
-    
+    private async Task<IEnumerable<string>> TagAutoCompleteSearch(string value) {
+        if (string.IsNullOrEmpty(value)) {
+            return new List<string>();
+        }
+        List<string> filteredTags;
+        try {
+            filteredTags = await _dataContext.Tags.Where(t => t.Name.ToLower().Contains(value.ToLower()))
+            .Select(t => t.Name)
+            .ToListAsync();
+        } catch(Exception e) {
+            Console.WriteLine(e);
+            filteredTags = new();
+        }        
+        return filteredTags;
+    }
+    private async Task<IEnumerable<string>> IngredientAutoCompleteSearch(string value) {
+        if (string.IsNullOrEmpty(value)) {
+            return new List<string>();
+        }
+        List<string> filteredIngredients;
+        try {
+            filteredIngredients = await _dataContext.Ingredients.Where(i => i.Name.ToLower().Contains(value.ToLower()))
+            .Select(t => t.Name)
+            .ToListAsync();
+
+        } catch (Exception e) {
+            Console.WriteLine(e);
+            filteredIngredients = new();
+        }
+        return filteredIngredients;
+    }
+    private void UpdateTagSearchText(string value) {
+        TagFilterSearchText = value;
+    }
+    private async Task AddTagFilter() {
+        Tag tag = _dataContext.Tags            
+            .Where(t => t.Name.ToLower() == TagFilterSearchText.ToLower()).FirstOrDefault();
+        if (tag != null) {
+            _tagsFilter.Add(tag);
+            _recipes = SearchResults;
+        }
+    }
+
+
 }
