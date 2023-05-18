@@ -2,11 +2,8 @@
 @page "/browse"
 
 @inject IDbContextFactory<DataContext> _contextFactory
+@inject NavigationManager _navigationManager
 
-
-
-
-    
 <MudText Typo="Typo.h6">Search Results</MudText>
 <MudGrid Spacing="0">
     <MudItem>
@@ -61,12 +58,27 @@
     </MudItem>
 </MudGrid>
 <p/>
+<MudGrid Spacing="0">    
+    <MudItem>
+        <MudIconButton Icon="@CurrentIcon" OnClick="ChangeOrderIcon"/>
+    </MudItem>
+    <MudItem>
+        <MudToggleIconButton Icon="@Icons.Material.Filled.ArrowUpward" ToggledIcon="@Icons.Material.Filled.ArrowDownward"
+            ToggledChanged="() => {
+                ResultsAscending = !ResultsAscending;
+                _recipes = SearchResults;
+                StateHasChanged();
+            }"
+        />
+    </MudItem>
+</MudGrid>
+
 <MudTable Items="@_recipes" Dense="true" RowsPerPage="@_rowsPerPage">
    
    
     <RowTemplate>
-        <MudTd>@context.Name</MudTd>
-        <MudTd>by @context.User.UserName</MudTd>
+        <MudTd @onclick="() => NavigateToRecipe(context.RecipeId)" Class="clickable">@context.Name</MudTd>
+        <MudTd @onclick="() => NavigateToUser(context.UserId)" Class="clickable">by @context.User.UserName</MudTd>
         <MudTd><div class="browse-text-limit-width">@context.Description</div></MudTd>
     </RowTemplate>
     <PagerContent>
@@ -79,11 +91,17 @@
     private string _searchText = string.Empty;
     public string TagFilterSearchText { get; set; } = string.Empty;
     public string IngredientFilterSearchText { get; set; } = string.Empty;
+    //public string ResultsOrderBy { get; set; } = Icons.Material.Filled.SortByAlpha; //alpha, date, likes
+    public bool ResultsAscending { get; set; } = true;
+    private string[] _orderIconOptions = { Icons.Material.Filled.SortByAlpha, Icons.Material.Filled.CalendarMonth, Icons.Material.Filled.Favorite};
+    private int orderIconIndex = 0;
+    private string CurrentIcon => _orderIconOptions[orderIconIndex % _orderIconOptions.Length];
     private List<Recipe>? _recipes = new();
     private int _rowsPerPage = 15;
     private DataContext _dataContext;
     private List<Tag>? _tagsFilter = new();
     private List<Ingredient>? _ingredientsFilter = new();
+
 
     private List<Recipe> SearchResults {
         get {
@@ -98,16 +116,40 @@
             || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText.ToLower()))
             .Select(r => r).ToList();
 
-            recipes = recipes.Where(r =>
-            {
+            recipes = recipes.Where(r => {
                 return ((_tagsFilter.Count <= 0 || _tagsFilter.All(t => r.RecipeTags.Any(rt => rt.TagId == t.TagId)))
                     && (_ingredientsFilter.Count <= 0 || _ingredientsFilter.All(i => r.RecipeIngredients.Any(ri => ri.IngredientId == i.IngredientId))));
             }).Select(r => r).ToList();
-            //}((_tagsFilter.Count <= 0 || _tagsFilter.All(t => r.RecipeTags.Any(rt => rt.Tag == t))) 
-            //&& (_ingredientsFilter.Count <= 0 || r.RecipeIngredients.Any(ri => _ingredientsFilter.Contains(ri.Ingredient))))
-            //.Select(r => r).ToList();
-            //.Where(r => _tagsFilter.Count <= 0 || _tagsFilter.All(t => r.RecipeTags.Any(rt => rt.Tag == t)))
-            //.Where(r => )
+
+            switch (orderIconIndex % _orderIconOptions.Length) {
+                case 0:
+                    if (ResultsAscending) {
+                        recipes = recipes.OrderBy(r => r.Name).ToList();
+                    } else {
+                        recipes = recipes.OrderByDescending(r => r.Name).ToList();
+                    }
+                    break;
+                case 1:
+                    if (ResultsAscending) {
+                        recipes = recipes.OrderBy(r => r.CreatedAt).ToList();
+                    } else {
+                        recipes = recipes.OrderByDescending(r => r.CreatedAt).ToList();
+                    }
+                    break;
+                case 2:
+                    if (ResultsAscending) {
+                        recipes = recipes.OrderBy(r => r.UsersWhoLikeMe?.Count ?? 0).ToList();
+                    } else {
+                        recipes = recipes.OrderByDescending(r => r.UsersWhoLikeMe?.Count ?? 0).ToList();
+                    }
+                    break;
+                default:
+                    recipes = recipes.OrderBy(r => r.Name).ToList();
+                    break;
+            }
+            
+
+            
 
             return recipes;
         }
@@ -191,4 +233,16 @@
         StateHasChanged();
     }
 
+    private void NavigateToRecipe(string id) {
+        _navigationManager.NavigateTo($"/recipe/{id}");
+    }
+    private void NavigateToUser(string id) {
+        _navigationManager.NavigateTo($"/profile/{id}");
+    }
+
+    private void ChangeOrderIcon() {
+        orderIconIndex++;
+        _recipes = SearchResults;
+        StateHasChanged();
+    }
 }
