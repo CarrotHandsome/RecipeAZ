@@ -23,6 +23,8 @@
                             </MudItem>
                             @if (CanEdit && Editing) {
                                 <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="(e) => {
+                                    DataContext.RecipeSteps.Attach(rs);
+                                    DataContext.RecipeSteps.Remove(rs);
                                     ItemRecipe!.RecipeSteps.Remove(rs);
                                     StateHasChanged();
                                 }" />
@@ -95,7 +97,8 @@
 
 @code {
     private bool ShowNewStepInput { get; set; } = false;
-    private DataContext? _dataContext;
+    [Parameter]
+    public DataContext? DataContext { get; set; }
     private Dictionary<RecipeStep, bool> detailsOpen = new Dictionary<RecipeStep, bool>();
     private bool stepEditOpen = false;
     private RecipeStep? editingStep;
@@ -105,7 +108,7 @@
 
     protected override async Task OnInitializedAsync() {
         await base.OnInitializedAsync();
-        _dataContext = await _contextFactory.CreateDbContextAsync();
+        //DataContext = await _contextFactory.CreateDbContextAsync();
         if (ItemRecipe != null && ItemRecipe.RecipeSteps != null) {
             foreach (RecipeStep rs in ItemRecipe.RecipeSteps) {
                 detailsOpen[rs] = false;
@@ -114,8 +117,8 @@
     }
     private async Task UpdateAndSaveRecipe() {
         if (ItemRecipe != null) {
-            _dataContext.Update(ItemRecipe);
-            await _dataContext.SaveChangesAsync();
+            DataContext.Update(ItemRecipe);
+            await DataContext.SaveChangesAsync();
             RecipeSnack.Add("Saved Recipe");
             StateHasChanged();
         }

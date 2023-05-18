@@ -31,6 +31,8 @@
                                     Size="Size.Small"
                                         aria-label="delete" 
                                         @onclick="(e) => {
+                                            DataContext.RecipeIngredients.Attach(ri);
+                                            DataContext.RecipeIngredients.Remove(ri);
                                             ItemRecipe!.RecipeIngredients.Remove(ri);
                                             StateHasChanged();
                                         }" />
@@ -119,8 +121,9 @@
 @code {
 
     private bool ShowNewIngredientInput { get; set; } = false;
-    private DataContext? _dataContext;
-
+    //private DataContext? _dataContext;
+    [Parameter]
+    public DataContext? DataContext { get; set; }
     private Dictionary<RecipeIngredient, bool> detailsOpen = new Dictionary<RecipeIngredient, bool>();
     private bool ingredientEditOpen = false;
     private string editingName;

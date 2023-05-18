@@ -8,30 +8,30 @@ namespace RecipeAZ.Pages.RecipeComponents {
     public partial class IngredientsComponent {
         protected override async Task OnInitializedAsync() {
             await base.OnInitializedAsync();
-            _dataContext = await _contextFactory.CreateDbContextAsync();
+            //DataContext = await _contextFactory.CreateDbContextAsync();
             if (ItemRecipe != null && ItemRecipe.RecipeIngredients != null) {
                 foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!) {
                     detailsOpen[ri] = false;
                 }
             }
 
-            AllIngredients = _dataContext.Ingredients.Select(i => i.Name).ToList();
+            AllIngredients = DataContext.Ingredients.Select(i => i.Name).ToList();
         }
         public async Task UpdateAddedIngredient() {
             if (ItemRecipe != null && LastItem.Name != null) {               
                 
                 try {
                     Console.WriteLine("adding new ingredient");
-                    if (!_dataContext.Ingredients.Any(i => i.Name == LastItem.Ingredient.Name)) {
+                    if (!DataContext.Ingredients.Any(i => i.Name == LastItem.Ingredient.Name)) {
                         Console.WriteLine("adding new Ingredient");
-                        await _dataContext.Ingredients.AddAsync(LastItem.Ingredient);
+                        await DataContext.Ingredients.AddAsync(LastItem.Ingredient);
                         Console.WriteLine("added new ingredient");
                     } 
-                    if (LastItem.Before != null && !_dataContext.Modifiers.Any(m => m.Name == LastItem.Before.Name)) {
-                        await _dataContext.Modifiers.AddAsync(LastItem.Before);
+                    if (LastItem.Before != null && !DataContext.Modifiers.Any(m => m.Name == LastItem.Before.Name)) {
+                        await DataContext.Modifiers.AddAsync(LastItem.Before);
                     }
-                    if (LastItem.After != null && !_dataContext.Modifiers.Any(m => m.Name == LastItem.After.Name)) {
-                        await _dataContext.Modifiers.AddAsync(LastItem.After);
+                    if (LastItem.After != null && !DataContext.Modifiers.Any(m => m.Name == LastItem.After.Name)) {
+                        await DataContext.Modifiers.AddAsync(LastItem.After);
                     }
                     RecipeIngredient newRecipeIngredient = new RecipeIngredient {
                         Name = LastItem.Name,
@@ -45,7 +45,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                         AfterId = LastItem.AfterId ?? "1"
                     };
                    
-                    //await _dataContext.RecipeIngredients.AddAsync(newRecipeIngredient);
+                    //await DataContext.RecipeIngredients.AddAsync(newRecipeIngredient);
                     Console.WriteLine($"Ingredient Id: {newRecipeIngredient.RecipeIngredientId}");
                     
                 } catch (Exception ex) {
@@ -63,7 +63,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
             bool adding = ri.RecipeIngredientId == null;
             Console.WriteLine("recipe ingredient: " + ri.Name);
             Console.WriteLine("recipe ingredient Id: " + ri.RecipeIngredientId);
-            Ingredient existingIngredient = _dataContext.Ingredients.FirstOrDefault(i => i.Name == ri.Name);
+            Ingredient existingIngredient = DataContext.Ingredients.FirstOrDefault(i => i.Name == ri.Name);
             Console.WriteLine("existing ingredient" + (existingIngredient?.Name ?? "no existing ingredient"));
             if (existingIngredient == null) {
                 Console.WriteLine("adding new ingredient");
@@ -96,12 +96,12 @@ namespace RecipeAZ.Pages.RecipeComponents {
             /*
              * Returns an Ingredient and two modifiers whose names compose to equal fullName
              */
-            Dictionary<string, Ingredient> ingredientsDict = _dataContext.Ingredients.ToDictionary(i => i.Name);
-            Dictionary<string, IngredientModifier> beforesDict = _dataContext.Modifiers.ToDictionary(im => im.Name);
-            Dictionary<string, IngredientModifier> aftersDict = _dataContext.Modifiers.ToDictionary(im => im.Name);
+            Dictionary<string, Ingredient> ingredientsDict = DataContext.Ingredients.ToDictionary(i => i.Name);
+            Dictionary<string, IngredientModifier> beforesDict = DataContext.Modifiers.ToDictionary(im => im.Name);
+            Dictionary<string, IngredientModifier> aftersDict = DataContext.Modifiers.ToDictionary(im => im.Name);
             List<(IngredientModifier?, Ingredient?, IngredientModifier?)> returnList = new();
             Console.WriteLine($"Full Name: {fullName}");
-            IngredientModifier emptyMod = _dataContext.Modifiers.FirstOrDefault(m => m.IngredientModifierId == "1");
+            IngredientModifier emptyMod = DataContext.Modifiers.FirstOrDefault(m => m.IngredientModifierId == "1");
             
             for (int i = 0; i < fullName.Length; i++) {
                 for (int j = i + 1; j <= fullName.Length; j++) {
@@ -145,7 +145,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 RecipeIngredients = new List<RecipeIngredient> { ri }
             };
             _newIngredientToRemove = ingredient;
-            //_dataContext.Ingredients.Add(ingredient);
+            //DataContext.Ingredients.Add(ingredient);
             return ingredient;
         }
 
@@ -154,7 +154,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
             if (string.IsNullOrEmpty(matchTo)) {
                 return new List<string>();
             }
-            List<string> candidates = await _dataContext.Ingredients.Select(i => i.Name).ToListAsync();
+            List<string> candidates = await DataContext.Ingredients.Select(i => i.Name).ToListAsync();
            
             return candidates.Where(x => (x.Contains(matchTo, StringComparison.InvariantCultureIgnoreCase) || matchTo.Contains(x, StringComparison.InvariantCultureIgnoreCase)));
         } 

@@ -8,7 +8,18 @@
 
     
 <MudText Typo="Typo.h6">Search Results</MudText>
-<MudTextField @bind-Value="_searchText" Label="Filter by search term" Variant="Variant.Outlined"></MudTextField>
+<MudGrid Spacing="0">
+    <MudItem>
+        <MudTextField @bind-Value="_searchText" Label="Filter by search term" Variant="Variant.Outlined" TextChanged="UpdateRecipes"></MudTextField>
+    </MudItem>
+    <MudItem Class="vcenter">
+        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Size="Size.Large"
+            OnClick="UpdateRecipes"
+        />
+    </MudItem>
+</MudGrid>
+
+
 <MudGrid>
     <MudItem xs="12">
         <MudGrid>
@@ -20,7 +31,11 @@
                 <MudIconButton Icon="@Icons.Material.Filled.Add" 
                     OnClick="AddTagFilter" />
                 @foreach (Tag tag in _tagsFilter) {
-                    <MudChip Variant="Variant.Outlined" Size="Size.Small">@tag.Name</MudChip>
+                    <MudChip Variant="Variant.Outlined" Size="Size.Small">
+                        <MudText>@tag.Name</MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Size="Size.Small"
+                            @onclick="() => HandleTagFilterClose(tag)"/>
+                    </MudChip>
                 }
             </MudItem>
         </MudGrid>
@@ -30,15 +45,22 @@
         <MudGrid>
             <MudItem>
                 <MudAutocomplete T="string" Label="Filter by ingredient"
-                    Value="IngredientFilterSearchText" SearchFunc="IngredientAutoCompleteSearch" />
+                    Value="IngredientFilterSearchText" SearchFunc="IngredientAutoCompleteSearch" TextChanged="UpdateIngredientSearchText" />
             </MudItem>
             <MudItem Class="d-flex align-center pl-0">
-                <MudIconButton Icon="@Icons.Material.Filled.Add" />
+                <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddIngredientFilter"/>
+                @foreach (Ingredient i in _ingredientsFilter) {
+                    <MudChip Variant="Variant.Outlined" Size="Size.Small">
+                        <MudText>@i.Name</MudText>
+                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Size="Size.Small"
+                            @onclick="() => HandleIngredientFilterClose(i)" />
+                    </MudChip>
+                }
             </MudItem>
         </MudGrid>
     </MudItem>
 </MudGrid>
-
+<p/>
 <MudTable Items="@_recipes" Dense="true" RowsPerPage="@_rowsPerPage">
    
    
@@ -54,7 +76,7 @@
 @code {
     [Parameter]
     public string Terms { get; set; } = string.Empty;
-    private string _searchText;
+    private string _searchText = string.Empty;
     public string TagFilterSearchText { get; set; } = string.Empty;
     public string IngredientFilterSearchText { get; set; } = string.Empty;
     private List<Recipe>? _recipes = new();
@@ -71,9 +93,9 @@
                 .ThenInclude(ri => ri.Ingredient)
             .Include(r => r.RecipeTags)
                 .ThenInclude(rt => rt.Tag)
-            .Where(r => (r.Name.ToLower().Contains(_searchText)
-            || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(_searchText))
-            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText)))            
+            .Where(r => r.Name.ToLower().Contains(_searchText.ToLower())
+            || r.RecipeIngredients.Any(ri => ri.Ingredient.Name.ToLower().Contains(_searchText.ToLower()))
+            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText.ToLower()))
             .Select(r => r).ToList();
 
             recipes = recipes.Where(r =>
@@ -95,7 +117,7 @@
         await base.OnInitializedAsync();
         Console.WriteLine("finished browse init");
         _dataContext = _contextFactory.CreateDbContext();
-        _searchText = Terms;
+        _searchText = Terms ?? string.Empty;
         _recipes = SearchResults;
     }
 
@@ -133,14 +155,40 @@
     private void UpdateTagSearchText(string value) {
         TagFilterSearchText = value;
     }
+    private void UpdateIngredientSearchText(string value) {
+        IngredientFilterSearchText = value;
+    }
     private async Task AddTagFilter() {
         Tag tag = _dataContext.Tags            
             .Where(t => t.Name.ToLower() == TagFilterSearchText.ToLower()).FirstOrDefault();
         if (tag != null) {
             _tagsFilter.Add(tag);
             _recipes = SearchResults;
+            UpdateTagSearchText(string.Empty);
         }
     }
+    private async Task AddIngredientFilter() {
+        Ingredient ingredient = _dataContext.Ingredients
+            .Where(ingredient => ingredient.Name.ToLower() == IngredientFilterSearchText.ToLower()).FirstOrDefault();
+        if (ingredient != null) {
+            _ingredientsFilter.Add(ingredient);
+            _recipes = SearchResults;
+        }
+    }
+    private void UpdateRecipes() {
+        _recipes = SearchResults;
+        StateHasChanged();
+    }
 
+    private void HandleTagFilterClose(Tag tag) {
+        _tagsFilter.Remove(tag);
+        _recipes = SearchResults;
+        StateHasChanged();
+    }
+    private void HandleIngredientFilterClose(Ingredient ingredient) {
+        _ingredientsFilter.Remove(ingredient);
+        _recipes = SearchResults;
+        StateHasChanged();
+    }
 
 }

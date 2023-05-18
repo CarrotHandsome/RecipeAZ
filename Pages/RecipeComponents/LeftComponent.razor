@@ -12,10 +12,10 @@
                     <OverViewComponent />
                 </MudTabPanel>
                 <MudTabPanel Text="Ingredients">
-                    <IngredientsComponent @ref="_ingredientsRef" />
+                    <IngredientsComponent DataContext="_dataContext" @ref="_ingredientsRef" />
                 </MudTabPanel>
                 <MudTabPanel Text="Steps">
-                    <StepsComponent />
+                    <StepsComponent DataContext="_dataContext"/>
                 </MudTabPanel>               
             </MudTabs>
         </MudItem>
@@ -31,8 +31,6 @@
         </MudItem>
     </MudGrid>
 </MudPaper>
-
-
 
 @code {
     [Parameter]
@@ -68,12 +66,7 @@
     }
 
     private async Task SaveRecipe(bool fromCreator = true)
-    {
-        Console.WriteLine("Saving Ingredients");
-        Console.ForegroundColor = ConsoleColor.Green;
-        Console.WriteLine("ID: " + Id);
-        Console.ResetColor();
-        //await _ingredientsRef.UpdateAddedIngredient();
+    {        
         if (Id != null)
         {
             _dataContext.Recipes.Update(Recipe!);
