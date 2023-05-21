@@ -1,9 +1,4 @@
-﻿using Microsoft.AspNetCore.Components;
-using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-
-namespace RecipeAZ.Models {
+﻿namespace RecipeAZ.Models {
     public class BoolWrapper {
         private bool _value;
 
@@ -27,51 +22,5 @@ namespace RecipeAZ.Models {
             Console.WriteLine("Edit button clicked");
             OnEditButtonClick?.Invoke();
         }
-    }
-
-    public class NavHelperService {
-        private readonly NavigationManager _navigationManager;
-        public NavHelperService(NavigationManager navigationManager) {
-            _navigationManager = navigationManager;
-        }
-        public void NavigateToRecipe(string id) {
-            Console.WriteLine(_navigationManager == null);
-            Console.WriteLine("navigating to recipe " + id);
-            _navigationManager.NavigateTo($"/recipe/{id}", true);
-        }
-        public void NavigateToUser(string id) {
-            _navigationManager.NavigateTo($"/profile/{id}", true);
-        }
-    }
-    public class TextProcessing {
-        public List<Tuple<string, bool, string>> ProcessString(string input) {
-            var result = new List<Tuple<string, bool, string>>();
-            var matches = Regex.Matches(input, @"@[^@]*@|[^@]+");
-
-            foreach (Match match in matches) {
-                string matchValue = match.Value;
-                bool isId = matchValue.StartsWith("@") && matchValue.EndsWith("@");
-                string afterSlash = null;
-
-                if (isId) {
-                    // Strip the '@' characters from the start and end.
-                    matchValue = matchValue.Substring(1, matchValue.Length - 2);
-
-                    // Check for a '/' character in the ID.
-                    int slashIndex = matchValue.IndexOf('/');
-                    if (slashIndex != -1 && slashIndex < matchValue.Length - 1) {
-                        afterSlash = matchValue.Substring(slashIndex + 1);
-                        matchValue = matchValue.Substring(0, slashIndex);
-                    }
-                }
-
-                // Add it to the result list
-                result.Add(Tuple.Create(matchValue, isId, afterSlash));
-                Console.WriteLine($"{matchValue} {isId} {afterSlash == null}");
-            }
-
-            return result;
-        }
-        
     }
 }

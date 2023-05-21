@@ -21,6 +21,20 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 var connectionString = builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 
+//builder.Services.AddDbContext<IdentityContext>(opts => {
+//    opts.UseSqlServer(connectionString);
+//    opts.EnableSensitiveDataLogging(true);
+//});
+//builder.Services.AddDbContext<DataContext>(opts => {
+//    opts.UseSqlServer(connectionString);
+//    opts.EnableSensitiveDataLogging(true);
+//    opts.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
+    
+//});
+
+//builder.Services.AddDefaultIdentity<AppUser>(options => options.SignIn.RequireConfirmedAccount = false)
+//    .AddRoles<IdentityRole>()
+//    .AddEntityFrameworkStores<DataContext>();
 builder.Services.AddDbContextFactory<DataContext>(opts => {
     opts.UseSqlServer(connectionString);
     opts.EnableSensitiveDataLogging(true);
@@ -44,8 +58,6 @@ builder.Services.AddScoped<UserManager<AppUser>>();
 builder.Services.AddScoped<RoleManager<IdentityRole>>();
 builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();
 builder.Services.AddSingleton<EditService>();
-builder.Services.AddScoped<TextProcessing>();
-builder.Services.AddScoped<NavHelperService>();
 
 
 builder.Services.AddRazorPages();
