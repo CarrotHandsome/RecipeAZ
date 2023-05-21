@@ -1,9 +1,21 @@
 @inject IDbContextFactory<DataContext> _contextFactory
 @inject EditService EditService
+@inject NavHelperService _navHelp
+@inject TextProcessing _textProcessing
 
 <div>
     <h4>Overview</h4>
-    @Recipe?.Description
+    @foreach (Tuple<string, bool, string> kvp in _textProcessing.ProcessString(Recipe?.Description ?? string.Empty)) {
+        if (kvp.Item2) {
+            <MudButton Variant="Variant.Text"
+               Style="display: inline; margin: 0px; padding: 0px;"
+               @onclick="() => {                
+                _navHelp.NavigateToRecipe(kvp.Item1);              
+            }">@kvp.Item3</MudButton>
+        } else {
+            <MudText Style="display: inline;">@kvp.Item1</MudText>
+        }
+    }
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
             OriginalOverview = Recipe?.Description ?? string.Empty;
