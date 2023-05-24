@@ -11,6 +11,7 @@
 <MudSnackbarProvider />
 
 <CascadingValue Value="@User" Name="UserParam">    
+
 <MudLayout>
     <MudAppBar Elevation="1" Color="Color.Success">
         
@@ -48,17 +49,20 @@
     @*<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
         <NavMenu />
     </MudDrawer>*@
-    <MudMainContent Class="m-lg-0 pl-0">
-        @Body
-    </MudMainContent>
+    
+        <MudMainContent Class="m-lg-0 pl-0">
+            @Body
+        </MudMainContent>
+    
 </MudLayout>
 </CascadingValue>
 
+
 @code {
 
-    private AppUser? User { get; set; }
+    public AppUser? User { get; set; }
     private string? UserId { get; set; }
-    private DataContext? _dataContext;
+    //public DataContext? DataContext { get; set; }
     private string _searchValue = string.Empty;
     MudTheme RecipeTheme = new MudTheme()
     {
@@ -76,42 +80,45 @@
 
     protected override async Task OnInitializedAsync() {
         await base.OnInitializedAsync();
-        _dataContext = await _contextFactory.CreateDbContextAsync();
+        using var DataContext = await _contextFactory.CreateDbContextAsync();        
         AuthenticationState authState = await authenticationStateProvider.GetAuthenticationStateAsync();
         var user = authState.User;
         if (user != null && user!.Identity != null && user!.Identity!.IsAuthenticated) {
             var userIdClaim = user.FindFirst(c => c.Type == ClaimTypes.NameIdentifier);
             if (userIdClaim != null && userIdClaim.Value != null) {
-                User = await _dataContext.Users
-                    .Include(u => u.RecipesILike)
-                    .Include(u => u.Recipes)
-                    .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
-
+                User = await DataContext.Users.AsNoTracking()
+                    .Include(u => u.RecipesILike).AsNoTracking()
+                    .Include(u => u.Recipes).AsNoTracking()
+                .FirstOrDefaultAsync(u => u.Id == userIdClaim.Value);
                 UserId = User?.Id;
+                //DataContext.Entry(User).State = EntityState.Detached;
             }
-        }
+        }               
     }
 
     private async Task<IEnumerable<string>> SearchRecipes(string searchText) {
-        Console.WriteLine("searching recipes");
+        using var DataContext = await _contextFactory.CreateDbContextAsync();
         if (searchText.Length < 2) {
             return null;
         }
         searchText = searchText.ToLower();
-        return await _dataContext.Recipes
-        .Include(r => r.RecipeIngredients)
-        .Include(r => r.RecipeTags)
-            .ThenInclude(rt => rt.Tag)
-        .Where(r => r.Name.ToLower().Contains(searchText)
-        || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(searchText))
-        || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(searchText)))
-        .Select(r => r.Name).ToListAsync();
+        return await DataContext.Recipes
+            .Include(r => r.RecipeIngredients)
+            .Include(r => r.RecipeTags)
+                .ThenInclude(rt => rt.Tag)
+            .Where(r => r.Name.ToLower().Contains(searchText)
+            || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(searchText))
+            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(searchText)))
+            .Select(r => r.Name).ToListAsync();        
+
     }
     private void UpdateSearchText(string update) {
         _searchValue = update;
     }
     private async Task GoToSearch() {
-        var recipes = await _dataContext.Recipes.Where(r => r.Name.ToLower() == _searchValue.ToLower()).Select(r => r.RecipeId).ToListAsync();
+        using var DataContext = await _contextFactory.CreateDbContextAsync();
+        List<string> recipes;
+       recipes = await DataContext.Recipes.Where(r => r.Name.ToLower() == _searchValue.ToLower()).Select(r => r.RecipeId).ToListAsync();
         _searchValue = string.Empty;
 
         if (recipes.Count == 1) {
@@ -126,7 +133,6 @@
 
     private void NewRecipe() {
         navigationManager.NavigateTo("/recipe");
-
     }
 
    

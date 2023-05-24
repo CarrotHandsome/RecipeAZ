@@ -1,11 +1,11 @@
-@inject IDbContextFactory<DataContext> _contextFactory
 @inject EditService EditService
 @inject NavHelperService _navHelp
 @inject TextProcessing _textProcessing
 
 <div>
     <h4>Overview</h4>
-    @foreach (Tuple<string, bool, string> kvp in _textProcessing.ProcessString(Recipe?.Description ?? string.Empty)) {
+    <TextLinkMixComponent Text="@Recipe?.Description" />
+    @*@foreach (Tuple<string, bool, string> kvp in _textProcessing.ProcessString(Recipe?.Description ?? string.Empty)) {
         if (kvp.Item2) {
             <MudButton Variant="Variant.Text"
                Style="display: inline; margin: 0px; padding: 0px;"
@@ -15,7 +15,7 @@
         } else {
             <MudText Style="display: inline;">@kvp.Item1</MudText>
         }
-    }
+    }*@
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
             OriginalOverview = Recipe?.Description ?? string.Empty;
@@ -55,21 +55,9 @@
     public bool CanEdit { get; set; }
     [CascadingParameter(Name = "EditingParam")]
     public bool Editing { get; set; }
+
     private string OriginalOverview { get; set; } = string.Empty;
-    private DataContext? _dataContext;
-    private bool overviewEditOpen = false;  
+    
+    private bool overviewEditOpen = false;
 
-    protected override async Task OnInitializedAsync() {
-        await base.OnInitializedAsync();
-        _dataContext = await _contextFactory.CreateDbContextAsync();
-    }
-
-
-    private async Task UpdateAndSaveRecipe() {
-        if (Recipe != null) {
-            //_dataContext.Update(Recipe);
-            //await _dataContext.SaveChangesAsync();
-            StateHasChanged();
-        }
-    }
 }

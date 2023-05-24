@@ -1,7 +1,7 @@
-﻿@inject IDbContextFactory<DataContext> _contextFactory
-@inject NavigationManager navigationManager
+﻿@inject NavigationManager navigationManager
 @inject ISnackbar snackBar
 @inject IDialogService dialogService
+@inject RecipeAZ.Services.RecipeService _recipeService
 
 <MudPaper Class="ml-0 pl-0">
     <MudGrid Spacing="0">
@@ -12,10 +12,10 @@
                     <OverViewComponent />
                 </MudTabPanel>
                 <MudTabPanel Text="Ingredients">
-                    <IngredientsComponent DataContext="_dataContext" @ref="_ingredientsRef" />
+                    <IngredientsComponent @ref="_ingredientsRef" />
                 </MudTabPanel>
                 <MudTabPanel Text="Steps">
-                    <StepsComponent DataContext="_dataContext"/>
+                    <StepsComponent />
                 </MudTabPanel>               
             </MudTabs>
         </MudItem>
@@ -23,7 +23,7 @@
             <MudMenu Icon="@Icons.Material.Filled.Menu">
                 @if (CanEdit) {
                     <MudMenuItem Icon="@Icons.Material.Filled.Edit" @onclick="OnEditClick" />
-                    <MudMenuItem @onclick="() => SaveRecipe(true)">Save</MudMenuItem>
+                    <MudMenuItem @onclick="async () => await SaveRecipe(true)">Save</MudMenuItem>
                     <MudMenuItem OnClick="async () => await ShowDeleteConfirmation()">Delete</MudMenuItem>
                 }                
                 <MudMenuItem @onclick="async () => await CopyRecipe()">Copy</MudMenuItem>
@@ -47,15 +47,13 @@
     public Recipe Recipe { get; set; }
     [CascadingParameter(Name = "UserParam")]
     public AppUser User { get; set; }
-    private DataContext? _dataContext;
+    [CascadingParameter(Name="ContextParam")]
+    public DataContext _dataContext { get; set; }
+
     private IngredientsComponent _ingredientsRef;
     public string? button;
     private bool ActionsVisible { get; set; }
 
-    protected override async Task OnInitializedAsync() {
-        await base.OnInitializedAsync();
-        _dataContext = await _contextFactory.CreateDbContextAsync();
-    }
     public void NavigateHandler(string button) {
         this.button = button;
     }
@@ -66,25 +64,10 @@
     }
 
     private async Task SaveRecipe(bool fromCreator = true)
-    {        
-        if (Id != null)
-        {
-            _dataContext.Recipes.Update(Recipe!);
-            Console.WriteLine("updating recipe");
-        }
-        else
-        {
-            await _dataContext.Recipes.AddAsync(Recipe!);
-            Console.WriteLine("added recipe..");
-            //_dataContext.Recipes.Update(EditRecipe!);
-        }
+    {
+        Console.WriteLine("Starting to save");
+        await _recipeService.SaveRecipeAsync(Id);
 
-        Console.WriteLine("Saving changes...");
-        try {
-            await _dataContext.SaveChangesAsync();
-        } catch (Exception ex) {
-            Console.WriteLine($"EXCEPTION: {ex}");
-        }
         _ingredientsRef.LastItem = new();
         Console.WriteLine("Saved");
         if (fromCreator)
@@ -94,7 +77,7 @@
             snackBar.Add("Saved Recipe", MudBlazor.Severity.Success);
         }
         Console.WriteLine(Recipe!.RecipeId);
-        navigationManager.NavigateTo($"/recipe/{Recipe!.RecipeId}");
+        //navigationManager.NavigateTo($"/recipe/{Recipe!.RecipeId}");
     }
 
     private async Task RemoveRecipeAsync() {
@@ -105,8 +88,7 @@
             snackBar.Configuration.ShowTransitionDuration = 300;
             snackBar.Add("Recipe has not been saved yet.", MudBlazor.Severity.Warning);
         } else {
-            _dataContext.Recipes.Remove(Recipe);
-            await _dataContext.SaveChangesAsync();
+            await _recipeService.RemoveRecipe(Recipe);
             navigationManager.NavigateTo($"/profile/{User.Id}");
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
             snackBar.Configuration.VisibleStateDuration = 500;

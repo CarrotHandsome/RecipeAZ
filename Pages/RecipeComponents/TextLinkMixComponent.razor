@@ -1,0 +1,21 @@
+﻿@inject TextProcessing _textProcessing
+@inject NavHelperService _navHelp
+
+@foreach (Tuple<string, bool, string> t in _textProcessing.ProcessString(Text)) {
+    if (t.Item2) {
+        <MudButton Variant="Variant.Text"
+            Style="display: inline; margin: 0px; padding: 0px;"
+            @onclick="() => {
+                _navHelp.NavigateToRecipe(t.Item1);
+            }" >
+            @t.Item3
+        </MudButton>
+    } else {
+        <MudText Style="display: inline;">@t.Item1</MudText>
+    }
+}
+
+@code {
+    [Parameter]
+    public string Text { get; set; }
+}

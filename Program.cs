@@ -46,6 +46,7 @@ builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();
 builder.Services.AddSingleton<EditService>();
 builder.Services.AddScoped<TextProcessing>();
 builder.Services.AddScoped<NavHelperService>();
+builder.Services.AddScoped<RecipeAZ.Services.RecipeService>();
 
 
 builder.Services.AddRazorPages();

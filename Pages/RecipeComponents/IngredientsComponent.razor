@@ -4,6 +4,7 @@
 @inject IDbContextFactory<DataContext> _contextFactory
 @inject TextProcessing _textProcessing
 @inject NavHelperService _navHelp
+@inject RecipeAZ.Services.RecipeService _recipeService
 @inherits EditableList<RecipeIngredient>
 
 
@@ -16,7 +17,7 @@
                     <MudListItem>
                         <MudGrid>
                             <MudItem>
-                                <div style="margin-top: 0.75rem; margin-bottom: 0;">@ri.Ingredient?.Name:</div>
+                                <div style="margin-top: 0.75rem; margin-bottom: 0;"><TextLinkMixComponent Text="@ri.Ingredient?.Name"/>:</div>
                             </MudItem>
                             <MudItem>
                                     <div style="margin-top: 0.75rem; margin-bottom: 0;">@ri.Amount</div>
@@ -32,11 +33,9 @@
                                     <MudIconButton Icon="@Icons.Material.Filled.Delete" 
                                     Size="Size.Small"
                                         aria-label="delete" 
-                                        @onclick="(e) => {
-                                            DataContext.RecipeIngredients.Attach(ri);
-                                            DataContext.RecipeIngredients.Remove(ri);
-                                            ItemRecipe!.RecipeIngredients.Remove(ri);
-                                            StateHasChanged();
+                                        @onclick="async (e) => {
+                                            await _recipeService.RemoveRecipeIngredient(ri);
+                                            //StateHasChanged();
                                         }" />
                                 
                                 </MudItem>
@@ -63,7 +62,8 @@
                         </MudGrid>
                     @if (detailsOpen.ContainsKey(ri) && detailsOpen[ri]) {
                         <MudPaper Class="pl-3" Elevation="0" Style="font-style:italic;">
-                            @foreach (Tuple<string, bool, string> t in _textProcessing.ProcessString(ri.Notes)) {
+                            <TextLinkMixComponent Text="@ri.Notes" />
+                            @*@foreach (Tuple<string, bool, string> t in _textProcessing.ProcessString(ri.Notes)) {
                                 if (t.Item2) {
                                     <MudButton Variant="Variant.Text"
                                        Style="display: inline; margin: 0px; padding: 0px;"
@@ -73,8 +73,7 @@
                                 } else {
                                     <MudText Style="display: inline;">@t.Item1</MudText>
                                 }
-                                            }
-                            
+                            }     *@                       
                         </MudPaper>
                     }
                     </MudListItem>                                                   
@@ -105,7 +104,7 @@
             <MudAutocomplete T="string" Label="Name your ingredient"
                 Value="tempIngredient.Name" TextChanged="UpdateEditingIngredient"
                 CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
-                SearchFunc="FindIngredientMatches" />
+                SearchFunc="_recipeService.FindIngredientMatches" />
             <MudTextField @bind-Value="tempIngredient.Amount" Lines="1" />
             <MudTextField @bind-Value="tempIngredient.Notes" Lines="5" />
             <div class="d-flex d-row">
@@ -136,9 +135,7 @@
 @code {
 
     private bool ShowNewIngredientInput { get; set; } = false;
-    //private DataContext? _dataContext;
-    [Parameter]
-    public DataContext? DataContext { get; set; }
+    
     private Dictionary<RecipeIngredient, bool> detailsOpen = new Dictionary<RecipeIngredient, bool>();
     private bool ingredientEditOpen = false;
     private string editingName;

@@ -1,6 +1,7 @@
 @using RecipeAZ.Models
 @using Microsoft.EntityFrameworkCore
 @using RecipeAZ.Interfaces
+@inject RecipeAZ.Services.RecipeService _recipeService
 @inject IDbContextFactory<DataContext> _contextFactory
 @inherits EditableList<RecipeStep>
 
@@ -13,7 +14,7 @@
                     <MudListItem>
                         <MudGrid>
                             <MudItem>                                
-                                <div style="margin-top: 0.75rem; margin-bottom: 0;">@rs.Description</div>                                
+                                <div style="margin-top: 0.75rem; margin-bottom: 0;"><TextLinkMixComponent Text="@rs.Description" /></div>                                
                             </MudItem>
                             <MudItem>
                                 <MudToggleIconButton @bind-Toggled="detailsOpen[rs]"
@@ -22,11 +23,8 @@
                                     Disabled="@hasNoDetails" />
                             </MudItem>
                             @if (CanEdit && Editing) {
-                                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="(e) => {
-                                    DataContext.RecipeSteps.Attach(rs);
-                                    DataContext.RecipeSteps.Remove(rs);
-                                    ItemRecipe!.RecipeSteps.Remove(rs);
-                                    StateHasChanged();
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="async (e) => {
+                                    await _recipeService.RemoveRecipeStep(ItemRecipe, rs);
                                 }" />
                                 <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
                                     originalDescription = rs.Description;
@@ -37,7 +35,7 @@
                             }
                         </MudGrid>                    
                         @if (detailsOpen[rs]) {
-                        <MudPaper Class="pl-3" Elevation="0" Style="font-style:italic;">@rs.Details</MudPaper>
+                        <MudPaper Class="pl-3" Elevation="0" Style="font-style:italic;"><TextLinkMixComponent Text="@rs.Details" /></MudPaper>
                         }
                         
                     </MudListItem>
@@ -97,8 +95,7 @@
 
 @code {
     private bool ShowNewStepInput { get; set; } = false;
-    [Parameter]
-    public DataContext? DataContext { get; set; }
+    
     private Dictionary<RecipeStep, bool> detailsOpen = new Dictionary<RecipeStep, bool>();
     private bool stepEditOpen = false;
     private RecipeStep? editingStep;
@@ -115,14 +112,14 @@
             }
         }
     }
-    private async Task UpdateAndSaveRecipe() {
-        if (ItemRecipe != null) {
-            DataContext.Update(ItemRecipe);
-            await DataContext.SaveChangesAsync();
-            RecipeSnack.Add("Saved Recipe");
-            StateHasChanged();
-        }
-    }
+    //private async Task UpdateAndSaveRecipe() {
+    //    if (ItemRecipe != null) {
+    //        DataContext.Update(ItemRecipe);
+    //        await DataContext.SaveChangesAsync();
+    //        RecipeSnack.Add("Saved Recipe");
+    //        StateHasChanged();
+    //    }
+    //}
     private string DetailsToggleIcon(RecipeStep rs) {
         return rs.Details == string.Empty ? null : Icons.Material.Filled.ChevronRight;
     }

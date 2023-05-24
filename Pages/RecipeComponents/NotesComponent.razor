@@ -1,15 +1,15 @@
 @inject NavigationManager navigationManager
-@inject IDbContextFactory<DataContext> _contextFactory
+@inject RecipeAZ.Services.RecipeService _recipeService
 
 <div>
     <MudLink @onclick="@(() => NavigateToUser())"
              Typo="Typo.h6"
              Color="Color.Dark"
              Underline="Underline.None">
-        @Recipe?.User?.UserName
+        @_recipeService.Recipe?.User?.UserName
     </MudLink>
     <p />   
-    @Recipe?.Notes
+    <TextLinkMixComponent Text="@_recipeService.Recipe?.Notes" />
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
             OriginalNotes = Recipe?.Notes ?? string.Empty;    
@@ -18,20 +18,19 @@
     }
     
 </div>
-@if (Recipe != null) {
+@if (_recipeService.Recipe != null) {
     <MudPopover Open="@notesEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft"
         Style="width:300px;height:490px"
     >
         <div class="d-flex flex-column">
-            <MudTextField @bind-Value="Recipe.Notes" Lines="20" />
+            <MudTextField @bind-Value="_recipeService.Recipe.Notes" Lines="20" />
             <div class="d-flex d-row">
                 Don't forget to save your recipe!
                 <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Size="Size.Large" Color="Color.Success" @onclick="async () => {
                     notesEditOpen = false;
-                    await UpdateAndSaveRecipe();
                 }" />
                 <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Size="Size.Large" Color="Color.Error" @onclick="async () => {
-                    Recipe.Notes = OriginalNotes;
+                    _recipeService.Recipe.Notes = OriginalNotes;
                     notesEditOpen = false;                    
                 }" />
             </div>            
@@ -48,20 +47,8 @@
     public bool Editing { get; set; }
     private string OriginalNotes { get; set; } = string.Empty;
     private bool notesEditOpen = false;
-    private DataContext? _dataContext;
 
-    protected override async Task OnInitializedAsync() {
-        await base.OnInitializedAsync();
-        _dataContext = await _contextFactory.CreateDbContextAsync();
-    }
-    private async Task UpdateAndSaveRecipe() {
-        if (Recipe != null) {
-            //_dataContext.Update(Recipe);
-            //await _dataContext.SaveChangesAsync();
-            StateHasChanged();
-        }
-    } 
     private void NavigateToUser() {
-        navigationManager.NavigateTo("/profile/" + Recipe.User.Id);
+        navigationManager.NavigateTo("/profile/" + _recipeService.Recipe.User.Id);
     }
 }

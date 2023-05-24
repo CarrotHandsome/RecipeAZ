@@ -4,12 +4,12 @@
 @using Microsoft.AspNetCore.Identity;
 @using Microsoft.AspNetCore.Components.Forms
 @inject IDbContextFactory<DataContext> _contextFactory
-@inject UserManager<AppUser> userManager
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject ISnackbar snackBar
 @inject IWebHostEnvironment env
 @inject ILogger<LayoutComponent> Logger
+@inject RecipeAZ.Services.RecipeService _recipeService
 
 <div style="background-color:white;padding:16px;border-radius:10px;">
 @if (Recipe != null) {
@@ -50,29 +50,9 @@
             <MudItem>
                 <MudToggleIconButton Icon="@Icons.Material.Filled.Favorite"                
                     ToggledIcon="@Icons.Material.Filled.Favorite" ToggledColor="Color.Secondary"
-                    Disabled="@(!CanEdit)"
+                    Disabled="@(User == null)"
                     Toggled="@Liked"
-                    ToggledChanged='async (bool toggled) => {
-                        if (User != null) {
-                            RecipeLike rl = new RecipeLike {
-                                AppUserId = User.Id!, RecipeId = Recipe.RecipeId
-                            };
-                            if (toggled) {
-                                await _dataContext.AddAsync(rl);
-                            } else {
-                                // Retrieve the existing RecipeLike object from the database
-                                var existingRl = await _dataContext.FindAsync<RecipeLike>(User.Id!, Recipe.RecipeId);
-                                if (existingRl != null) {
-                                    _dataContext.Remove(existingRl);
-                                }
-                            }
-                        }
-                        Liked = toggled;
-                        if (User?.Id != Recipe.UserId) {
-                            await SaveRecipe(false);
-                            Console.WriteLine($"Recipe is Liked:{Liked} ");
-                        }
-                }' />
+                    ToggledChanged="ToggleLike" />
             </MudItem>
             <MudItem Class="d-flex align-center flex-grow-1 gap-0">
                 @foreach (RecipeTag recipeTag in Recipe.RecipeTags) {
@@ -130,9 +110,9 @@
         <div class="recipe-halves">            
             <CascadingValue Value="@Recipe" Name="RecipeParam">   
                 <CascadingValue Value="@CanEdit" Name="CanEditParam">
-                    <CascadingValue Value="@Editing" Name="EditingParam" >
+                    <CascadingValue Value="@Editing" Name="EditingParam" >                        
                         <LeftComponent Id="@Id" OnEditUpdate="@UpdateEditState" />
-                        <RightComponent />
+                        <RightComponent />                                 
                     </CascadingValue>                        
                 </CascadingValue>                                                   
             </CascadingValue>
@@ -149,14 +129,13 @@
 </div>
 
 @code {
-    [CascadingParameter(Name = "UserParam")]
+    [CascadingParameter(Name= "UserParam")]
     protected AppUser? User { get; set; }
     [Parameter]
-    public string? Id { get; set; }
-    private DataContext? _dataContext;
+    public string? Id { get; set; }    
 
     private Recipe? Recipe;
-
+  
     public bool Liked { get; set; }
     private bool CanEdit { get; set; } = false; //logged in user is owner of recipe
     private bool Editing { get; set; } = false;
@@ -166,6 +145,7 @@
     //private string? UserId { get; set; }
     private int maxTags = 5;
     private bool titleEditOpen { get; set; } = false;
+    public DataContext _dataContext;
 
 
     //private List<string> tags { get; set; } = new();

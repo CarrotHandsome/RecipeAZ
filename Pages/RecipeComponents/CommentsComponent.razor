@@ -1,17 +1,16 @@
 @using Microsoft.AspNetCore.Identity;
-@inject IDbContextFactory<DataContext> _contextFactory
-@inject UserManager<AppUser> userManager
+@inject RecipeAZ.Services.RecipeService _recipeService
 
 <div>
     @Recipe?.Comments?.Count() comments:
     @{
-        var orderedComments = Recipe?.Comments?.OrderBy(c => c.CreatedAt);
+        var orderedComments = _recipeService.Recipe?.Comments?.OrderBy(c => c.CreatedAt);
         @if (orderedComments != null) {
             @foreach (Comment c in orderedComments) {
                 
                 <div>@c.User?.UserName said at @c.CreatedAt.ToString("yyyy-MM-dd HH:mm"):</div>
                 <div>@c.Text</div>
-                @if (CommentUser == c.User) {
+                @if (CommentUser?.Id == c.User.Id) {
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
                 commentEditOpen = true;
                 EditComment = c;
@@ -21,16 +20,19 @@
             }
         }        
     }
+    <AuthorizeView>
+    <Authorized>
+        <MudToggleIconButton @bind-Toggled="addingComment"
+            Icon="@Icons.Material.Filled.Comment"
+            ToggledIcon="@Icons.Material.Filled.ExpandLess"
+            Size="Size.Small" />
+        @if (addingComment) {
+            <MudTextField @bind-Value="CurrentComment" Variant="Variant.Outlined" Lines="2" />
+            <MudIconButton Icon="@Icons.Material.Filled.AddComment" Size="Size.Small" @onclick="async () => await AddComment()" />
+        }
+    </Authorized>
+    </AuthorizeView>
     
-    <MudToggleIconButton @bind-Toggled="addingComment" 
-        Icon="@Icons.Material.Filled.Comment" 
-        ToggledIcon="@Icons.Material.Filled.ExpandLess" 
-        Size="Size.Small"
-        />
-    @if (addingComment) {
-        <MudTextField @bind-Value="CurrentComment" Variant="Variant.Outlined" Lines="2" />
-        <MudIconButton Icon="@Icons.Material.Filled.AddComment" Size="Size.Small" OnClick="AddComment" />
-    }
 </div>
 
 <MudPopover Open="@commentEditOpen" Fixed="false" Class="px-4 pt-4">
@@ -38,7 +40,7 @@
         <MudTextField @bind-Value="EditComment!.Text" Lines="3"/>
         <MudIconButton Icon="@Icons.Material.Filled.Save" Class="ml-auto mr-n3 mb-1" Color="Color.Error" @onclick="async () => {       
             commentEditOpen = false;
-            await UpdateAndSaveRecipe();            
+            await _recipeService.SaveRecipeAsync(_recipeService.Recipe.RecipeId);
         }" />
     </div>
 </MudPopover>
@@ -52,32 +54,16 @@
     public bool commentEditOpen = false;
     public string CurrentComment { get; set; } = string.Empty;
     private Comment? EditComment { get; set; }
-    private DataContext? _dataContext;
-
-    protected override async Task OnInitializedAsync() {
-        await base.OnInitializedAsync();
-        _dataContext = await _contextFactory.CreateDbContextAsync();
-    }
 
     private async Task AddComment() {
         addingComment = false;
-        if (Recipe != null && Recipe.Comments != null) {
-            Recipe.Comments.Add(new Comment {
-                UserId = CommentUser?.Id ?? "1",                
-                User = CommentUser,
+        if (_recipeService.Recipe != null && _recipeService.Recipe.Comments != null) {
+            Comment comment = new Comment {
+                UserId = CommentUser?.Id ?? "1",
+                RecipeId = Recipe.RecipeId,
                 Text = CurrentComment
-                });
-            await UpdateAndSaveRecipe();
+                };
+            await _recipeService.AddComment(comment);
         }        
     }
-
-    private async Task UpdateAndSaveRecipe() {
-        if (Recipe != null) {
-            _dataContext.Update(Recipe);
-            await _dataContext.SaveChangesAsync();
-            StateHasChanged();
-        }
-    }
-
-    
 }

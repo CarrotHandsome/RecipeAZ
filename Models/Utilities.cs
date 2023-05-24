@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
+using MudBlazor;
 using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace RecipeAZ.Models {
+    
     public class BoolWrapper {
         private bool _value;
 

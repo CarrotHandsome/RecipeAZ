@@ -20,7 +20,7 @@ namespace RecipeAZ.Models {
         public DbSet<Comment> Comments => Set<Comment>();
         public DbSet<Tag> Tags => Set<Tag>();
         public DbSet<RecipeTag> RecipeTags => Set<RecipeTag>();
-        public DbSet<IngredientModifier> Modifiers => Set<IngredientModifier>();
+        public DbSet<RecipeLike> RecipeLikes => Set<RecipeLike>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) {
             optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));

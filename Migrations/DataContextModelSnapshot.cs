@@ -240,14 +240,14 @@ namespace RecipeAZ.Migrations
                         {
                             Id = "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "283db4b3-190f-4d8c-8bff-804c7deda0b3",
+                            ConcurrencyStamp = "44689390-4700-4eeb-a103-9342dc0847d9",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEB8+yHUB2OxOjvgP5E6EnAXB6EX8mpn11wyGnsU5DttBzpWAJR+F8aY31K9YJl8ScA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGCajBUIu4GtyEuUiYfuAgUvPtRpT4fgEJDodody9UxB1iHqvPDl4R+gaM+5fxHJxg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "87355706-8f11-46e1-81e8-a0ab2896c98e",
+                            SecurityStamp = "cb206ca4-7710-4d45-aa1d-74d247ad0502",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -288,7 +288,7 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             CommentId = "1",
-                            CreatedAt = new DateTime(2023, 5, 10, 21, 59, 43, 2, DateTimeKind.Local).AddTicks(3854),
+                            CreatedAt = new DateTime(2023, 5, 21, 14, 39, 26, 406, DateTimeKind.Local).AddTicks(40),
                             RecipeId = "1",
                             Text = "nice recipe",
                             UserId = "02174cf0–9412–4cfe - afbf - 59f706d72cf6"
@@ -347,7 +347,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("IngredientId1");
 
-                    b.ToTable("Modifiers");
+                    b.ToTable("IngredientModifier");
 
                     b.HasData(
                         new
@@ -408,7 +408,7 @@ namespace RecipeAZ.Migrations
                         new
                         {
                             RecipeId = "1",
-                            CreatedAt = new DateTime(2023, 5, 10, 21, 59, 43, 2, DateTimeKind.Local).AddTicks(2764),
+                            CreatedAt = new DateTime(2023, 5, 21, 14, 39, 26, 405, DateTimeKind.Local).AddTicks(9135),
                             Description = "Nulla turpis risus, mollis sed mi non, congue posuere enim. Fusce vehicula ligula nec nibh vehicula tempor. Maecenas accumsan quis mauris a imperdiet. Phasellus venenatis, dolor vitae venenatis aliquet, mi nisi consequat ligula, vel facilisis arcu eros id justo. Vestibulum id porta tellus, nec porttitor diam. Praesent hendrerit nulla sed eros finibus, eu sodales mauris semper. Praesent eros velit, sollicitudin a ex id, sagittis eleifend turpis. Pellentesque facilisis sem eu varius elementum. Sed ac justo dolor. Donec malesuada justo eu urna luctus, et cursus magna laoreet. Vivamus a accumsan risus. Nullam rutrum porta elementum. Curabitur lectus odio, euismod et dolor sit amet, efficitur elementum felis. Mauris quam sapien, commodo sed libero facilisis, cursus feugiat ligula.",
                             ImagePath = "images/recipe_default.png",
                             Name = "Tarka Dal",
@@ -511,7 +511,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeLike");
+                    b.ToTable("RecipeLikes");
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeStep", b =>
