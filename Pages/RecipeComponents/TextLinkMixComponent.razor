@@ -3,13 +3,12 @@
 
 @foreach (Tuple<string, bool, string> t in _textProcessing.ProcessString(Text)) {
     if (t.Item2) {
-        <MudButton Variant="Variant.Text"
-            Style="display: inline; margin: 0px; padding: 0px;"
+        <MudText Class="clickable" Style="display: inline; margin: 0px; padding: 0px;font-weight:bold;"
             @onclick="() => {
                 _navHelp.NavigateToRecipe(t.Item1);
             }" >
             @t.Item3
-        </MudButton>
+        </MudText>
     } else {
         <MudText Style="display: inline;">@t.Item1</MudText>
     }

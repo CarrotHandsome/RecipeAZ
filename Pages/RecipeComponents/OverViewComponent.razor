@@ -1,6 +1,7 @@
 @inject EditService EditService
 @inject NavHelperService _navHelp
 @inject TextProcessing _textProcessing
+@inject IJSRuntime _jsRuntime
 
 <div>
     <h4>Overview</h4>
@@ -29,7 +30,12 @@
         Style="width:500px;height:390px;"        
     >
         <div class="d-flex flex-column">
-            <MudTextField @bind-Value="Recipe.Description" Lines="15" />
+            <MudTextField @bind-Value="Recipe.Description" Lines="15" id="linkable-overview" />
+            <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch" 
+                @onclick="async () => await OnSearchLinkClick(_textId)"
+            />
+            <InsertRecipeLinkComponent Text="@Recipe.Description" CursorStart="@_cursorStart" CursorEnd="@_cursorEnd" 
+                SearchOpen="@_searchLinkOpen" OnLinkAdded="HandleLinkAdded"/>
             <div class="d-flex d-row">
                 Don't forget to save your recipe!
                 <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="async () => {                
@@ -57,7 +63,26 @@
     public bool Editing { get; set; }
 
     private string OriginalOverview { get; set; } = string.Empty;
-    
+
     private bool overviewEditOpen = false;
+    private bool _searchLinkOpen = false;
+    private int _cursorStart;
+    private int _cursorEnd;
+    private string _textId = "linkable-overview";
+
+    private async Task OnSearchLinkClick(string id) {
+        CursorSpan span = await GetCursorSpan(id);
+        _cursorStart = span.Item1;
+        _cursorEnd = span.Item2;
+        _searchLinkOpen = true;
+    }
+    private async Task<CursorSpan> GetCursorSpan(string id) {
+        CursorSpan result = await _jsRuntime.InvokeAsync<CursorSpan>("getCursorPosition", id);
+        return result;
+    } 
+    private void HandleLinkAdded(string newText) {
+        Recipe.Description = newText;
+        _searchLinkOpen = false;
+    }
 
 }

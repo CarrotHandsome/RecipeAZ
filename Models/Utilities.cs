@@ -72,11 +72,15 @@ namespace RecipeAZ.Models {
 
                 // Add it to the result list
                 result.Add(Tuple.Create(matchValue, isId, afterSlash));
-                Console.WriteLine($"{matchValue} {isId} {afterSlash == null}");
             }
 
             return result;
         }
         
+    }
+
+    public class CursorSpan {
+        public int Item1 { get; set; }
+        public int Item2 { get; set; }
     }
 }

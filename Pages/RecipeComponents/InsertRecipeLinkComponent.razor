@@ -1,0 +1,39 @@
+﻿@inject RecipeAZ.Services.RecipeService _recipeService
+@inject IJSRuntime _jsRuntime
+
+<MudPopover Open="@SearchOpen">
+    <MudAutocomplete T="Recipe" Label="Find a recipe" Value="_searchRecipe"    
+        SearchFunc="_recipeService.SearchRecipes" ValueChanged="RecipeChanged"
+        ToStringFunc="@(r => r == null ? null : ($"{r.Name} by {r.User?.UserName}"))"
+    />
+    <MudIconButton Icon="@Icons.Material.Filled.ContentPasteGo" @onclick="() => ReplaceTextWithLink()"/>
+</MudPopover>
+
+@code {
+    [Parameter]
+    public int CursorStart { get; set; }
+    [Parameter]
+    public int CursorEnd { get; set; }
+    [Parameter]
+    public bool SearchOpen { get; set; }
+    [Parameter]
+    public string Text { get; set; }
+    [Parameter]
+    public EventCallback<string> OnLinkAdded { get; set; }
+    private Recipe? _searchRecipe;  
+
+    public void ReplaceTextWithLink() {
+        string startText = Text.Substring(0, CursorStart);
+        string endText = Text.Substring(CursorEnd);
+        string spanText = Text.Substring(CursorStart, CursorEnd - CursorStart);
+        Text = startText + $"@{_searchRecipe?.RecipeId}/{spanText}@" + endText;
+        OnLinkAdded.InvokeAsync(Text);
+        SearchOpen = false;
+    }
+    public void Test() {        
+        Console.WriteLine($"{CursorStart} {CursorEnd}");
+    }
+    private void RecipeChanged(Recipe r) {
+        _searchRecipe = r;
+    }
+}

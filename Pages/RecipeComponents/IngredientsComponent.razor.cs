@@ -66,7 +66,6 @@ namespace RecipeAZ.Pages.RecipeComponents {
         }
 
         private async Task<IEnumerable<string>> FindIngredientMatches(string matchTo) {
-            Console.WriteLine("finidng");
             if (string.IsNullOrEmpty(matchTo)) {
                 return new List<string>();
             }

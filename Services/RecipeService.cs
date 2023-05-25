@@ -144,5 +144,22 @@ namespace RecipeAZ.Services {
             }
             
         }
+        public async Task<IEnumerable<Recipe>> SearchRecipes(string searchText) {
+            //using var DataContext = await _contextFactory.CreateDbContextAsync();
+            if (searchText.Length < 2) {
+                return null;
+            }
+            searchText = searchText.ToLower();
+            return await DataContext.Recipes
+                .Include(r => r.RecipeIngredients)
+                .Include(r => r.User)
+                .Include(r => r.RecipeTags)
+                    .ThenInclude(rt => rt.Tag)
+                .Where(r => r.Name.ToLower().Contains(searchText)
+                || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(searchText))
+                || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(searchText)))
+                .Select(r => r).ToListAsync();
+
+        }
     }
 }
