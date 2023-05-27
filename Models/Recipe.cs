@@ -7,7 +7,7 @@ namespace RecipeAZ.Models
     public class Recipe {
         public string RecipeId { get; set; }
         public string Name { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty; //aka Overview
         public string Notes { get; set; } = string.Empty;
         public string? UserId { get; set; } = string.Empty;
         public string? ImagePath { get; set; } = "images/recipe_default.png";

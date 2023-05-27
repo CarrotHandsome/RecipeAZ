@@ -1,15 +1,28 @@
 ﻿@inject RecipeAZ.Services.RecipeService _recipeService
 @inject IJSRuntime _jsRuntime
 
-<MudPopover Open="@SearchOpen">
-    <MudAutocomplete T="Recipe" Label="Find a recipe" Value="_searchRecipe"    
+
+<MudPopover Open="@SearchOpen" TransformOrigin="Origin.BottomLeft">
+    <MudAutocomplete T="Recipe" Label="Link to a recipe" Value="_searchRecipe"    
         SearchFunc="_recipeService.SearchRecipes" ValueChanged="RecipeChanged"
         ToStringFunc="@(r => r == null ? null : ($"{r.Name} by {r.User?.UserName}"))"
     />
-    <MudIconButton Icon="@Icons.Material.Filled.ContentPasteGo" @onclick="() => ReplaceTextWithLink()"/>
+    <MudTextField @bind-Value="_linkText" Label="Link Text"></MudTextField>
+    <div class="d-flex d-row">
+        <MudIconButton Icon="@Icons.Material.Filled.ContentPasteGo" Color="Color.Success" Class="ml-auto mr-0 mb-0"
+            @onclick="() => ReplaceTextWithLink()" />
+        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-0" Color="Color.Error" Size="Size.Medium" 
+            @onclick="() => {
+                SearchOpen = false;
+                OnClose.InvokeAsync();
+            }"/>
+    </div>
+    
 </MudPopover>
 
 @code {
+    //[CascadingParameter(Name="RecipeParam")]
+    //public Recipe? Recipe { get; set; }
     [Parameter]
     public int CursorStart { get; set; }
     [Parameter]
@@ -20,19 +33,34 @@
     public string Text { get; set; }
     [Parameter]
     public EventCallback<string> OnLinkAdded { get; set; }
-    private Recipe? _searchRecipe;  
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+    private Recipe? _searchRecipe;
+    private string _linkText;
+    protected override async Task OnParametersSetAsync() {
+        base.OnParametersSetAsync();
+        Console.WriteLine(Text == null);
+        _linkText = Text.Substring(CursorStart, CursorEnd - CursorStart);        
+    }
 
     public void ReplaceTextWithLink() {
-        string startText = Text.Substring(0, CursorStart);
-        string endText = Text.Substring(CursorEnd);
-        string spanText = Text.Substring(CursorStart, CursorEnd - CursorStart);
-        Text = startText + $"@{_searchRecipe?.RecipeId}/{spanText}@" + endText;
-        OnLinkAdded.InvokeAsync(Text);
-        SearchOpen = false;
+        if (_searchRecipe == null) {
+            SearchOpen = false;
+            OnClose.InvokeAsync();
+        } else {
+            if (_linkText == string.Empty) {
+                _linkText = _searchRecipe.Name;
+            }
+            string startText = Text.Substring(0, CursorStart);
+            string endText = Text.Substring(CursorEnd);
+            //string spanText = Text.Substring(CursorStart, CursorEnd - CursorStart);
+            Text = startText + $"@{_searchRecipe?.RecipeId}/{_linkText}@" + endText;
+            OnLinkAdded.InvokeAsync(Text);
+            SearchOpen = false;
+        }
+        
     }
-    public void Test() {        
-        Console.WriteLine($"{CursorStart} {CursorEnd}");
-    }
+    
     private void RecipeChanged(Recipe r) {
         _searchRecipe = r;
     }

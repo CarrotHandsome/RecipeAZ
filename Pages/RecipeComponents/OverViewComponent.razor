@@ -5,18 +5,7 @@
 
 <div>
     <h4>Overview</h4>
-    <TextLinkMixComponent Text="@Recipe?.Description" />
-    @*@foreach (Tuple<string, bool, string> kvp in _textProcessing.ProcessString(Recipe?.Description ?? string.Empty)) {
-        if (kvp.Item2) {
-            <MudButton Variant="Variant.Text"
-               Style="display: inline; margin: 0px; padding: 0px;"
-               @onclick="() => {                
-                _navHelp.NavigateToRecipe(kvp.Item1);              
-            }">@kvp.Item3</MudButton>
-        } else {
-            <MudText Style="display: inline;">@kvp.Item1</MudText>
-        }
-    }*@
+    <TextLinkMixComponent Text="@Recipe?.Description" />    
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
             OriginalOverview = Recipe?.Description ?? string.Empty;
@@ -31,26 +20,29 @@
     >
         <div class="d-flex flex-column">
             <MudTextField @bind-Value="Recipe.Description" Lines="15" id="linkable-overview" />
-            <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch" 
-                @onclick="async () => await OnSearchLinkClick(_textId)"
-            />
-            <InsertRecipeLinkComponent Text="@Recipe.Description" CursorStart="@_cursorStart" CursorEnd="@_cursorEnd" 
-                SearchOpen="@_searchLinkOpen" OnLinkAdded="HandleLinkAdded"/>
+                      
             <div class="d-flex d-row">
+                <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch"
+                    Title="Insert link to another recipe"
+                    @onclick="async () => await OnSearchLinkClick(_textId)" />
                 Don't forget to save your recipe!
-                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="async () => {                
-                    overviewEditOpen = false;
-                    StateHasChanged();
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" 
+                    Size="Size.Large" Disabled="_searchLinkOpen" @onclick="async () => {                
+                        overviewEditOpen = false;
+                        StateHasChanged();
                 }" />
-                <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error" Size="Size.Large" @onclick="async () => {
-                    Recipe.Description = OriginalOverview;
-                    overviewEditOpen = false;
-                    StateHasChanged();
+                <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error"
+                    Size="Size.Large" Disabled="_searchLinkOpen" @onclick="async () => {
+                        Recipe.Description = OriginalOverview;
+                        overviewEditOpen = false;
+                        StateHasChanged();
                 }" />
-            </div>
-            
+            </div>            
         </div>
+        <InsertRecipeLinkComponent Text="@Recipe.Description" CursorStart="@_cursorStart" CursorEnd="@_cursorEnd"
+            SearchOpen="@_searchLinkOpen" OnLinkAdded="HandleLinkAdded" OnClose="() => _searchLinkOpen=false"/>
     </MudPopover>
+    
 }
 
 

@@ -78,9 +78,14 @@ namespace RecipeAZ.Models {
         }
         
     }
-
     public class CursorSpan {
         public int Item1 { get; set; }
         public int Item2 { get; set; }
+    }
+
+    public class EditEntity {
+        public string Title { get; set; }
+        public int Lines { get; set; }
+        public bool CanLinkToOtherRecipes { get; set; }
     }
 }
