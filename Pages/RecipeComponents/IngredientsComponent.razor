@@ -16,8 +16,7 @@
                 @foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!.OrderBy(ri => ri.Order)) {
                     bool hasNoNotes = ri.Notes == string.Empty;
                     <MudListItem>
-                        <MudGrid>
-                            
+                        <MudGrid>                            
                             <div class="d-flex d-row">
                             @if (CanEdit && Editing) {
                                 
@@ -62,11 +61,11 @@
                                     Disabled="@hasNoNotes" />                                
                             </div>
                             @if (detailsOpen.ContainsKey(ri) && detailsOpen[ri]) {
-                            <MudItem xs="12">
-                                <MudPaper Class="pl-2" Elevation="0" Style="font-style:italic;">
-                                    <TextLinkMixComponent Text="@ri.Notes" />
-                                </MudPaper>
-                            </MudItem>
+                                <MudItem xs="12">
+                                    <MudPaper Class="pl-2" Elevation="0" Style="font-style:italic;">
+                                        <TextLinkMixComponent Text="@ri.Notes" />
+                                    </MudPaper>
+                                </MudItem>
                             }
                         </MudGrid>
                     

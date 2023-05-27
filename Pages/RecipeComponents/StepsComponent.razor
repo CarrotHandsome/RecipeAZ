@@ -14,31 +14,30 @@
                     bool hasNoDetails = rs.Details == string.Empty;
                     <MudListItem>
                         <MudGrid>
-                            <MudItem>                                
-                                <div style="margin-top: 0.75rem; margin-bottom: 0;"><TextLinkMixComponent Text="@rs.Description" /></div>                                
-                            </MudItem>
-                            <MudItem>
+                            <div class="d-flex d-row">
+                                @if (CanEdit && Editing) {
+                                    <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="async (e) => {
+                                        await _recipeService.RemoveRecipeStep(ItemRecipe, rs);
+                                    }" />
+                                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+                                        originalDescription = rs.Description;
+                                        originalDetails = rs.Details;
+                                        stepEditOpen = true;
+                                        editingStep = rs;
+                                    }" />
+                                }
+                                <div style="margin-top: 0.75rem; margin-bottom: 0;"><TextLinkMixComponent Text="@rs.Description" /></div>
                                 <MudToggleIconButton @bind-Toggled="detailsOpen[rs]"
                                     Icon="@DetailsToggleIcon(rs)"
                                     ToggledIcon="@Icons.Material.Filled.ExpandMore"
                                     Disabled="@hasNoDetails" />
-                            </MudItem>
-                            @if (CanEdit && Editing) {
-                                <MudIconButton Icon="@Icons.Material.Filled.Delete" aria-label="delete" @onclick="async (e) => {
-                                    await _recipeService.RemoveRecipeStep(ItemRecipe, rs);
-                                }" />
-                                <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
-                                    originalDescription = rs.Description;
-                                    originalDetails = rs.Details;
-                                    stepEditOpen = true;
-                                    editingStep = rs;
-                                }" />
+                            </div>
+                            @if (detailsOpen[rs]) {
+                                <MudItem xs="12">
+                                    <MudPaper Class="pl-2" Elevation="0" Style="font-style:italic;"><TextLinkMixComponent Text="@rs.Details" /></MudPaper>
+                                </MudItem>                                
                             }
-                        </MudGrid>                    
-                        @if (detailsOpen[rs]) {
-                        <MudPaper Class="pl-3" Elevation="0" Style="font-style:italic;"><TextLinkMixComponent Text="@rs.Details" /></MudPaper>
-                        }
-                        
+                        </MudGrid> 
                     </MudListItem>
                 }                
             </MudList>
