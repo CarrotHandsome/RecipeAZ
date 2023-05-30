@@ -3,10 +3,11 @@ using RecipeAZ.Models;
 
 namespace RecipeAZ.Services {
     public class RecipeService {
-        private readonly IDbContextFactory<DataContext> _contextFactory;
-        private DataContext DataContext { get; set; }
+        public IDbContextFactory<DataContext> _contextFactory { get; set; }
+        public DataContext DataContext { get; set; }
         public Recipe Recipe { get; set; }
-        public RecipeService(DataContext context) {
+        public RecipeService(DataContext context, IDbContextFactory<DataContext> factory) {
+            _contextFactory = factory;
             DataContext = context;
         }
         public async Task<Recipe> GetRecipeAsync(string id) {
@@ -135,6 +136,34 @@ namespace RecipeAZ.Services {
                 Recipe.UsersWhoLikeMe.Remove(existingRl);
             }
         }
+
+        public async Task AddTag(string newTagName) {
+            if (!string.IsNullOrEmpty(newTagName)) {
+                Console.WriteLine("adding tag");
+
+                Tag tagToAdd;
+                Tag existingTag;                
+                Console.WriteLine("finding existing tag");
+                existingTag = await DataContext.Tags.FirstOrDefaultAsync(t => t.Name == TextProcessing.ToTitleCase(newTagName));
+                if (existingTag == null) {
+                    Console.WriteLine("no existing tag");
+                    tagToAdd = new Tag { Name = TextProcessing.ToTitleCase(newTagName) };
+                    DataContext.Tags.Add(tagToAdd);
+                    //await context.SaveChangesAsync();
+                } else {
+                    Console.WriteLine("found existing tag");
+                    tagToAdd = existingTag;
+                }
+                
+                Console.WriteLine("Added tag or found existing one");
+                if (!DataContext.RecipeTags.Any(rt => rt.RecipeId == Recipe.RecipeId && rt.TagId == tagToAdd.TagId)) {
+                    RecipeTag recipeTag = new RecipeTag { RecipeId = Recipe.RecipeId, Tag = tagToAdd, TagId = tagToAdd.TagId };
+                    //_recipeService.DataContext.RecipeTags.Add(recipeTag);
+                    Recipe.RecipeTags.Add(recipeTag);
+                    //await _recipeService.DataContext.SaveChangesAsync();
+                }
+            }
+        }
         public async Task AddComment(Comment comment) {
             try {
                 DataContext.Comments.Add(comment);
@@ -160,6 +189,91 @@ namespace RecipeAZ.Services {
                 || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(searchText)))
                 .Select(r => r).ToListAsync();
 
+        }
+
+        public async Task<IEnumerable<Recipe>> GetRelatedRecipesByIngredientAsync(Recipe originalRecipe) {
+            var originalIngredientIds = originalRecipe?.RecipeIngredients?.Select(ri => ri.IngredientId).ToList();
+            using (var context = await _contextFactory.CreateDbContextAsync()) {
+                return await context.Recipes
+                .Include(r => r.RecipeIngredients)
+                .Include(r => r.User)
+                .Where(r => r.RecipeIngredients != null && r.RecipeIngredients.Any(ri => originalIngredientIds.Contains(ri.IngredientId)
+                    && r.RecipeId != originalRecipe.RecipeId)).ToListAsync();
+            }
+            
+        }
+        public async Task<IEnumerable<Recipe>> GetRelatedRecipesByTagAsync(Recipe originalRecipe) {
+            Console.WriteLine("trying to get related by tag");
+            Console.WriteLine($"originalRecipe recipetags is null: {originalRecipe.RecipeTags == null}");
+            var originalTagIds = originalRecipe?.RecipeTags?.Select(rt => rt.TagId).ToList();
+            Console.WriteLine("made list of tags");
+            using (var context = await _contextFactory.CreateDbContextAsync()) {
+                Console.WriteLine("using disposable context");
+                try {
+                    return await context.Recipes
+                    .Include(r => r.RecipeTags)
+                    .Include(r => r.User)
+                    .Where(r => r.RecipeTags != null && r.RecipeTags.Any(rt => originalTagIds.Contains(rt.TagId)
+                        && r.RecipeId != originalRecipe.RecipeId)).ToListAsync() ?? new List<Recipe>();
+                } catch(Exception e) {
+                    Console.WriteLine("EXCEPTION: " + e);
+                    return new List<Recipe>();
+                }
+                
+            }                
+        }
+
+        public async Task<Dictionary<Recipe, int>> GetRelatedRecipesByIngredientWeightedAsync(Recipe originalRecipe) {
+            Dictionary<Recipe, int> weightedList= new Dictionary<Recipe, int>();
+            var originalIngredientIds = originalRecipe?.RecipeIngredients?.Select(ri => ri.IngredientId).ToList();
+
+            foreach (Recipe r in await GetRelatedRecipesByIngredientAsync(originalRecipe) ?? new List<Recipe>()) {
+                weightedList[r] = 0;
+                foreach (RecipeIngredient ri in r?.RecipeIngredients ?? new List<RecipeIngredient>()) {
+                    if (originalIngredientIds.Contains(ri.IngredientId)) {
+                        weightedList[r]++;
+                    }
+                }                
+            }
+            return weightedList;
+        }
+
+        public async Task<Dictionary<Recipe, int>> GetRelatedRecipesByTagWeightedAsync(Recipe originalRecipe) {
+            Dictionary<Recipe, int> weightedList = new Dictionary<Recipe, int>();
+            Console.WriteLine($"Original REcipe is null: {originalRecipe == null}");
+            var originalTagIds = originalRecipe?.RecipeTags?.Select(rt => rt.TagId).ToList();
+            Console.WriteLine($"Original tags is null: {originalTagIds == null}");
+            foreach (Recipe r in await GetRelatedRecipesByTagAsync(originalRecipe) ?? new List<Recipe>()) {
+                weightedList[r] = 0;
+                foreach (RecipeTag rt in r?.RecipeTags ?? new List<RecipeTag>()) {
+                    if (originalTagIds.Contains(rt.TagId)) {
+                        weightedList[r]++;
+                    }
+                }
+            }
+            return weightedList;
+        }
+        public async Task<Dictionary<Recipe, int>> GetRelatedRecipesWeightedAsync(Recipe originalRecipe,
+            int tagWeight=2, int ingredientWeight=1) {
+            
+            Dictionary<Recipe, int> tagWeighted = await GetRelatedRecipesByTagWeightedAsync(originalRecipe);
+            Dictionary<Recipe, int> ingredientWeighted = await GetRelatedRecipesByIngredientWeightedAsync(originalRecipe);
+            Dictionary<Recipe, int> weightedList = new();
+
+            foreach (KeyValuePair<Recipe, int> kvp in tagWeighted) {
+                if (!weightedList.ContainsKey(kvp.Key)) {
+                    weightedList[kvp.Key] = 0;
+                }
+                weightedList[kvp.Key] += kvp.Value * tagWeight;
+            }
+            foreach (KeyValuePair<Recipe, int> kvp in ingredientWeighted) {
+                if (!weightedList.ContainsKey(kvp.Key)) {
+                    weightedList[kvp.Key] = 0;
+                }
+                weightedList[kvp.Key] += kvp.Value * ingredientWeight;
+            }
+            Console.WriteLine($"LIST COUNT: {weightedList.Count}");
+            return weightedList;
         }
     }
 }

@@ -25,8 +25,17 @@ span.link:hover {
     margin-right: -1em;
     padding-right: 1em;
 }
+.related-text-truncate-height { /*for related text recipe name button on recipe page*/
+    overflow: hidden;
+    position: relative;
+    line-height: 1.5em; /* Adjust this value based on your needs */
+    max-height: 3em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
+    text-align: justify;
+    margin-right: -1em;
+    padding-right: 1em;
+}
 
-.text-truncate-height:before {
+.text-truncate-height:before, .related-text-truncate-height:before {
     content: '...';
     position: absolute;
     right: 0;
@@ -70,4 +79,13 @@ span.link:hover {
 .vcenter {
     display: flex;
     align-items: center;
+}
+
+.custom-small-button {
+    font-size: 0.6rem;
+    padding: 0px;
+}
+
+.custom-tab .mud-tab-active {
+    color: green;
 }

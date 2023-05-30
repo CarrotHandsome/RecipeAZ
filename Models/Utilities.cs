@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using MudBlazor;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace RecipeAZ.Models {
@@ -76,7 +77,17 @@ namespace RecipeAZ.Models {
 
             return result;
         }
-        
+        public static string ToTitleCase(string input) {
+            TextInfo textInfo = CultureInfo.CurrentCulture.TextInfo;
+            return textInfo.ToTitleCase(input.ToLower() ?? string.Empty);
+        }
+
+        public static string UserAttribution(string user, string pre="by ", string post="") {
+            if (user != null) {
+                return pre + user + post;
+            }
+            return string.Empty;
+        }
     }
     public class CursorSpan {
         public int Item1 { get; set; }

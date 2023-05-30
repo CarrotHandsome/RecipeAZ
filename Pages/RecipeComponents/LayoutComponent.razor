@@ -9,30 +9,58 @@
 @inject ISnackbar snackBar
 @inject IWebHostEnvironment env
 @inject ILogger<LayoutComponent> Logger
+@inject TextProcessing _textProcessing
 @inject RecipeAZ.Services.RecipeService _recipeService
 
 <div style="background-color:white;padding:16px;border-radius:10px;">
-@if (Recipe != null) {
-    
-    <MudGrid>
-        <MudItem><MudImage Src="@Recipe.ImagePath" Height="200" /></MudItem>
-        @if(CanEdit && Editing) {
-            <MudItem>
-                <MudFileUpload T="IBrowserFile" 
-                    FilesChanged="OnImageUpload"
-                    Accept="image/jpeg,image/png,image/gif,image/bmp">
-                    <ButtonTemplate>
-                        <MudButton HtmlTag="label"
-                           Color="Color.Info"
-                           StartIcon="@Icons.Material.Filled.UploadFile"
-                           Size="Size.Large"
-                           for="@context" />
-                    </ButtonTemplate>
-                </MudFileUpload>
-            </MudItem>
-        }        
-    </MudGrid>
-    
+    @if (Recipe != null) {
+        <div class="d-flex d-row">
+            <MudGrid>
+                <MudItem><MudImage Src="@Recipe.ImagePath" Height="200" /></MudItem>
+                @if(CanEdit && Editing) {
+                    <MudItem>
+                        <MudFileUpload T="IBrowserFile" 
+                            FilesChanged="OnImageUpload"
+                            Accept="image/jpeg,image/png,image/gif,image/bmp">
+                            <ButtonTemplate>
+                                <MudButton HtmlTag="label"
+                                   Color="Color.Info"
+                                   StartIcon="@Icons.Material.Filled.UploadFile"
+                                   Size="Size.Large"
+                                   for="@context" />
+                            </ButtonTemplate>
+                        </MudFileUpload>
+                    </MudItem>
+                }
+            </MudGrid>
+            <div style="padding:10px;border-style:solid;border-width:0px 1px 0px 1px;border-radius:3px;border-color:#81C784;">
+                <div><h5 style="text-align:center;">Related Recipes</h5></div>
+                <hr style="color:#81C784" />
+                <MudPaper Width="95%" Height="95%" Elevation="0" Class="overflow-hidden d-flex flex-wrap d-row" Style="width:100%;">
+                    
+                        @if (_relatedRecipesWeighted != null) {
+                            foreach (KeyValuePair<Recipe, int> kvp in _relatedRecipesWeighted.OrderByDescending(r => r.Value).Take(10)) {                              
+                                    @if (kvp.Key != null) {     
+                                        <div style="position:relative;">
+                                            <MudButton Size="Size.Small" Style="position:relative;white-space:nowrap;" 
+                                                Variant="Variant.Text" 
+                                                Class="mr-4 mb-0 p-0" @onclick="() => NavigateToRecipe(kvp.Key)" >
+                                                @kvp.Key?.Name                                                
+                                            </MudButton>   
+                                            <MudButton Size="Size.Small" Variant="Variant.Filled" Class="custom-small-button"
+                                                Style="position:absolute;top:20px;left:5px;height:auto.6em;">
+                                                @TextProcessing.UserAttribution(kvp.Key?.User?.UserName!)
+                                            </MudButton>
+                                        </div>
+                                    }                                    
+                               
+                            }
+                        }                        
+                    
+                    
+                </MudPaper>
+            </div>
+        </div>
     
     <div class="view-recipe-container m-2">
         <MudGrid>
@@ -55,16 +83,19 @@
                     ToggledChanged="ToggleLike" />
             </MudItem>
             <MudItem Class="d-flex align-center flex-grow-1 gap-0">
-                @foreach (RecipeTag recipeTag in Recipe.RecipeTags) {
-                    <MudChip Size="Size.Small">
-                        <MudText>@recipeTag.Tag.Name</MudText>
-                        @if (CanEdit && Editing) {
-                            <MudIconButton Icon="@Icons.Material.Outlined.Cancel" 
-                                Color="Color.Default" Size="Size.Small"
-                                OnClick="@(() => HandleChipClose(recipeTag))" />
+                    @if (Recipe.RecipeTags != null) {
+                        foreach (RecipeTag recipeTag in Recipe.RecipeTags.Where(rt => rt.Tag != null)) {
+                            <MudChip Size="Size.Small">
+                                <MudText>@recipeTag.Tag.Name</MudText>
+                                @if (CanEdit && Editing) {
+                                    <MudIconButton Icon="@Icons.Material.Outlined.Cancel"
+                                   Color="Color.Default" Size="Size.Small"
+                                   OnClick="@(() => HandleChipClose(recipeTag))" />
+                                }
+                            </MudChip>
                         }
-                    </MudChip>
-                }
+                    }
+                    
             </MudItem>
             @if (CanEdit && Editing && Recipe.RecipeTags.Count < maxTags) {
                 <MudItem Class="d-flex align-center flex-grow-1 gap-4">
@@ -132,10 +163,9 @@
     [CascadingParameter(Name= "UserParam")]
     protected AppUser? User { get; set; }
     [Parameter]
-    public string? Id { get; set; }    
-
+    public string? Id { get; set; }        
     private Recipe? Recipe;
-  
+
     public bool Liked { get; set; }
     private bool CanEdit { get; set; } = false; //logged in user is owner of recipe
     private bool Editing { get; set; } = false;
@@ -146,6 +176,7 @@
     private int maxTags = 5;
     private bool titleEditOpen { get; set; } = false;
     public DataContext _dataContext;
+    private Dictionary<Recipe, int> _relatedRecipesWeighted;
 
 
     //private List<string> tags { get; set; } = new();
@@ -155,5 +186,9 @@
 
     private void NavigateToParent() {
         navigationManager.NavigateTo($"/recipe/{ Recipe.ParentRecipeId }", true);
+    }
+
+    private void NavigateToRecipe(Recipe r) {
+        navigationManager.NavigateTo($"/recipe/{ r.RecipeId }");
     }
 }

@@ -6,7 +6,7 @@
 <MudPaper Class="ml-0 pl-0">
     <MudGrid Spacing="0">
         <MudItem xs="10">
-            <MudTabs Rounded="true" ApplyEffectsToContainer="true" 
+            <MudTabs Rounded="true" ApplyEffectsToContainer="true" Style="color:#81C784;" Class="custom-tab"
                 PanelClass="pa-6"  MinimumTabWidth="100px">
                 <MudTabPanel Text="Overview">
                     <OverViewComponent />
@@ -20,7 +20,7 @@
             </MudTabs>
         </MudItem>
         <MudItem>
-            <MudMenu Icon="@Icons.Material.Filled.Menu">
+            <MudMenu Icon="@Icons.Material.Filled.Menu" Color="Color.Success">
                 @if (CanEdit) {
                     <MudMenuItem Icon="@Icons.Material.Filled.Edit" @onclick="OnEditClick" />
                     <MudMenuItem @onclick="async () => await SaveRecipe(true)">Save</MudMenuItem>

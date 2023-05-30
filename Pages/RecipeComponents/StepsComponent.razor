@@ -6,8 +6,7 @@
 @inject IJSRuntime _jsRuntime
 @inherits EditableList<RecipeStep>
 
-<div>
-    <h4>Steps</h4>
+<div style="color:black">
         <MudPaper MinWidth="400px" Elevation="0">
             <MudList Class="pl-0">
                 @foreach (RecipeStep rs in ItemRecipe!.RecipeSteps!.OrderBy(rs => rs.Order)) {

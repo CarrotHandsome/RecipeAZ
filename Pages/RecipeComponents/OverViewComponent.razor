@@ -3,8 +3,7 @@
 @inject TextProcessing _textProcessing
 @inject IJSRuntime _jsRuntime
 
-<div>
-    <h4>Overview</h4>
+<div style="color:black">
     <TextLinkMixComponent Text="@Recipe?.Description" />    
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {

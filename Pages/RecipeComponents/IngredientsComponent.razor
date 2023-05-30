@@ -9,8 +9,7 @@
 @inherits EditableList<RecipeIngredient>
 
 
-<div>
-    <h4>Ingredients</h4>    
+<div style="color:black">
         <MudPaper MinWidth="400px" Elevation="0">
             <MudList Class="pl-0">
                 @foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!.OrderBy(ri => ri.Order)) {
