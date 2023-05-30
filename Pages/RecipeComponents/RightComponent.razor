@@ -1,6 +1,6 @@
 @inject EditService editService
 
-<div>
+<div class="notes-comments-shared">
     <NotesComponent />
     <hr style="color:#81C784">
     <CommentsComponent />
@@ -9,21 +9,4 @@
 
 @code {
 
-    //[CascadingParameter(Name = "CanEditParam")]
-    //public bool CanEdit { get; set; } = false;
-    //[CascadingParameter(Name = "EditingParameter")]
-    //public bool Editing { get; set; }
-
-    //protected override void OnInitialized() {
-    //    base.OnInitialized();
-    //    editService.OnEditButtonClick += RefreshChildComponents;
-    //}
-
-    //public void Dispose() {
-    //    editService.OnEditButtonClick -= RefreshChildComponents;
-    //}
-
-    //private void RefreshChildComponents() {
-    //    StateHasChanged();
-    //}
 }

@@ -57,6 +57,7 @@
                                 <MudToggleIconButton @bind-Toggled="detailsOpen[ri]"
                                     Icon="@DetailsToggleIcon(ri)"
                                     ToggledIcon="@Icons.Material.Filled.ExpandMore"
+                                    Color="Color.Success"
                                     Disabled="@hasNoNotes" />                                
                             </div>
                             @if (detailsOpen.ContainsKey(ri) && detailsOpen[ri]) {

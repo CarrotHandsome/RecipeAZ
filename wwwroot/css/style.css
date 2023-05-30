@@ -1,7 +1,7 @@
 ﻿.recipe-halves {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
+    gap: 0px;
 }
 
 .recipe-left-nav {
@@ -19,30 +19,42 @@ span.link:hover {
 .text-truncate-height {
     overflow: hidden;
     position: relative;
-    line-height: 2em; /* Adjust this value based on your needs */
+    line-height: 1em; /* Adjust this value based on your needs */
     max-height: 4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
     text-align: justify;
     margin-right: 1em;
     padding-right: 1em;
 }
-.related-text-truncate-height { /*for related text recipe name button on recipe page*/
+.userpage-text-truncate-height {
     overflow: hidden;
     position: relative;
-    line-height: 2em; /* Adjust this value based on your needs */
+    line-height: 1em; /* Adjust this value based on your needs */
     max-height: 4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
     text-align: justify;
-    margin-right: -1em;
+    margin-right: 1em;
     padding-right: 1em;
 }
+.related-recipe { /*for related text recipe name button on recipe page*/
+    position: relative;
+    margin-right: 6px;
+    padding-left: 6px;
+    padding-top: 6px;
+    line-height: 1em; /* Adjust this value based on your needs */
+    max-height: 4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
+    border-style: solid;
+    border-width: 1px 1px 0px 0px;
+    border-radius: 10px;
+    border-color: #81C784;
+}
 
-.text-truncate-height:before, .related-text-truncate-height:before {
+.text-truncate-height:before, .userpage-text-truncate-height:before {
     content: '...';
     position: absolute;
     right: 0;
     bottom: 0;
 }
 
-.text-truncate-height:after {
+.text-truncate-height:after, .userpage-text-truncate-height {
     content: '';
     position: absolute;
     right: 0;
@@ -88,4 +100,20 @@ span.link:hover {
 
 .custom-tab .mud-tab-active {
     color: green;
+}
+
+.notes-comments-shared {
+    padding: 10px;
+}
+
+.featured-recipe-grid {
+    padding-bottom: 14px;
+    border-style: solid;
+    border-width:0px 0px 1px 0px;
+    border-radius:10px;
+    border-color:green;
+}
+
+.mud-tab-slider {
+    background-color:green !important;
 }

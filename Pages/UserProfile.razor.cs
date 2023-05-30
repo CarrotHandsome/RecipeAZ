@@ -1,20 +1,24 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.EntityFrameworkCore;
+using RecipeAZ.Models;
 using System.Security.Claims;
 
 namespace RecipeAZ.Pages {
     public partial class UserProfile {
         protected override async Task OnInitializedAsync() {
             await base.OnInitializedAsync();
-            _dataContext = await _contextFactory.CreateDbContextAsync();
-            Recipes = await _dataContext.Recipes
-                .Where(r => r.UserId == Id)
-                .Include(r => r.UsersWhoLikeMe)
-                .Include(r => r.User)
-                .Include(r => r.RecipeTags)
-                    .ThenInclude(rt => rt.Tag)
-                .ToListAsync();
+            using (var context = _contextFactory.CreateDbContext()) {
+                Recipes = await context.Recipes
+                    .Where(r => r.UserId == Id)
+                    .Include(r => r.UsersWhoLikeMe)
+                    .Include(r => r.User)
+                    .Include(r => r.RecipeTags)
+                        .ThenInclude(rt => rt.Tag)
+                    .ToListAsync();
+                ProfileUser = context.Users.Where(u => u.Id == Id).FirstOrDefault();
+            }           
+                
         }
 
         private void NavigateToRecipe(string recipeId) {

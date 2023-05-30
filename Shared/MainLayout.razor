@@ -3,6 +3,7 @@
 @inject NavigationManager navigationManager
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject IDbContextFactory<DataContext> _contextFactory
+@inject IWebHostEnvironment Environment
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
 
@@ -50,10 +51,10 @@
         <NavMenu />
     </MudDrawer>*@
     
-        <MudMainContent Class="m-lg-0 pl-0">
-            @Body
-        </MudMainContent>
-    
+    <MudMainContent Class="">
+        @Body
+    </MudMainContent>
+        
 </MudLayout>
 </CascadingValue>
 

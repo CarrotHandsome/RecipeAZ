@@ -5,9 +5,9 @@
 
 <PageTitle>RecipeAZ</PageTitle>
 
-<div style="background-color:white;padding:16px;border-radius:10px;">
+<div style="background-color:white;padding:30px;margin-bottom:14px;border-radius:10px;">
     @if (FeaturedRecipe != null) {
-        <MudGrid>
+        <MudGrid Class="featured-recipe-grid">
             <MudItem xs="12" sm="4" md="3">
                 <div class="clickable image-container" @onclick="@(() => NavigateToRecipe(FeaturedRecipe.RecipeId))">
                     <MudImage Src="@FeaturedRecipe.ImagePath" Class="rounded-lg mud-image-cropped" />
@@ -26,7 +26,7 @@
                                          Typo="Typo.h6"
                                          Color="Color.Dark"
                                          Underline="Underline.None">
-                            by @FeaturedRecipe.User.UserName
+                            by @FeaturedRecipe.User.UserName on @FeaturedRecipe.CreatedAt.ToShortDateString()
                         </MudLink>
                     </MudItem>
                     <MudItem xs="12">
@@ -36,8 +36,8 @@
                             </MudChip>
                         }
                     </MudItem>
-                    <MudItem xs="12">
-                        <div class="text-truncate-height"><TextLinkMixComponent Text="@FeaturedRecipe.Description" /></div>
+                    <MudItem xs="12" Class="text-truncate-height">
+                        <TextLinkMixComponent Text="@FeaturedRecipe.Description" />
                     </MudItem>
                 </MudGrid>
             </MudItem>
@@ -59,84 +59,102 @@
     </MudGrid>
 </div>
 <p />
-<MudGrid Spacing="10">
-    <MudItem>
+<MudGrid Spacing="0">
+        <MudItem xs="6" >
         <MudList>
             <MudListSubheader>Browse popular recipes</MudListSubheader>
-            @foreach (Recipe recipe in TopRecipes) {
-                <MudListItem>
-                    <MudGrid>
-                        <MudItem>
-                            <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))">
-                                <MudImage Src="@recipe.ImagePath" Height="50"/>
-                            </div>
-                        </MudItem>
-                        <MudItem>
-                            <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
-                                Typo="Typo.h6"
-                                Color="Color.Dark"
-                                Underline="Underline.None"
-                                Class="index-recipe-ellipsis">
-                             @recipe.Name
-                            </MudLink>
-                            <p style="margin: 0;"/>
-                            <MudLink @onclick="@(() => NavigateToProfile(recipe.User.Id))"
-                                Typo="Typo.caption"
-                                Color="Color.Dark"
-                                Underline="Underline.None">
-                                by @recipe.User.UserName
-                            </MudLink>
-                            <p style="margin: 0;" />
-                            @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
-                                <MudChip Size="Size.Small">
-                                    <MudText>@recipeTag.Tag.Name</MudText>
-                                </MudChip>
-                            }
-                        </MudItem>
-                    </MudGrid>
-                    <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Error" />
-                    @recipe.UsersWhoLikeMe.Count
-                </MudListItem>
-            }
+                <div style="border-style:solid;border-width:0px 1px 1px 0px;border-radius:15px;border-color:#81C784">
+                @foreach (Recipe recipe in TopRecipes) {
+                    <MudListItem>
+                        <MudGrid Spacing="0">
+                            <MudItem xs="12" Class="d-flex flex-row">
+                                <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))" style="margin-right:5px;">
+                                    <MudImage Src="@recipe.ImagePath" Height="50" />
+                                </div>
+                                <div>
+                                    <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
+                                        Typo="Typo.h6"
+                                        Color="Color.Dark"
+                                        Underline="Underline.None"
+                                        Class="index-recipe-ellipsis">
+                                        @recipe.Name
+                                    </MudLink>
+                                    <p style="margin: 0;" />
+                                    <MudLink @onclick="@(() => NavigateToProfile(recipe.User.Id))"
+                                        Typo="Typo.caption"
+                                        Color="Color.Dark"
+                                        Underline="Underline.None">
+                                        by @recipe.User.UserName on @recipe.CreatedAt.ToShortDateString()
+                                    </MudLink>
+                                </div>
+                            </MudItem>
+
+                            <MudItem>
+                                <p style="margin: 0;" />
+                                <div class="d-flex flex-row">
+                                    <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Success" />
+                                    @recipe.UsersWhoLikeMe.Count
+                                    @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
+                                        <MudChip Size="Size.Small">
+                                            <MudText>@recipeTag.Tag.Name</MudText>
+                                        </MudChip>
+                                    }
+                                </div>
+
+                            </MudItem>
+                        </MudGrid>
+                    </MudListItem>
+                }
+            </div>
+            
         </MudList>
     </MudItem>
-    <MudItem>
+    <MudItem xs="6">
         <MudList>
             <MudListSubheader>Browse recent recipes</MudListSubheader>
+                <div style="border-style:solid;border-width:1px 0px 0px 1px;border-radius:15px;border-color:#81C784">
             @foreach (Recipe recipe in RecentRecipes) {               
                 <MudListItem>
-                    <MudGrid>
-                        <MudItem>
-                            <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))">
+                    <MudGrid Spacing="0">
+                        <MudItem xs="12" Class="d-flex flex-row">
+                            <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))" style="margin-right:5px;">
                                 <MudImage Src="@recipe.ImagePath" Height="50" />
                             </div>
+                            <div>
+                                <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
+                                        Typo="Typo.h6"
+                                        Color="Color.Dark"
+                                        Underline="Underline.None"
+                                        Class="index-recipe-ellipsis">
+                                    @recipe.Name
+                                </MudLink>
+                                <p style="margin: 0;" />
+                                <MudLink @onclick="@(() => NavigateToProfile(recipe.User.Id))"
+                                        Typo="Typo.caption"
+                                        Color="Color.Dark"
+                                        Underline="Underline.None">
+                                        by @recipe.User.UserName on @recipe.CreatedAt.ToShortDateString()
+                                </MudLink>
+                            </div>
                         </MudItem>
+
                         <MudItem>
-                            <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
-                                 Typo="Typo.h6"
-                                 Color="Color.Dark"
-                                 Underline="Underline.None"
-                                 Class="index-recipe-ellipsis">
-                                @recipe.Name
-                            </MudLink>
                             <p style="margin: 0;" />
-                            <MudLink @onclick="@(() => NavigateToProfile(recipe.User.Id))"
-                                 Typo="Typo.caption"
-                                 Color="Color.Dark"
-                                 Underline="Underline.None">
-                                by @recipe.User.UserName
-                            </MudLink>
-                            <p style="margin: 0;" />
-                            @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
-                                <MudChip Size="Size.Small">
-                                    <MudText>@recipeTag.Tag.Name</MudText>
-                                </MudChip>
-                            }
+                            <div class="d-flex flex-row">
+                                <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Success" />
+                                @recipe.UsersWhoLikeMe.Count
+                                @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
+                                    <MudChip Size="Size.Small">
+                                        <MudText>@recipeTag.Tag.Name</MudText>
+                                    </MudChip>
+                                }
+                            </div>
+
                         </MudItem>
                     </MudGrid>
-                    Created on @recipe.CreatedAt
                 </MudListItem>
             }
+            </div>
         </MudList>
     </MudItem>
 </MudGrid>

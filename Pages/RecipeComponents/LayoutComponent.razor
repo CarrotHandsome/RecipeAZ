@@ -10,15 +10,17 @@
 @inject IWebHostEnvironment env
 @inject ILogger<LayoutComponent> Logger
 @inject TextProcessing _textProcessing
+@inject NavHelperService _navHelp
 @inject RecipeAZ.Services.RecipeService _recipeService
 
 <div style="background-color:white;padding:16px;border-radius:10px;">
     @if (Recipe != null) {
         <div class="d-flex d-row" >
-            <MudGrid Style="min-width:400px;" Spacing="0">
-                <MudItem><MudImage Src="@Recipe.ImagePath" Height="200" /></MudItem>
+            <div style="min-width:400px;border-style:solid;border-width:1px 0px 1px 1px;border-radius:10px;padding:14px;border-color:#fac951" 
+                 >
+                <MudImage Src="@Recipe.ImagePath" Height="200" />
                 @if(CanEdit && Editing) {
-                    <MudItem>
+                    
                         <MudFileUpload T="IBrowserFile" 
                             FilesChanged="OnImageUpload"
                             Accept="image/jpeg,image/png,image/gif,image/bmp">
@@ -30,25 +32,27 @@
                                    for="@context" />
                             </ButtonTemplate>
                         </MudFileUpload>
-                    </MudItem>
+                    
                 }
-            </MudGrid>
-            <div style="padding:10px;border-style:solid;border-width:0px 1px 0px 1px;border-radius:3px;border-color:#81C784;">
+            </div>
+            <div style="padding:10px;border-style:solid;border-width:0px 0px 0px 0px;border-radius:3px;border-color:#81C784;">
                 <div><h5 style="text-align:center;">Related Recipes</h5></div>
-                <hr style="color:#81C784" />
+                
                 <MudPaper Width="95%" Height="95%" Elevation="0" Class="overflow-hidden d-flex flex-wrap d-row" Style="width:100%;">
                     
                         @if (_relatedRecipesWeighted != null) {
                             foreach (KeyValuePair<Recipe, int> kvp in _relatedRecipesWeighted.OrderByDescending(r => r.Value).Take(10)) {                              
                                     @if (kvp.Key != null) {     
-                                        <div style="position:relative;">
+                                        <div class="related-recipe">
                                             <MudButton Size="Size.Small" Style="position:relative;white-space:nowrap;" 
                                                 Variant="Variant.Text" 
-                                                Class="mr-4 mb-0 p-0" @onclick="() => NavigateToRecipe(kvp.Key)" >
+                                                Class="mr-4 mb-0 p-0" @onclick="() => _navHelp.NavigateToRecipe(kvp.Key.RecipeId)" >
                                                 @kvp.Key?.Name                                                
                                             </MudButton>   
                                             <MudButton Size="Size.Small" Variant="Variant.Filled" Class="custom-small-button"
-                                                Style="position:absolute;top:20px;left:5px;height:auto.6em;">
+                                                Style="position:absolute;top:28px;left:5px;height:auto.6em;"
+                                                DisableElevation="true"
+                                                @onclick="() => _navHelp.NavigateToUser(kvp.Key.User.Id)" >
                                                 @TextProcessing.UserAttribution(kvp.Key?.User?.UserName!)
                                             </MudButton>
                                         </div>
@@ -141,9 +145,13 @@
         <div class="recipe-halves">            
             <CascadingValue Value="@Recipe" Name="RecipeParam">   
                 <CascadingValue Value="@CanEdit" Name="CanEditParam">
-                    <CascadingValue Value="@Editing" Name="EditingParam" >                        
-                        <LeftComponent Id="@Id" OnEditUpdate="@UpdateEditState" />
-                        <RightComponent />                                 
+                    <CascadingValue Value="@Editing" Name="EditingParam" >
+                            <div style="border-style:solid;border-width:0px 0px 1px 0px;border-radius:15px;border-color:#fac951">
+                            <LeftComponent Id="@Id" OnEditUpdate="@UpdateEditState" />
+                        </div>
+                            <div style="border-style:solid;border-width:1px 0px 0px 1px;border-radius:15px;border-color:#fac951">
+                            <RightComponent />  
+                        </div>
                     </CascadingValue>                        
                 </CascadingValue>                                                   
             </CascadingValue>
@@ -186,9 +194,5 @@
 
     private void NavigateToParent() {
         navigationManager.NavigateTo($"/recipe/{ Recipe.ParentRecipeId }", true);
-    }
-
-    private void NavigateToRecipe(Recipe r) {
-        navigationManager.NavigateTo($"/recipe/{ r.RecipeId }");
-    }
+    }    
 }
