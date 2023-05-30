@@ -4,13 +4,15 @@
 @inject IJSRuntime _jsRuntime
 
 <div style="color:black">
-    <TextLinkMixComponent Text="@Recipe?.Description" />    
-    @if (CanEdit && Editing) {
-        <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
+    <MudPaper MinWidth="400px" Elevation="0">
+        <TextLinkMixComponent Text="@Recipe?.Description" />
+        @if (CanEdit && Editing) {
+            <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
             OriginalOverview = Recipe?.Description ?? string.Empty;
-            overviewEditOpen = true;                
+            overviewEditOpen = true;
         }" />
-    }
+        }
+    </MudPaper>    
     
 </div>
 @if (Recipe != null) {

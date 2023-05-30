@@ -19,17 +19,17 @@ span.link:hover {
 .text-truncate-height {
     overflow: hidden;
     position: relative;
-    line-height: 1.2em; /* Adjust this value based on your needs */
-    max-height: 2.4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
+    line-height: 2em; /* Adjust this value based on your needs */
+    max-height: 4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
     text-align: justify;
-    margin-right: -1em;
+    margin-right: 1em;
     padding-right: 1em;
 }
 .related-text-truncate-height { /*for related text recipe name button on recipe page*/
     overflow: hidden;
     position: relative;
-    line-height: 1.5em; /* Adjust this value based on your needs */
-    max-height: 3em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
+    line-height: 2em; /* Adjust this value based on your needs */
+    max-height: 4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
     text-align: justify;
     margin-right: -1em;
     padding-right: 1em;

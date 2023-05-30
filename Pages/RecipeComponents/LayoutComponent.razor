@@ -14,8 +14,8 @@
 
 <div style="background-color:white;padding:16px;border-radius:10px;">
     @if (Recipe != null) {
-        <div class="d-flex d-row">
-            <MudGrid>
+        <div class="d-flex d-row" >
+            <MudGrid Style="min-width:400px;" Spacing="0">
                 <MudItem><MudImage Src="@Recipe.ImagePath" Height="200" /></MudItem>
                 @if(CanEdit && Editing) {
                     <MudItem>
@@ -24,7 +24,7 @@
                             Accept="image/jpeg,image/png,image/gif,image/bmp">
                             <ButtonTemplate>
                                 <MudButton HtmlTag="label"
-                                   Color="Color.Info"
+                                   Color="Color.Success"
                                    StartIcon="@Icons.Material.Filled.UploadFile"
                                    Size="Size.Large"
                                    for="@context" />

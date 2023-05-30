@@ -1,4 +1,5 @@
 ﻿@page "/"
+@using RecipeAZ.Pages.RecipeComponents
 @inject IDbContextFactory<DataContext> _contextFactory
 @inject NavigationManager navigationManager
 
@@ -36,7 +37,7 @@
                         }
                     </MudItem>
                     <MudItem xs="12">
-                        <div class="text-truncate-height">@FeaturedRecipe.Description</div>
+                        <div class="text-truncate-height"><TextLinkMixComponent Text="@FeaturedRecipe.Description" /></div>
                     </MudItem>
                 </MudGrid>
             </MudItem>
