@@ -12,7 +12,7 @@ namespace RecipeAZ.Models {
             _logger = loggerFactory.CreateLogger<DataContext>();
             
         }
-
+        //WARNING: ADDING OR TAKING AWAY DBSETS REQUIRES THE JSONDBSERVICE TO BE UPDATED TO REFLECT SET OF DBSETS
         public DbSet<Recipe> Recipes => Set<Recipe>();
         public DbSet<Ingredient> Ingredients => Set<Ingredient>();
         public DbSet<RecipeStep> RecipeSteps => Set<RecipeStep>();     

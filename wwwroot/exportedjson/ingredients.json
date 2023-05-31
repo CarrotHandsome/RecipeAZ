@@ -1,0 +1,30 @@
+[
+  {
+    "IngredientId": "1",
+    "Name": "water"
+  },
+  {
+    "IngredientId": "2",
+    "Name": "red lentils"
+  },
+  {
+    "IngredientId": "3301ff47-d34f-4feb-981b-f385e0f2d438",
+    "Name": "some ingredient like tarka dal"
+  },
+  {
+    "IngredientId": "51a213e4-44c0-4646-b902-f2b399276a09",
+    "Name": "sdfgsd"
+  },
+  {
+    "IngredientId": "8ae0f200-ec7c-4f8b-acae-decefb0932b2",
+    "Name": "@1/tarka dal@"
+  },
+  {
+    "IngredientId": "8f42312e-61cd-43da-87e0-2be7449a099a",
+    "Name": "@1/some@ ingredient like tarka dal"
+  },
+  {
+    "IngredientId": "98e53c25-450c-400d-9db1-c5ee7bcc791d",
+    "Name": "Another ingredient"
+  }
+]

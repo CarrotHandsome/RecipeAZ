@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using RecipeAZ.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Linq.Expressions;
 
 namespace RecipeAZ.Services {
     public class RecipeService {
@@ -173,21 +175,38 @@ namespace RecipeAZ.Services {
             }
             
         }
-        public async Task<IEnumerable<Recipe>> SearchRecipes(string searchText) {
+        public async Task<List<Recipe>> GetRecipesAsync(Expression<Func<Recipe, bool>> filter, string searchText, int minLength=2) {
             //using var DataContext = await _contextFactory.CreateDbContextAsync();
-            if (searchText.Length < 2) {
-                return null;
+            if (searchText.Length > minLength || minLength == -1) {
+                searchText = searchText.ToLower();
+                using (var context = await _contextFactory.CreateDbContextAsync()) {
+                    return await context.Recipes
+                    .Include(r => r.RecipeIngredients)
+                    .Include(r => r.User)
+                    .Include(r => r.RecipeTags)
+                        .ThenInclude(rt => rt.Tag)
+                    .Include(r => r.User)
+                    .Include(r => r.RecipeIngredients)
+                        .ThenInclude(ri => ri.Ingredient)
+                    .Include(r => r.RecipeTags)
+                        .ThenInclude(rt => rt.Tag)
+                    .Include(r => r.UsersWhoLikeMe)
+                    .Where(filter).Select(r => r).ToListAsync() ?? new List<Recipe>();
+                }                
             }
-            searchText = searchText.ToLower();
-            return await DataContext.Recipes
-                .Include(r => r.RecipeIngredients)
-                .Include(r => r.User)
-                .Include(r => r.RecipeTags)
-                    .ThenInclude(rt => rt.Tag)
-                .Where(r => r.Name.ToLower().Contains(searchText)
-                || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(searchText))
-                || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(searchText)))
-                .Select(r => r).ToListAsync();
+            
+            return new List<Recipe>();
+            
+            
+            //return await DataContext.Recipes
+            //    .Include(r => r.RecipeIngredients)
+            //    .Include(r => r.User)
+            //    .Include(r => r.RecipeTags)
+            //        .ThenInclude(rt => rt.Tag)
+            //    .Where(r => r.Name.ToLower().Contains(searchText)
+            //    || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(searchText))
+            //    || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(searchText)))
+            //    .Select(r => r).ToListAsync();
 
         }
 

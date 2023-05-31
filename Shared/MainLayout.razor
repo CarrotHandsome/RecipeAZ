@@ -4,8 +4,10 @@
 @inject AuthenticationStateProvider authenticationStateProvider
 @inject IDbContextFactory<DataContext> _contextFactory
 @inject IWebHostEnvironment Environment
+@inject JsonDbService _jsonDbService
 @using Microsoft.AspNetCore.Components.Authorization
 @using System.Security.Claims
+@using RecipeAZ.Services
 
 <MudThemeProvider Theme="RecipeTheme"/>
 <MudDialogProvider />
@@ -17,7 +19,7 @@
     <MudAppBar Elevation="1" Color="Color.Success">
         
         <MudText Typo="Typo.h5" Class="ml-3 clickable" @onclick="ReturnToIndex" Style="margin-right:10px">RecipeAZ</MudText>
-        
+        <MudIconButton Icon="@Icons.Material.Filled.FileUpload" OnClick="@_jsonDbService.ExportToJson"/>
         <MudSpacer />
         <MudGrid Spacing="1" Justify="Justify.FlexEnd">
             <MudItem>

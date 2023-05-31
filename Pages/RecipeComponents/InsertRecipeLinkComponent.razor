@@ -4,7 +4,7 @@
 
 <MudPopover Open="@SearchOpen" TransformOrigin="Origin.BottomLeft">
     <MudAutocomplete T="Recipe" Label="Link to a recipe" Value="_searchRecipe"    
-        SearchFunc="_recipeService.SearchRecipes" ValueChanged="RecipeChanged"
+        SearchFunc="SearchFunction" ValueChanged="RecipeChanged"
         ToStringFunc="@(r => r == null ? null : ($"{r.Name} by {r.User?.UserName}"))"
     />
     <MudTextField @bind-Value="_linkText" Label="Link Text"></MudTextField>
@@ -58,10 +58,16 @@
             OnLinkAdded.InvokeAsync(Text);
             SearchOpen = false;
         }
-        
+
     }
-    
+
     private void RecipeChanged(Recipe r) {
         _searchRecipe = r;
+    }
+
+    private async Task<IEnumerable<Recipe>> SearchFunction(string inputString) {
+        return await _recipeService.GetRecipesAsync(r => r.Name.ToLower().Contains(_searchRecipe.Name)
+            || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(_searchRecipe.Name))
+            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchRecipe.Name)), _searchRecipe.Name);
     }
 }

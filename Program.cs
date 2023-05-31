@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using MudBlazor.Services;
 using RecipeAZ.Models;
+using RecipeAZ.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
@@ -46,8 +47,8 @@ builder.Services.AddTransient<IEmailSender, SendGridEmailSender>();
 builder.Services.AddSingleton<EditService>();
 builder.Services.AddScoped<TextProcessing>();
 builder.Services.AddScoped<NavHelperService>();
-builder.Services.AddScoped<RecipeAZ.Services.RecipeService>();
-
+builder.Services.AddScoped<RecipeService>();
+builder.Services.AddScoped<JsonDbService>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();

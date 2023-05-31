@@ -29,10 +29,11 @@ span.link:hover {
     overflow: hidden;
     position: relative;
     line-height: 1em; /* Adjust this value based on your needs */
-    max-height: 4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
+    max-height: 6em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
     text-align: justify;
     margin-right: 1em;
     padding-right: 1em;
+    margin-top: 3em;
 }
 .related-recipe { /*for related text recipe name button on recipe page*/
     position: relative;
@@ -47,14 +48,20 @@ span.link:hover {
     border-color: #81C784;
 }
 
-.text-truncate-height:before, .userpage-text-truncate-height:before {
+.text-truncate-height:before {
     content: '...';
     position: absolute;
     right: 0;
     bottom: 0;
 }
+.userpage-text-truncate-height:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+}
 
-.text-truncate-height:after, .userpage-text-truncate-height {
+.text-truncate-height:after, .userpage-text-truncate-height:after {
     content: '';
     position: absolute;
     right: 0;
@@ -87,7 +94,14 @@ span.link:hover {
     overflow: hidden;
     text-overflow: ellipsis;
 }
-
+.profile-description-limit {
+    width: 300px; /* adjust as needed */
+    line-height: 1em;
+    max-height: 4em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 .vcenter {
     display: flex;
     align-items: center;

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore;
 using MudBlazor;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -99,4 +100,6 @@ namespace RecipeAZ.Models {
         public int Lines { get; set; }
         public bool CanLinkToOtherRecipes { get; set; }
     }
+
+    
 }

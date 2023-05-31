@@ -1,0 +1,24 @@
+[
+  {
+    "Id": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "UserName": "admin",
+    "NormalizedUserName": "ADMIN",
+    "Email": "admin@gmail.com",
+    "NormalizedEmail": null,
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAIAAYagAAAAEGCajBUIu4GtyEuUiYfuAgUvPtRpT4fgEJDodody9UxB1iHqvPDl4R+gaM+5fxHJxg==",
+    "SecurityStamp": "cb206ca4-7710-4d45-aa1d-74d247ad0502",
+    "ConcurrencyStamp": "44689390-4700-4eeb-a103-9342dc0847d9"
+  },
+  {
+    "Id": "cbe324a4-6815-46ff-bc37-e8bf5d89478d",
+    "UserName": "peeman",
+    "NormalizedUserName": "PEEMAN",
+    "Email": "akekajoo@gmail.com",
+    "NormalizedEmail": "AKEKAJOO@GMAIL.COM",
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAIAAYagAAAAEEMvSCG9fMOmjqB2Kb0oNrLKBcaceAqm01JOFZ3zjv4YWRYtmxoQmFZTwEasV26R7A==",
+    "SecurityStamp": "LSJDRWAZEPGLMRYEEPKNPITCSMC6HAGL",
+    "ConcurrencyStamp": "344c4a70-c1d8-4ca3-a612-01669a694d79"
+  }
+]

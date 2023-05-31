@@ -1,0 +1,34 @@
+[
+  {
+    "RecipeStepId": "1",
+    "Name": "Step 1",
+    "Description": "Rinse Lentils",
+    "Details": "",
+    "RecipeId": "1",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "2",
+    "Name": "Step 2",
+    "Description": "Add lentils and water to pot",
+    "Details": "",
+    "RecipeId": "1",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "3",
+    "Name": "Step 3",
+    "Description": "Boil till cooked",
+    "Details": "get em real hot",
+    "RecipeId": "1",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "412ac9f3-66dd-4a3e-a9d7-6c880aef4ee1",
+    "Name": "",
+    "Description": "@1/its @like @1/tarka dal@",
+    "Details": "test test test@1/Tarka Dal@",
+    "RecipeId": "2c2009e6-2de3-4f50-a953-902179e0a9c0",
+    "Order": 1
+  }
+]

@@ -21,12 +21,12 @@
         @foreach (Recipe recipe in Recipes) {
             <MudListItem>
                 <MudGrid>
-                    <MudItem xs="5">    
+                    <MudItem xs="3">    
                         <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))">
                             <MudImage Src="@recipe.ImagePath" Height="50" />
                         </div>
                            
-                        <h5>@recipe.Name</h5>
+                        <h5 class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))">@recipe.Name</h5>
                         <div>@recipe.CreatedAt</div>
                         @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
                             <MudChip Size="Size.Small" Color="Color.Success">
@@ -39,9 +39,11 @@
 
                         @recipe.UsersWhoLikeMe.Count
                     </MudItem>
-                    @*<MudItem xs="5" Class="userpage-text-truncate-height">
-                        <TextLinkMixComponent Text="@recipe.Description" />
-                    </MudItem>*@
+                    <MudItem xs="9">
+                        <div class="userpage-text-truncate-height">
+                            <TextLinkMixComponent Text="@recipe.Description" />
+                        </div>
+                    </MudItem>
                 </MudGrid>
                 
 

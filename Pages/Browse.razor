@@ -6,7 +6,7 @@
 @inject NavigationManager _navigationManager
 @inject RecipeAZ.Services.RecipeService _recipeService
 
-<div style="background-color:white;">
+<div style="background-color:white;padding:16px;border-radius:10px;">
     <MudText Typo="Typo.h6">Search Results</MudText>
     <MudGrid Spacing="0" Class="orange-lines">
         <MudItem>
@@ -66,18 +66,22 @@
         </MudItem>
         <MudItem>
             <MudToggleIconButton Icon="@Icons.Material.Filled.ArrowUpward" ToggledIcon="@Icons.Material.Filled.ArrowDownward"
-                ToggledChanged="() => {
+                ToggledChanged="async () => {
                     ResultsAscending = !ResultsAscending;
-                    _recipes = SearchResults;
+                    _recipes = await SearchResults();
                     StateHasChanged();
                 }" />
         </MudItem>
     </MudGrid>
 
-    <MudTable Items="@_recipes" Dense="true" RowsPerPage="@_rowsPerPage">
+    <MudTable Items="@_recipes" Dense="true" RowsPerPage="@_rowsPerPage" Elevation="0">
         <RowTemplate>
+            <MudTd>
+                <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Success" />
+                @context?.UsersWhoLikeMe?.Count
+            </MudTd>
             <MudTd @onclick="() => NavigateToRecipe(context.RecipeId)" Class="clickable">@context.Name</MudTd>
-            <MudTd @onclick="() => NavigateToUser(context.UserId)" Class="clickable">by @context.User.UserName</MudTd>
+            <MudTd @onclick="() => NavigateToUser(context.UserId)" Class="clickable">by @context.User.UserName on @context.CreatedAt.ToShortDateString()</MudTd>
             <MudTd><div class="browse-text-limit-width"><RecipeAZ.Pages.RecipeComponents.TextLinkMixComponent Text="@context.Description" UseLinks="false" /> </div></MudTd>
         </RowTemplate>
         <PagerContent>
@@ -99,29 +103,29 @@
     private string CurrentIcon => _orderIconOptions[orderIconIndex % _orderIconOptions.Length];
     private List<Recipe>? _recipes = new();
     private int _rowsPerPage = 15;
-    private DataContext _dataContext;
+    //private DataContext _dataContext;
     private List<Tag>? _tagsFilter = new();
     private List<Ingredient>? _ingredientsFilter = new();
 
 
-    private List<Recipe> SearchResults {
-        get {
-            List<Recipe> recipes = _dataContext.Recipes
-            .Include(r => r.User)
-            .Include(r => r.RecipeIngredients)
-                .ThenInclude(ri => ri.Ingredient)
-            .Include(r => r.RecipeTags)
-                .ThenInclude(rt => rt.Tag)
-            .Include(r => r.UsersWhoLikeMe)
-            .Where(r => r.Name.ToLower().Contains(_searchText.ToLower())
+    private async Task<List<Recipe>> SearchResults() {
+        {
+            List<Recipe> recipes = await _recipeService.GetRecipesAsync(
+                r => r.Name.ToLower().Contains(_searchText.ToLower())
             || r.RecipeIngredients.Any(ri => ri.Ingredient.Name.ToLower().Contains(_searchText.ToLower()))
-            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText.ToLower()))
-            .Select(r => r).ToList();
+            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText.ToLower()),
+            _searchText, -1);
 
-            recipes = recipes.Where(r => {
-                return ((_tagsFilter.Count <= 0 || _tagsFilter.All(t => r.RecipeTags.Any(rt => rt.TagId == t.TagId)))
-                    && (_ingredientsFilter.Count <= 0 || _ingredientsFilter.All(i => r.RecipeIngredients.Any(ri => ri.IngredientId == i.IngredientId))));
-            }).Select(r => r).ToList();
+
+            //.Where(r => r.Name.ToLower().Contains(_searchText.ToLower())
+            //|| r.RecipeIngredients.Any(ri => ri.Ingredient.Name.ToLower().Contains(_searchText.ToLower()))
+            //|| r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText.ToLower()))
+            //.Select(r => r).ToList();
+
+            //recipes = recipes.Where(r => {
+            //    return ((_tagsFilter.Count <= 0 || _tagsFilter.All(t => r.RecipeTags.Any(rt => rt.TagId == t.TagId)))
+            //        && (_ingredientsFilter.Count <= 0 || _ingredientsFilter.All(i => r.RecipeIngredients.Any(ri => ri.IngredientId == i.IngredientId))));
+            //}).Select(r => r).ToList();
 
             switch (orderIconIndex % _orderIconOptions.Length) {
                 case 0:
@@ -149,10 +153,6 @@
                     recipes = recipes.OrderBy(r => r.Name).ToList();
                     break;
             }
-            
-
-            
-
             return recipes;
         }
     }
@@ -160,9 +160,9 @@
     protected override async Task OnInitializedAsync() {
         await base.OnInitializedAsync();
         Console.WriteLine("finished browse init");
-        _dataContext = _contextFactory.CreateDbContext();
+        //_dataContext = _contextFactory.CreateDbContext();
         _searchText = Terms ?? string.Empty;
-        _recipes = SearchResults;
+        _recipes = await SearchResults();
     }
 
     private async Task<IEnumerable<string>> TagAutoCompleteSearch(string value) {
@@ -171,9 +171,12 @@
         }
         List<string> filteredTags;
         try {
-            filteredTags = await _dataContext.Tags.Where(t => t.Name.ToLower().Contains(value.ToLower()))
-            .Select(t => t.Name)
-            .ToListAsync();
+            using (var context = await _contextFactory.CreateDbContextAsync()) {
+                filteredTags = await context.Tags.Where(t => t.Name.ToLower().Contains(value.ToLower()))
+                .Select(t => t.Name)
+                .ToListAsync();
+            }
+
         } catch(Exception e) {
             Console.WriteLine(e);
             filteredTags = new();
@@ -186,9 +189,11 @@
         }
         List<string> filteredIngredients;
         try {
-            filteredIngredients = await _dataContext.Ingredients.Where(i => i.Name.ToLower().Contains(value.ToLower()))
-            .Select(t => t.Name)
-            .ToListAsync();
+            using (var context = await _contextFactory.CreateDbContextAsync()) {
+                filteredIngredients = await context.Ingredients.Where(i => i.Name.ToLower().Contains(value.ToLower()))
+                .Select(t => t.Name)
+                .ToListAsync();
+            }            
 
         } catch (Exception e) {
             Console.WriteLine(e);
@@ -203,35 +208,42 @@
         IngredientFilterSearchText = value;
     }
     private async Task AddTagFilter() {
-        Tag tag = _dataContext.Tags            
+        Tag tag = null;
+        using (var context = await _contextFactory.CreateDbContextAsync()) {
+            tag = context.Tags
             .Where(t => t.Name.ToLower() == TagFilterSearchText.ToLower()).FirstOrDefault();
+        }        
         if (tag != null) {
             _tagsFilter.Add(tag);
-            _recipes = SearchResults;
+            _recipes = await SearchResults();
             UpdateTagSearchText(string.Empty);
         }
     }
     private async Task AddIngredientFilter() {
-        Ingredient ingredient = _dataContext.Ingredients
-            .Where(ingredient => ingredient.Name.ToLower() == IngredientFilterSearchText.ToLower()).FirstOrDefault();
+        Ingredient ingredient = null;
+        using (var context = await _contextFactory.CreateDbContextAsync()) {
+            ingredient = context.Ingredients
+                .Where(ingredient => ingredient.Name.ToLower() == IngredientFilterSearchText.ToLower()).FirstOrDefault();
+        }
+        
         if (ingredient != null) {
             _ingredientsFilter.Add(ingredient);
-            _recipes = SearchResults;
+            _recipes = await SearchResults();
         }
     }
-    private void UpdateRecipes() {
-        _recipes = SearchResults;
+    private async Task UpdateRecipes() {
+        _recipes = await SearchResults();
         StateHasChanged();
     }
 
-    private void HandleTagFilterClose(Tag tag) {
+    private async Task HandleTagFilterClose(Tag tag) {
         _tagsFilter.Remove(tag);
-        _recipes = SearchResults;
+        _recipes = await SearchResults();
         StateHasChanged();
     }
-    private void HandleIngredientFilterClose(Ingredient ingredient) {
+    private async Task HandleIngredientFilterClose(Ingredient ingredient) {
         _ingredientsFilter.Remove(ingredient);
-        _recipes = SearchResults;
+        _recipes = await SearchResults();
         StateHasChanged();
     }
 
@@ -242,9 +254,9 @@
         _navigationManager.NavigateTo($"/profile/{id}");
     }
 
-    private void ChangeOrderIcon() {
+    private async Task ChangeOrderIcon() {
         orderIconIndex++;
-        _recipes = SearchResults;
+        _recipes = await SearchResults();
         StateHasChanged();
     }
 }
