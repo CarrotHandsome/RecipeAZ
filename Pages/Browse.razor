@@ -1,90 +1,91 @@
 ﻿@page "/browse/{terms}"
 @page "/browse"
 
+
 @inject IDbContextFactory<DataContext> _contextFactory
 @inject NavigationManager _navigationManager
+@inject RecipeAZ.Services.RecipeService _recipeService
 
-<MudText Typo="Typo.h6">Search Results</MudText>
-<MudGrid Spacing="0">
-    <MudItem>
-        <MudTextField @bind-Value="_searchText" Label="Filter by search term" Variant="Variant.Outlined" TextChanged="UpdateRecipes"></MudTextField>
-    </MudItem>
-    <MudItem Class="vcenter">
-        <MudIconButton Icon="@Icons.Material.Filled.Refresh" Size="Size.Large"
-            OnClick="UpdateRecipes"
-        />
-    </MudItem>
-</MudGrid>
+<div style="background-color:white;">
+    <MudText Typo="Typo.h6">Search Results</MudText>
+    <MudGrid Spacing="0" Class="orange-lines">
+        <MudItem>
+            <MudTextField @bind-Value="_searchText" Label="Filter by search term" Variant="Variant.Outlined" 
+                TextChanged="UpdateRecipes"></MudTextField>
+        </MudItem>
+        <MudItem Class="vcenter">
+            <MudIconButton Icon="@Icons.Material.Filled.Refresh" Size="Size.Large"
+                OnClick="UpdateRecipes" />
+        </MudItem>
+    </MudGrid>
 
+    <MudGrid>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem>
+                    <MudAutocomplete T="string" Label="Filter by tag" Immediate="true"
+                        Value="TagFilterSearchText" SearchFunc="TagAutoCompleteSearch" TextChanged="UpdateTagSearchText" />
+                </MudItem>
+                <MudItem Class="d-flex align-center pl-0">
+                    <MudIconButton Icon="@Icons.Material.Filled.Add"
+                        OnClick="AddTagFilter" />
+                    @foreach (Tag tag in _tagsFilter) {
+                        <MudChip Variant="Variant.Outlined" Size="Size.Small">
+                            <MudText>@tag.Name</MudText>
+                            <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Size="Size.Small"
+                                @onclick="() => HandleTagFilterClose(tag)" />
+                        </MudChip>
+                    }
+                </MudItem>
+            </MudGrid>
 
-<MudGrid>
-    <MudItem xs="12">
-        <MudGrid>
-            <MudItem>
-                <MudAutocomplete T="string" Label="Filter by tag" Immediate="true"
-                    Value="TagFilterSearchText" SearchFunc="TagAutoCompleteSearch" TextChanged="UpdateTagSearchText"/>
-            </MudItem>
-            <MudItem Class="d-flex align-center pl-0">
-                <MudIconButton Icon="@Icons.Material.Filled.Add" 
-                    OnClick="AddTagFilter" />
-                @foreach (Tag tag in _tagsFilter) {
-                    <MudChip Variant="Variant.Outlined" Size="Size.Small">
-                        <MudText>@tag.Name</MudText>
-                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Size="Size.Small"
-                            @onclick="() => HandleTagFilterClose(tag)"/>
-                    </MudChip>
-                }
-            </MudItem>
-        </MudGrid>
-        
-    </MudItem>
-    <MudItem xs="12">
-        <MudGrid>
-            <MudItem>
-                <MudAutocomplete T="string" Label="Filter by ingredient"
-                    Value="IngredientFilterSearchText" SearchFunc="IngredientAutoCompleteSearch" TextChanged="UpdateIngredientSearchText" />
-            </MudItem>
-            <MudItem Class="d-flex align-center pl-0">
-                <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddIngredientFilter"/>
-                @foreach (Ingredient i in _ingredientsFilter) {
-                    <MudChip Variant="Variant.Outlined" Size="Size.Small">
-                        <MudText>@i.Name</MudText>
-                        <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Size="Size.Small"
-                            @onclick="() => HandleIngredientFilterClose(i)" />
-                    </MudChip>
-                }
-            </MudItem>
-        </MudGrid>
-    </MudItem>
-</MudGrid>
-<p/>
-<MudGrid Spacing="0">    
-    <MudItem>
-        <MudIconButton Icon="@CurrentIcon" OnClick="ChangeOrderIcon"/>
-    </MudItem>
-    <MudItem>
-        <MudToggleIconButton Icon="@Icons.Material.Filled.ArrowUpward" ToggledIcon="@Icons.Material.Filled.ArrowDownward"
-            ToggledChanged="() => {
-                ResultsAscending = !ResultsAscending;
-                _recipes = SearchResults;
-                StateHasChanged();
-            }"
-        />
-    </MudItem>
-</MudGrid>
+        </MudItem>
+        <MudItem xs="12">
+            <MudGrid>
+                <MudItem>
+                    <MudAutocomplete T="string" Label="Filter by ingredient"
+                        Value="IngredientFilterSearchText" SearchFunc="IngredientAutoCompleteSearch" TextChanged="UpdateIngredientSearchText" />
+                </MudItem>
+                <MudItem Class="d-flex align-center pl-0">
+                    <MudIconButton Icon="@Icons.Material.Filled.Add" OnClick="AddIngredientFilter" />
+                    @foreach (Ingredient i in _ingredientsFilter) {
+                        <MudChip Variant="Variant.Outlined" Size="Size.Small">
+                            <MudText>@i.Name</MudText>
+                            <MudIconButton Icon="@Icons.Material.Filled.Cancel" Color="Color.Default" Size="Size.Small"
+                                @onclick="() => HandleIngredientFilterClose(i)" />
+                        </MudChip>
+                    }
+                </MudItem>
+            </MudGrid>
+        </MudItem>
+    </MudGrid>
+    <p />
+    <MudGrid Spacing="0">
+        <MudItem>
+            <MudIconButton Icon="@CurrentIcon" OnClick="ChangeOrderIcon" />
+        </MudItem>
+        <MudItem>
+            <MudToggleIconButton Icon="@Icons.Material.Filled.ArrowUpward" ToggledIcon="@Icons.Material.Filled.ArrowDownward"
+                ToggledChanged="() => {
+                    ResultsAscending = !ResultsAscending;
+                    _recipes = SearchResults;
+                    StateHasChanged();
+                }" />
+        </MudItem>
+    </MudGrid>
 
-<MudTable Items="@_recipes" Dense="true" RowsPerPage="@_rowsPerPage">
-   
-   
-    <RowTemplate>
-        <MudTd @onclick="() => NavigateToRecipe(context.RecipeId)" Class="clickable">@context.Name</MudTd>
-        <MudTd @onclick="() => NavigateToUser(context.UserId)" Class="clickable">by @context.User.UserName</MudTd>
-        <MudTd><div class="browse-text-limit-width">@context.Description</div></MudTd>
-    </RowTemplate>
-    <PagerContent>
-        <MudTablePager />
-    </PagerContent>
-</MudTable>
+    <MudTable Items="@_recipes" Dense="true" RowsPerPage="@_rowsPerPage">
+        <RowTemplate>
+            <MudTd @onclick="() => NavigateToRecipe(context.RecipeId)" Class="clickable">@context.Name</MudTd>
+            <MudTd @onclick="() => NavigateToUser(context.UserId)" Class="clickable">by @context.User.UserName</MudTd>
+            <MudTd><div class="browse-text-limit-width"><RecipeAZ.Pages.RecipeComponents.TextLinkMixComponent Text="@context.Description" UseLinks="false" /> </div></MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager />
+        </PagerContent>
+    </MudTable>
+</div>
+
 @code {
     [Parameter]
     public string Terms { get; set; } = string.Empty;
@@ -111,6 +112,7 @@
                 .ThenInclude(ri => ri.Ingredient)
             .Include(r => r.RecipeTags)
                 .ThenInclude(rt => rt.Tag)
+            .Include(r => r.UsersWhoLikeMe)
             .Where(r => r.Name.ToLower().Contains(_searchText.ToLower())
             || r.RecipeIngredients.Any(ri => ri.Ingredient.Name.ToLower().Contains(_searchText.ToLower()))
             || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText.ToLower()))

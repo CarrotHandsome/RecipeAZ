@@ -2,13 +2,16 @@
 @inject NavHelperService _navHelp
 
 @foreach (Tuple<string, bool, string> t in _textProcessing.ProcessString(Text)) {
-    if (t.Item2) {
+    if (t.Item2 && UseLinks) {
         <MudText Class="clickable" Style="display: inline; margin: 0px; padding: 0px;font-weight:bold;"
             @onclick="() => {
                 _navHelp.NavigateToRecipe(t.Item1);
             }" >
             @t.Item3
         </MudText>
+    } else if (t.Item2) {
+        <MudText Style="display: inline;">@t.Item3</MudText>
+        
     } else {
         <MudText Style="display: inline;">@t.Item1</MudText>
     }
@@ -17,4 +20,6 @@
 @code {
     [Parameter]
     public string Text { get; set; }
+    [Parameter]
+    public bool UseLinks { get; set; } = true;
 }

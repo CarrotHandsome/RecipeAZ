@@ -117,3 +117,11 @@ span.link:hover {
 .mud-tab-slider {
     background-color:green !important;
 }
+
+.orange-lines .mud-outlined-input {
+    border-color: #fac951 !important;
+}
+
+.orange-lines .mud-input-slot .mud-input {
+    color: #fac951 !important;
+}
