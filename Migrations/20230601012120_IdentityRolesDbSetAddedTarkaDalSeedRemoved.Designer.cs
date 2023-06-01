@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RecipeAZ.Models;
 
@@ -11,9 +12,11 @@ using RecipeAZ.Models;
 namespace RecipeAZ.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230601012120_IdentityRolesDbSetAddedTarkaDalSeedRemoved")]
+    partial class IdentityRolesDbSetAddedTarkaDalSeedRemoved
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -240,14 +243,14 @@ namespace RecipeAZ.Migrations
                         {
                             Id = "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c7be70b1-025c-43fa-8b26-98b0bf6057c4",
+                            ConcurrencyStamp = "77619ccc-8cbb-4593-a645-20489c80e8da",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAELUounx1QAcKIZs4pyT7Ic8QmBoBK+X89z9VSJlKuscFsPyR3gQtlVVhDYS9BX6MbQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBsFAV1G3eEwULKwFlmD1Ek4RK3txlRQQiOkQaBcNUUh6DxHIlfheLqw7jFO6za0Cw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "83846a1b-089e-4693-9236-b1eaee5532ec",
+                            SecurityStamp = "518fa5c8-ec6a-49fb-952c-aff1b8833af1",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -300,6 +303,34 @@ namespace RecipeAZ.Migrations
                     b.ToTable("Ingredients");
                 });
 
+            modelBuilder.Entity("RecipeAZ.Models.IngredientModifier", b =>
+                {
+                    b.Property<string>("IngredientModifierId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IngredientId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("IngredientId1")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<bool>("IsBefore")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("IngredientModifierId");
+
+                    b.HasIndex("IngredientId");
+
+                    b.HasIndex("IngredientId1");
+
+                    b.ToTable("IngredientModifier");
+                });
+
             modelBuilder.Entity("RecipeAZ.Models.Recipe", b =>
                 {
                     b.Property<string>("RecipeId")
@@ -347,9 +378,16 @@ namespace RecipeAZ.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<string>("AfterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Amount")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("BeforeId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("IngredientId")
                         .IsRequired()
@@ -371,6 +409,10 @@ namespace RecipeAZ.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("RecipeIngredientId");
+
+                    b.HasIndex("AfterId");
+
+                    b.HasIndex("BeforeId");
 
                     b.HasIndex("IngredientId");
 
@@ -533,6 +575,17 @@ namespace RecipeAZ.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("RecipeAZ.Models.IngredientModifier", b =>
+                {
+                    b.HasOne("RecipeAZ.Models.Ingredient", null)
+                        .WithMany("Afters")
+                        .HasForeignKey("IngredientId");
+
+                    b.HasOne("RecipeAZ.Models.Ingredient", null)
+                        .WithMany("Befores")
+                        .HasForeignKey("IngredientId1");
+                });
+
             modelBuilder.Entity("RecipeAZ.Models.Recipe", b =>
                 {
                     b.HasOne("RecipeAZ.Models.Recipe", "ParentRecipe")
@@ -550,6 +603,16 @@ namespace RecipeAZ.Migrations
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeIngredient", b =>
                 {
+                    b.HasOne("RecipeAZ.Models.IngredientModifier", "After")
+                        .WithMany("AfterRecipeIngredients")
+                        .HasForeignKey("AfterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("RecipeAZ.Models.IngredientModifier", "Before")
+                        .WithMany("BeforeRecipeIngredients")
+                        .HasForeignKey("BeforeId");
+
                     b.HasOne("RecipeAZ.Models.Ingredient", "Ingredient")
                         .WithMany("RecipeIngredients")
                         .HasForeignKey("IngredientId")
@@ -561,6 +624,10 @@ namespace RecipeAZ.Migrations
                         .HasForeignKey("RecipeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("After");
+
+                    b.Navigation("Before");
 
                     b.Navigation("Ingredient");
 
@@ -627,7 +694,18 @@ namespace RecipeAZ.Migrations
 
             modelBuilder.Entity("RecipeAZ.Models.Ingredient", b =>
                 {
+                    b.Navigation("Afters");
+
+                    b.Navigation("Befores");
+
                     b.Navigation("RecipeIngredients");
+                });
+
+            modelBuilder.Entity("RecipeAZ.Models.IngredientModifier", b =>
+                {
+                    b.Navigation("AfterRecipeIngredients");
+
+                    b.Navigation("BeforeRecipeIngredients");
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Recipe", b =>

@@ -1,6 +1,3 @@
-@using RecipeAZ.Models
-@using Microsoft.EntityFrameworkCore
-@using RecipeAZ.Interfaces
 @inject IDbContextFactory<DataContext> _contextFactory
 @inject TextProcessing _textProcessing
 @inject NavHelperService _navHelp
@@ -11,67 +8,68 @@
 
 <div style="color:black">
         <MudPaper MinWidth="400px" Elevation="0">
-            <MudList Class="pl-0">
-                @foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!.OrderBy(ri => ri.Order)) {
-                    bool hasNoNotes = ri.Notes == string.Empty;
-                    <MudListItem>
-                        <MudGrid>                            
-                            <div class="d-flex d-row">
+        <MudDropContainer T="RecipeIngredient" Items="RecipeIngredientsList"
+            ItemsSelector="@((item, dropzone) => item?.Order.ToString() == dropzone)" 
+            ItemDropped="ItemDropUpdateOrder" Class="d-flex flex-wrap flex-grow-1">
+            <ChildContent>                
+                <MudList Clickable="true" Class="pl-0">
+                    @foreach (RecipeIngredient ri in (ItemRecipe?.RecipeIngredients ?? new List<RecipeIngredient>()).OrderBy(ri => ri.Order)) {
+                        string dropzone = ri.Order.ToString();                        
+                        <MudDropZone T="RecipeIngredient" Identifier="@dropzone" AllowReorder="false" ItemIsDisabled="i => !CanEdit || !Editing" />
+                    }
+                </MudList>
+            </ChildContent>
+            <ItemRenderer>
+                <MudListItem>
+                    <MudGrid>
+                        <div class="d-flex d-row">
                             @if (CanEdit && Editing) {
-                                
-                                    <MudIconButton Icon="@Icons.Material.Filled.Delete"
-                                        Size="Size.Small"
-                                        aria-label="delete"
-                                        @onclick="async (e) => {
-                                            await _recipeService.RemoveRecipeIngredient(ri);
-                                            //StateHasChanged();
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                    Size="Size.Small"
+                                    aria-label="delete"
+                                    @onclick="async (e) => {
+                                            await _recipeService.RemoveRecipeIngredient(context);
                                         }" />
 
-                                
-                                    <MudIconButton Icon="@Icons.Material.Filled.Edit"
-                                        Size="Size.Small"
-                                        aria-label="edit"
-                                        @onclick="() => {
-                                            tempIngredient = new RecipeIngredient {
-                                                Name = ri.Name,
-                                                Notes = ri.Notes,
-                                                Ingredient = ri.Ingredient,
-                                                Recipe = ri.Recipe,
-                                                Amount = ri.Amount,
-                                                Order = ri.Order,
-                                                Before = ri.Before,
-                                                After = ri.After
-                                            };
-                                            editingIngredient = ri;
-                                            ingredientEditOpen = true;
-                                        }" />
-                                
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                    Size="Size.Small"
+                                    aria-label="edit"
+                                    @onclick="() => {
+                                        tempIngredient = new RecipeIngredient {
+                                            Name = context.Name,
+                                            Notes = context.Notes,
+                                            Ingredient = context.Ingredient,
+                                            Recipe = context.Recipe,
+                                            Amount = context.Amount,
+                                            Order = context.Order
+                                        };
+                                        editingIngredient = context;
+                                        ingredientEditOpen = true;
+                                    }" />
                             }
-                            
-                                <div class="mr-1" style="margin-top: 0.75rem; margin-bottom: 0;"><TextLinkMixComponent Text="@ri.Ingredient?.Name"/>:</div>
-                            
-                           
-                                <div style="margin-top: 0.75rem; margin-bottom: 0;">@ri.Amount</div>
-                            
-                            
-                                <MudToggleIconButton @bind-Toggled="detailsOpen[ri]"
-                                    Icon="@DetailsToggleIcon(ri)"
-                                    ToggledIcon="@Icons.Material.Filled.ExpandMore"
-                                    Color="Color.Success"
-                                    Disabled="@hasNoNotes" />                                
-                            </div>
-                            @if (detailsOpen.ContainsKey(ri) && detailsOpen[ri]) {
-                                <MudItem xs="12">
-                                    <MudPaper Class="pl-2" Elevation="0" Style="font-style:italic;">
-                                        <TextLinkMixComponent Text="@ri.Notes" />
-                                    </MudPaper>
-                                </MudItem>
-                            }
-                        </MudGrid>
-                    
-                    </MudListItem>                                                   
-                }
-            </MudList>
+
+                            <div class="mr-1" style="margin-top: 0.75rem; margin-bottom: 0;"><TextLinkMixComponent Text="@context.Ingredient?.Name" />:</div>
+
+                            <div style="margin-top: 0.75rem; margin-bottom: 0;">@context.Amount</div>
+
+                            <MudToggleIconButton @bind-Toggled="detailsOpen[context]"
+                                Icon="@DetailsToggleIcon(context)"
+                                ToggledIcon="@Icons.Material.Filled.ExpandMore"
+                                Color="Color.Success"
+                                Disabled="@string.IsNullOrEmpty(context.Notes)" />
+                        </div>
+                        @if (detailsOpen.ContainsKey(context) && detailsOpen[context]) {
+                            <MudItem xs="12">
+                                <MudPaper Class="pl-2" Elevation="0" Style="font-style:italic;">
+                                    <TextLinkMixComponent Text="@context.Notes" />
+                                </MudPaper>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudListItem>
+            </ItemRenderer>
+        </MudDropContainer>
+            
         </MudPaper>
         @if (CanEdit && Editing) {
             <MudToggleIconButton @bind-Toggled="@ShowNewIngredientInput"
@@ -156,7 +154,8 @@
     private string editingName;
     private string editingAmount;
     private string editingNotes;
-    private List<RecipeIngredient> RecipeIngredientsList => ItemRecipe.RecipeIngredients.ToList();
+    private List<RecipeIngredient> RecipeIngredientsList =>
+        ItemRecipe?.RecipeIngredients?.Where(ingredient => ingredient != null).ToList() ?? new List<RecipeIngredient>();
     private RecipeIngredient? editingIngredient;
     private RecipeIngredient? tempIngredient;
     private int editingIngredientIndex;
@@ -193,4 +192,6 @@
         CurrentEditAction?.Invoke(newText);
         _searchLinkOpen = false;
     }
+
+    
 }

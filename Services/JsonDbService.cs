@@ -1,7 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Newtonsoft.Json;
 using RecipeAZ.Models;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq.Expressions;
 
 namespace RecipeAZ.Services {
     public class JsonDbService {
@@ -21,17 +24,55 @@ namespace RecipeAZ.Services {
                 await ExportDbSet<Tag, TagDto>(context.Tags, "tags");
                 await ExportDbSet<RecipeTag, RecipeTagDto>(context.RecipeTags, "recipetags");
                 await ExportDbSet<RecipeLike, RecipeLikeDto>(context.RecipeLikes, "reipelikes");
-                await ExportDbSet<AppUser, UserDto>(context.Users, "users");                
+                await ExportDbSet<AppUser, UserDto>(context.Users, "users", u => u.Id != "02174cf0–9412–4cfe - afbf - 59f706d72cf6");
+                await ExportDbSet<IdentityRole, IdentityRoleDto>(context.IdentityRoles, "identityroles", ird => ird.Id != "341743f0 - asd2–42de - afbf - 59kmkkmk72cf6");
+                await ExportDbSet<IdentityUserRole<string>, IdentityUserRoleDto>(context.IdentityUserRoles, "identityuserroles", iurd => iurd.RoleId != "341743f0 - asd2–42de - afbf - 59kmkkmk72cf6"
+                    && iurd.UserId != "02174cf0–9412–4cfe - afbf - 59f706d72cf6");
             }
         }
 
-        public async Task ExportDbSet<T, D>(DbSet<T> dbSet, string filename) 
+        public async Task ImportFromJson() {
+            using (var context = await _contextFactory.CreateDbContextAsync()) {
+                await ImportDbSet<Recipe, RecipeDto>(context.Recipes, "recipes");
+                await ImportDbSet<Ingredient, IngredientDto>(context.Ingredients, "ingredients");
+                await ImportDbSet<RecipeStep, RecipeStepDto>(context.RecipeSteps, "recipesteps");
+                await ImportDbSet<RecipeIngredient, RecipeIngredientDto>(context.RecipeIngredients, "recipeingredients");
+                await ImportDbSet<Comment, CommentDto>(context.Comments, "comments");
+                await ImportDbSet<Tag, TagDto>(context.Tags, "tags");
+                await ImportDbSet<RecipeTag, RecipeTagDto>(context.RecipeTags, "recipetags");
+                await ImportDbSet<RecipeLike, RecipeLikeDto>(context.RecipeLikes, "reipelikes");
+                await ImportDbSet<AppUser, UserDto>(context.Users, "users");
+
+                await context.SaveChangesAsync();
+            }
+        }
+
+        public async Task ExportDbSet<T, D>(DbSet<T> dbSet, string filename, Func<T, bool> filter = null) 
             where T : class
             where D : class, new() {
             var entities = await dbSet.ToListAsync();
+            if (filter != null) {
+                entities = entities.Where(filter).ToList();
+            }
             var dtos = entities.Select(e => MapToDto<T, D>(e)).ToList();
             
             File.WriteAllText(Path.Combine(_env.WebRootPath, "exportedjson", $"{filename}.json"), JsonConvert.SerializeObject(dtos, Formatting.Indented));
+        }
+
+        public async Task ImportDbSet<T, D>(DbSet<T> dbSet, string filename)
+            where T : class, new()
+            where D : class {
+            var path = Path.Combine(_env.WebRootPath, "exportedjson", $"{filename}.json");
+
+            if (File.Exists(path)) {
+                var json = await File.ReadAllTextAsync(path);
+                var dtos = JsonConvert.DeserializeObject<List<D>>(json);
+
+                var entities = dtos.Select(d => MapToEntity<T, D>(d)).ToList();
+                foreach (var entity in entities) {
+                    await dbSet.AddAsync(entity);
+                }
+            }
         }
 
         private D MapToDto<T, D>(T entity) where D : new() {
@@ -50,6 +91,24 @@ namespace RecipeAZ.Services {
                 }
             }
             return dto;
+        }
+
+        private T MapToEntity<T, D>(D dto) where T : new() {
+            var entity = new T();
+
+            var dtoProperties = typeof(D).GetProperties();
+            var entityProperties = typeof(T).GetProperties();
+
+            foreach (var dtoProperty in dtoProperties) {
+                if (dtoProperty.CanRead) {
+                    var entityProperty = entityProperties.FirstOrDefault(p => p.Name == dtoProperty.Name);
+                    if (entityProperty != null && entityProperty.CanWrite) {
+                        var value = dtoProperty.GetValue(dto);
+                        entityProperty.SetValue(entity, value);
+                    }
+                }
+            }
+            return entity;
         }
     }
 
@@ -118,5 +177,17 @@ namespace RecipeAZ.Services {
         public string SecurityStamp { get; set; }
         public string ConcurrencyStamp { get; set; }
         
+    }
+
+    public class IdentityRoleDto {
+        public string Id { get; set; }
+        public string Name { get; set; }
+        public string NormalizedName { get; set; }
+        public string ConcurrencyStamp { get; set; }
+    }
+
+    public class IdentityUserRoleDto {
+        public string RoleId { get; set; }
+        public string UserId { get; set; }
     }
 }

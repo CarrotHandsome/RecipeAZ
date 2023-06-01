@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using MudBlazor;
 using RecipeAZ.Models;
 using System.Diagnostics;
 using System.Text.Json;
@@ -16,42 +17,12 @@ namespace RecipeAZ.Pages.RecipeComponents {
             }
 
             AllIngredients = await _recipeService.GetAllIngredientNames();
-        }
-        //public async Task UpdateAddedIngredient() {
-        //    if (ItemRecipe != null && LastItem.Name != null) { 
-        //        try {
-        //            Console.WriteLine("adding new ingredient");
-        //            if (await _recipeService.DoesIngredientExist(LastItem.Name)) {//!await DataContext.Ingredients.AnyAsync(i => i.Name == LastItem.Ingredient.Name)) {
-        //                Console.WriteLine("adding new Ingredient");
-        //                await DataContext.Ingredients.AddAsync(LastItem.Ingredient);
-        //                Console.WriteLine("added new ingredient");
-        //            } 
-                    
-        //            RecipeIngredient newRecipeIngredient = new RecipeIngredient {
-        //                Name = LastItem.Name,
-        //                Recipe = ItemRecipe,
-        //                RecipeId = ItemRecipe.RecipeId,
-        //                Ingredient = LastItem.Ingredient,
-        //                IngredientId = LastItem.Ingredient.IngredientId,
-        //                Before = LastItem.Before,
-        //                BeforeId = LastItem.BeforeId ?? "1",
-        //                After = LastItem.After,
-        //                AfterId = LastItem.AfterId ?? "1"
-        //            };
-        //        } catch (Exception ex) {
-        //            Console.WriteLine($"EXCEPTION: {ex.Message}");
-        //        }                
-        //            LastItem = new();
-        //        //_newRI = new();
-        //        //StateHasChanged();
-        //        //Console.WriteLine(_newRI.Ingredient.Name);
-        //    }
-        //}
-
+        }        
         private void AddRecipeIngredient(RecipeIngredient ri) {
             _recipeService.AddRecipeIngredient(ri);
             detailsOpen[ri] = ri.Notes != string.Empty;            
-            ShowNewIngredientInput = false;                       
+            ShowNewIngredientInput = false;
+            LastItem = new();
             StateHasChanged();
         }
         
@@ -73,6 +44,23 @@ namespace RecipeAZ.Pages.RecipeComponents {
             List<string> candidates = await DataContext.Ingredients.Select(i => i.Name).ToListAsync();
            
             return candidates.Where(x => (x.Contains(matchTo, StringComparison.InvariantCultureIgnoreCase) || matchTo.Contains(x, StringComparison.InvariantCultureIgnoreCase)));
-        } 
+        }
+
+        private void ItemDropUpdateOrder(MudItemDropInfo<RecipeIngredient> dropItem) {
+            Console.WriteLine("starting reorder update");
+            int originalOrder = dropItem.Item.Order;
+            Console.WriteLine($"Original Order: {originalOrder}");
+            dropItem.Item.Order = int.Parse(dropItem.DropzoneIdentifier);
+            Console.WriteLine($"Parsed Order: {dropItem.Item.Order}");
+            var targetOrder = int.Parse(dropItem.DropzoneIdentifier);
+            var targetItem = RecipeIngredientsList.FirstOrDefault(ri => ri.Order == targetOrder);
+
+            if (targetItem != null) {
+                targetItem.Order = originalOrder;
+            }
+
+        }
+
+        
     }
 }

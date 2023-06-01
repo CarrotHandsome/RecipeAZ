@@ -118,12 +118,21 @@ namespace RecipeAZ.Services {
             }
         }
         public async Task RemoveRecipeIngredient(RecipeIngredient ri) {
+            //List<RecipeIngredient> befores = DataContext.RecipeIngredients.Where(before => before.RecipeId == ri.RecipeId && ri.Order > before.Order).ToList();
+            List<RecipeIngredient> afters = DataContext.RecipeIngredients.Where(after => after.RecipeId == ri.RecipeId && ri.Order < after.Order).ToList();
+            foreach (RecipeIngredient after in afters) {
+                after.Order = after.Order - 1;
+            }
             DataContext.RecipeIngredients.Attach(ri);
             DataContext.RecipeIngredients.Remove(ri);
             Recipe.RecipeIngredients.Remove(ri);
             DataContext.Recipes.Update(Recipe);
         }
         public async Task RemoveRecipeStep(Recipe recipe, RecipeStep rs) {
+            List<RecipeStep> afters = DataContext.RecipeSteps.Where(after => after.RecipeId == rs.RecipeId && rs.Order < after.Order).ToList();
+            foreach (RecipeStep after in afters) {
+                after.Order = after.Order - 1;
+            }
             DataContext.RecipeSteps.Attach(rs);
             DataContext.RecipeSteps.Remove(rs);
             recipe.RecipeSteps.Remove(rs);

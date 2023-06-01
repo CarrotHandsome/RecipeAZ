@@ -11,21 +11,21 @@ namespace RecipeAZ.Models {
         public string RecipeId { get; set; }
         public Ingredient? Ingredient { get; set; }
         public string IngredientId { get; set; }
-        public IngredientModifier Before { get; set; }
-        public string? BeforeId { get; set; } = "1";
-        public IngredientModifier After { get; set; }
-        public string? AfterId { get; set; } = "1";
+        //public IngredientModifier Before { get; set; }
+        //public string? BeforeId { get; set; } = "1";
+        //public IngredientModifier After { get; set; }
+        //public string? AfterId { get; set; } = "1";
         public string Name { get; set; } = string.Empty;
         public string Notes { get; set; } = string.Empty;
         public string Amount { get; set; } = string.Empty;
         public int Order { get; set; }
 
-        public string FullName {
-            get {
-                string before = Before?.Name ?? string.Empty;
-                string after = After?.Name ?? string.Empty;
-                return $"{before} {Ingredient?.Name ?? string.Empty} {after}";
-            }
-        }
+        //public string FullName {
+        //    get {
+        //        string before = Before?.Name ?? string.Empty;
+        //        string after = After?.Name ?? string.Empty;
+        //        return $"{before} {Ingredient?.Name ?? string.Empty} {after}";
+        //    }
+        //}
     }
 }

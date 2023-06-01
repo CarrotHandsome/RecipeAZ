@@ -20,6 +20,7 @@
         
         <MudText Typo="Typo.h5" Class="ml-3 clickable" @onclick="ReturnToIndex" Style="margin-right:10px">RecipeAZ</MudText>
         <MudIconButton Icon="@Icons.Material.Filled.FileUpload" OnClick="@_jsonDbService.ExportToJson"/>
+        <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@_jsonDbService.ImportFromJson" />
         <MudSpacer />
         <MudGrid Spacing="1" Justify="Justify.FlexEnd">
             <MudItem>
