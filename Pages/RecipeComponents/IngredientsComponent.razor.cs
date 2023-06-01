@@ -50,12 +50,13 @@ namespace RecipeAZ.Pages.RecipeComponents {
             Console.WriteLine("starting reorder update");
             int originalOrder = dropItem.Item.Order;
             Console.WriteLine($"Original Order: {originalOrder}");
-            dropItem.Item.Order = int.Parse(dropItem.DropzoneIdentifier);
+            
             Console.WriteLine($"Parsed Order: {dropItem.Item.Order}");
             var targetOrder = int.Parse(dropItem.DropzoneIdentifier);
             var targetItem = RecipeIngredientsList.FirstOrDefault(ri => ri.Order == targetOrder);
 
             if (targetItem != null) {
+                dropItem.Item.Order = targetOrder;
                 targetItem.Order = originalOrder;
             }
 
