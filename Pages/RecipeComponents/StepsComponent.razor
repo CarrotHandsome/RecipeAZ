@@ -46,16 +46,9 @@
             @*<MudTextField @bind-Value="LastItem.Name" Label="New Step" Immediate="true"></MudTextField>*@
             <MudTextField @bind-Value="LastItem.Description" Label="New Step" Lines="3"></MudTextField>
             <MudTextField @bind-Value="LastItem.Details" Label="Details" Lines="5"></MudTextField>
-            <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add" @onclick="(e) => {
-                    RecipeStep newStep = new RecipeStep {
-                        Name = LastItem.Name,
-                        Description = LastItem.Description,
-                        Details = LastItem.Details,
-                        Recipe = ItemRecipe
-                    };
-                    newStep.Order = ItemRecipe.RecipeSteps.Count() + 1;
-                    ItemRecipe!.RecipeSteps!.Add(newStep);
-                    detailsOpen[newStep] = true;
+            <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add" @onclick="async (e) => {
+                    await _recipeService.AddRecipeStep(LastItem);
+                    //detailsOpen[newStep] = true;
                     LastItem = new();
                     ShowNewStepInput = false;
                     StateHasChanged();

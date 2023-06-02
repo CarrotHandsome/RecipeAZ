@@ -1,7 +1,7 @@
 ﻿using RecipeAZ.Interfaces;
 
 namespace RecipeAZ.Models {
-    public class RecipeStep : IEditableListItem {
+    public class RecipeStep : IEditableListItem<RecipeStep> {
         public string RecipeStepId { get; set; }
         public string Name { get; set; } = string.Empty;        
         public string Description { get; set; } = string.Empty;

@@ -100,6 +100,5 @@ namespace RecipeAZ.Models {
         public int Lines { get; set; }
         public bool CanLinkToOtherRecipes { get; set; }
     }
-
     
 }

@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MudBlazor;
 
 namespace RecipeAZ.Pages.RecipeComponents {
-    public class EditableList<T> : ComponentBase where T : IEditableListItem, new() {
+    public class EditableList<T> : ComponentBase where T : IEditableListItem<T>, new() {
         [Inject]
         public ISnackbar RecipeSnack { get; set; }
         [CascadingParameter(Name = "RecipeParam")]

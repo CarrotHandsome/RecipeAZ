@@ -38,10 +38,10 @@
                                     @onclick="() => {
                                         tempIngredient = new RecipeIngredient {
                                             Name = context.Name,
-                                            Notes = context.Notes,
+                                            Details = context.Details,
                                             Ingredient = context.Ingredient,
                                             Recipe = context.Recipe,
-                                            Amount = context.Amount,
+                                            Description = context.Description,
                                             Order = context.Order
                                         };
                                         editingIngredient = context;
@@ -51,18 +51,18 @@
 
                             <div class="mr-1" style="margin-top: 0.75rem; margin-bottom: 0;"><TextLinkMixComponent Text="@context.Ingredient?.Name" />:</div>
 
-                            <div style="margin-top: 0.75rem; margin-bottom: 0;">@context.Amount</div>
+                            <div style="margin-top: 0.75rem; margin-bottom: 0;">@context.Description</div>
 
                             <MudToggleIconButton @bind-Toggled="detailsOpen[context]"
                                 Icon="@DetailsToggleIcon(context)"
                                 ToggledIcon="@Icons.Material.Filled.ExpandMore"
                                 Color="Color.Success"
-                                Disabled="@string.IsNullOrEmpty(context.Notes)" />
+                                Disabled="@string.IsNullOrEmpty(context.Details)" />
                         </div>
                         @if (detailsOpen.ContainsKey(context) && detailsOpen[context]) {
                             <MudItem xs="12">
                                 <MudPaper Class="pl-2" Elevation="0" Style="font-style:italic;">
-                                    <TextLinkMixComponent Text="@context.Notes" />
+                                    <TextLinkMixComponent Text="@context.Details" />
                                 </MudPaper>
                             </MudItem>
                         }
@@ -80,10 +80,9 @@
                 <MudAutocomplete T="string" Label="Name your ingredient" 
                     Value="LastItem.Name" TextChanged="OnTextChanged"
                     CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
-                    SearchFunc="FindIngredientMatches" />
-                @*<MudTextField @bind-Value="LastItem.Name" Label="New Ingredient" Immediate="true"></MudTextField>*@
-                <MudTextField @bind-Value="LastItem.Amount" Label="Amount"></MudTextField>
-                <MudTextField @bind-Value="LastItem.Notes" Label="Notes"></MudTextField>
+                    SearchFunc="FindIngredientMatches" />                
+                <MudTextField @bind-Value="LastItem.Description" Label="Description"></MudTextField>
+                <MudTextField @bind-Value="LastItem.Details" Label="Details"></MudTextField>
                 <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add" 
                     @onclick="() => { AddRecipeIngredient(LastItem); }" />
             }   
@@ -107,15 +106,15 @@
                     }" />
             </div>
             
-            <MudTextField @bind-Value="tempIngredient.Amount" Lines="1" />                
+            <MudTextField @bind-Value="tempIngredient.Description" Lines="1" />                
           
             <div class="d-flex d-row">
-                <MudTextField @bind-Value="tempIngredient.Notes" Lines="5" id="linkable-ingredient-details"/>
+                <MudTextField @bind-Value="tempIngredient.Details" Lines="5" id="linkable-ingredient-details"/>
                 <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch"
                     Title="Insert link to another recipe"
                     @onclick="async () => {
-                        _editText = tempIngredient.Notes;
-                        CurrentEditAction = new Action<string>((newText) => tempIngredient.Notes = newText);
+                        _editText = tempIngredient.Details;
+                        CurrentEditAction = new Action<string>((newText) => tempIngredient.Details = newText);
                         await OnSearchLinkClick(_detailsId);
                     }" />
             </div>            
@@ -124,8 +123,8 @@
                 Dont forget to save your recipe!
                 <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="() => {
                     editingIngredient.Name = tempIngredient.Name;
-                    editingIngredient.Notes = tempIngredient.Notes;
-                    editingIngredient.Amount = tempIngredient.Amount;
+                    editingIngredient.Details = tempIngredient.Details;
+                    editingIngredient.Description = tempIngredient.Description;
                     editingIngredient.Order = tempIngredient.Order;
                     editingIngredient.Recipe = tempIngredient.Recipe;                    
                            
@@ -151,17 +150,14 @@
     private bool ShowNewIngredientInput { get; set; } = false;
     private Action<string> CurrentEditAction { get; set; }
     private Dictionary<RecipeIngredient, bool> detailsOpen = new Dictionary<RecipeIngredient, bool>();
-    private bool ingredientEditOpen = false;
-    private string editingName;
-    private string editingAmount;
-    private string editingNotes;
+    private bool ingredientEditOpen = false;    
     private List<RecipeIngredient> RecipeIngredientsList =>
         ItemRecipe?.RecipeIngredients?.Where(ingredient => ingredient != null).ToList() ?? new List<RecipeIngredient>();
     private RecipeIngredient? editingIngredient;
     private RecipeIngredient? tempIngredient;
     private int editingIngredientIndex;
     private List<string> AllIngredients = new();
-    private Ingredient _newIngredientToRemove = null;
+    
     private bool _searchLinkOpen = false;
     private int _cursorStart;
     private int _cursorEnd;
@@ -177,7 +173,7 @@
     }
 
     private string DetailsToggleIcon(RecipeIngredient ri) {
-        return ri.Notes == string.Empty ? null : Icons.Material.Filled.ChevronRight;
+        return ri.Details == string.Empty ? null : Icons.Material.Filled.ChevronRight;
     }
     private async Task OnSearchLinkClick(string id) {
         CursorSpan span = await GetCursorSpan(id);

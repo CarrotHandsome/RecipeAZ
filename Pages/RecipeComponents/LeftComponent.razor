@@ -12,10 +12,10 @@
                     <OverViewComponent />
                 </MudTabPanel>
                 <MudTabPanel Text="Ingredients">
-                    <IngredientsComponent @ref="_ingredientsRef" />
+                    <ItemListComponent ItemType="RecipeIngredient" @ref="_ingredientsRef" />
                 </MudTabPanel>
                 <MudTabPanel Text="Steps">
-                    <StepsComponent />
+                    <ItemListComponent ItemType="RecipeStep" @ref="_stepsRef" />
                 </MudTabPanel>               
             </MudTabs>
         </MudItem>
@@ -50,7 +50,8 @@
     [CascadingParameter(Name="ContextParam")]
     public DataContext _dataContext { get; set; }
 
-    private IngredientsComponent _ingredientsRef;
+    private ItemListComponent<RecipeIngredient>? _ingredientsRef;
+    private ItemListComponent<RecipeStep>? _stepsRef;
     public string? button;
     private bool ActionsVisible { get; set; }
 
@@ -68,7 +69,8 @@
         Console.WriteLine("Starting to save");
         await _recipeService.SaveRecipeAsync(Id);
 
-        _ingredientsRef.LastItem = new();
+        _ingredientsRef.LastItem = new RecipeIngredient();
+        _stepsRef.LastItem = new RecipeStep();
         Console.WriteLine("Saved");
         if (fromCreator)
         {
@@ -110,7 +112,7 @@
         Recipe copy = new Recipe {
             Name = "Copy of " + Recipe.Name,
             Description = Recipe.Description,
-            Notes = Recipe.Notes,
+            Details = Recipe.Details,
             RecipeSteps = new List<RecipeStep>(),
             RecipeIngredients = new List<RecipeIngredient>(),
             ImagePath = Recipe.ImagePath,
@@ -135,8 +137,8 @@
             RecipeIngredient copyIngredient = new RecipeIngredient {
                     Name = ri.Name,
                     IngredientId = ri.IngredientId,
-                    Notes = ri.Notes,
-                    Amount = ri.Amount,
+                    Details = ri.Details,
+                    Description = ri.Description,
                     Order = ri.Order
                 };
             copy.RecipeIngredients.Add(copyIngredient);

@@ -117,7 +117,7 @@ namespace RecipeAZ.Services {
         public string RecipeId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty; //aka Overview
-        public string Notes { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
         public string? UserId { get; set; } = string.Empty;
         public string? ImagePath { get; set; } = "images/recipe_default.png";        
         public string? ParentRecipeId { get; set; }          
@@ -142,8 +142,8 @@ namespace RecipeAZ.Services {
         public string? BeforeId { get; set; } = "1";
         public string? AfterId { get; set; } = "1";
         public string Name { get; set; } = string.Empty;
-        public string Notes { get; set; } = string.Empty;
-        public string Amount { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
         public int Order { get; set; }
     }
     public class CommentDto {

@@ -1,5 +1,237 @@
-﻿<h3>ItemListComponent</h3>
+﻿@using RecipeAZ.Interfaces
+@using System.Linq.Expressions
+@inject IDbContextFactory<DataContext> _contextFactory
+@inject TextProcessing _textProcessing
+@inject NavHelperService _navHelp
+@inject RecipeAZ.Services.RecipeService _recipeService
+@inject IJSRuntime _jsRuntime
+@typeparam ItemType
 
+<div style="color:black">
+    <MudPaper MinWidth="400px" Elevation="0">
+        <MudDropContainer T="IEditableListItem<ItemType>" Items="@ItemsList"
+                ItemsSelector="@((item, dropzone) => item?.Order.ToString() == dropzone)"
+                ItemDropped="ItemDropUpdateOrder" Class="d-flex flex-wrap flex-grow-1">
+            <ChildContent>
+                <MudList Clickable="true" Class="pl-0">
+                    @foreach (IEditableListItem<ItemType> ri in (ItemsList.OrderBy(ri => ri.Order))) {
+                        string dropzone = ri.Order.ToString();
+                        <MudDropZone T="IEditableListItem<ItemType>" Identifier="@dropzone" AllowReorder="false" ItemIsDisabled="IsItemDisabled" />
+                    }
+                </MudList>
+            </ChildContent>
+            <ItemRenderer>
+                <MudListItem>
+                    <MudGrid>
+                        <div class="d-flex d-row">
+                            @if (CanEdit && Editing) {
+                                <MudIcon Icon="@Icons.Material.Filled.DragHandle" />
+                                <MudIconButton Icon="@Icons.Material.Filled.Delete"
+                                    Size="Size.Small"
+                                    aria-label="delete"
+                                    @onclick="async (e) => 
+                                    await _recipeService.RemoveItem(context)" />
+
+                                <MudIconButton Icon="@Icons.Material.Filled.Edit"
+                                    Size="Size.Small"
+                                    aria-label="edit"
+                                    @onclick="() => {
+                                        tempItem = new ItemType {
+                                            Name = context.Name,
+                                            Description = context.Description,                                            
+                                            Recipe = context.Recipe,
+                                            Details = context.Details,
+                                            Order = context.Order
+                                        };
+                                    editingItem = context;
+                                    _itemEditOpen = true;
+                                }" />
+                            }
+                            @if (_typeName == "RecipeIngredient") {
+                                <div class="mr-1" style="margin-top: 0.75rem; margin-bottom: 0;">
+                                    <TextLinkMixComponent Text="@context.Name" />:
+                                </div>
+                            }                     
+
+                            <div style="margin-top: 0.75rem; margin-bottom: 0;">
+                                @if (_typeName == "RecipeStep") {
+                                    <TextLinkMixComponent Text="@context.Description" />
+                                } else {
+                                    @context.Description
+                                }                                
+                            </div>
+
+                             <MudToggleIconButton @bind-Toggled="detailsOpen[context]"
+                                Icon="@DetailsToggleIcon(context)"
+                                ToggledIcon="@Icons.Material.Filled.ExpandMore"
+                                Color="Color.Success"
+                                Disabled="@string.IsNullOrEmpty(context.Details)" />
+                        </div>
+                        @if (detailsOpen.ContainsKey(context) && detailsOpen[context]) {
+                            <MudItem xs="12">
+                                <MudPaper Class="pl-2" Elevation="0" Style="font-style:italic;">
+                                    <TextLinkMixComponent Text="@context.Details" />
+                                </MudPaper>
+                            </MudItem>
+                        }
+                    </MudGrid>
+                </MudListItem>
+            </ItemRenderer>
+        </MudDropContainer>
+
+    </MudPaper>
+    @if (CanEdit && Editing) {
+        <MudToggleIconButton @bind-Toggled="@ShowNewItemInput"
+            Icon="@Icons.Material.Filled.Add"
+            ToggledIcon="@Icons.Material.Filled.Remove" />
+        @if (ShowNewItemInput) {
+            @if (_typeName == "RecipeIngredient") {
+                <MudAutocomplete T="string" Label="@NameYourItem"
+                     Value="LastItem.Name" TextChanged="OnTextChanged"
+                     CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
+                     SearchFunc="FindItemMatchesSearchFunc" />
+            }            
+            
+            @*<MudTextField @bind-Value="LastItem.Name" Label="@NewItem" Immediate="true"></MudTextField>*@
+            <MudTextField @bind-Value="LastItem.Description" Label="@Description"></MudTextField>
+            <MudTextField @bind-Value="LastItem.Details" Label="add details if you want"></MudTextField>
+            <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add"
+                @onclick="() => { AddItem(LastItem); }" />
+        }
+    }
+</div>
+
+@if (ItemRecipe != null) {
+    <MudPopover Open="@_itemEditOpen" Fixed="false" Class="px-4 pt-4">
+        <div class="d-flex flex-column">
+            <div class="d-flex d-row">
+                @if (_typeName == "RecipeIngredient") {
+                    <MudAutocomplete T="string" Label="@NameYourItem" id="@_nameId"
+                        Value="tempItem.Name" TextChanged="UpdateEditingItem"
+                        CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"                             
+                        SearchFunc="FindItemMatchesSearchFunc" />
+                <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch"
+                    Title="Insert link to another recipe"
+                    @onclick="async () => {
+                        _editText = tempItem.Name;
+                        CurrentEditAction = new Action<string>((newText) => tempItem.Name = newText);
+                        await OnSearchLinkClick(_nameId);
+                    }" />                    
+                }
+                
+            </div>
+            <div class="d-flex d-row">
+                <MudTextField @bind-Value="tempItem.Description" Lines="1" id="@_descriptionId" Label="@Description"/>
+                @if (_typeName == "RecipeStep") {
+                    <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch"
+                        Title="Insert link to another recipe"
+                        @onclick="async () => {
+                            _editText = tempItem.Description;
+                            CurrentEditAction = new Action<string>((newText) => tempItem.Description = newText);
+                            await OnSearchLinkClick(_descriptionId);
+                        }" />
+                }
+            </div>    
+
+            <div class="d-flex d-row">
+                <MudTextField @bind-Value="tempItem.Details" Lines="5" id="@_detailsId" />
+                <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch"
+                    Title="Insert link to another recipe"
+                    @onclick="async () => {
+                        _editText = tempItem.Details;
+                        CurrentEditAction = new Action<string>((newText) => tempItem.Details = newText);
+                        await OnSearchLinkClick(_detailsId);
+                    }" />
+            </div>
+
+            <div class="d-flex d-row">
+                Dont forget to save your recipe!
+                <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="() => {
+                    editingItem.Name = tempItem.Name;
+                    editingItem.Details = tempItem.Details;
+                    editingItem.Description = tempItem.Description;
+                    editingItem.Order = tempItem.Order;
+                    editingItem.Recipe = tempItem.Recipe;
+
+                    _itemEditOpen = false;
+                    //AddItem(editingItem);
+
+                }" />
+                <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error" Size="Size.Large" @onclick="async () => {
+                    editingItem = tempItem;
+                    tempItem = null;
+                    _itemEditOpen = false;
+                    StateHasChanged();
+                }" />
+            </div>
+        </div>
+        <InsertRecipeLinkComponent Text="@_editText" CursorStart="@_cursorStart" CursorEnd="@_cursorEnd"
+            SearchOpen="@_searchLinkOpen" OnLinkAdded="HandleLinkAdded" OnClose="() => _searchLinkOpen=false" />
+    </MudPopover>
+}
 @code {
+    [CascadingParameter(Name="RecipeParam")]
+    public Recipe? ItemRecipe { get; set; }
+    [CascadingParameter(Name = "CanEditParam")]
+    protected bool CanEdit { get; set; }
+    [CascadingParameter(Name = "EditingParam")]
+    protected bool Editing { get; set; }
+    public bool CannotAddItem => LastItem == null;
+    [Parameter]
+    public Type? Type { get; set; }
 
+    private string NameYourItem => $"name your {_typeNameSimple}";
+    private string NewItem => $"new {_typeNameSimple}";
+    private string Description => _typeName == "RecipeIngredient" ? "amount" : "describe the step";
+
+    private string _typeName;
+    private string _typeNameSimple;
+
+    private bool IsItemDisabled(IEditableListItem<ItemType> i) => !CanEdit || !Editing;
+    private bool ShowNewItemInput { get; set; } = false;
+    private Action<string> CurrentEditAction { get; set; }
+    private Dictionary<IEditableListItem<ItemType>, bool> detailsOpen = new Dictionary<IEditableListItem<ItemType>, bool>();
+    private bool _itemEditOpen = false;
+    //[Parameter]
+    //public Expression<Func<IEditableListItem<ItemType>, bool>> 
+    public List<IEditableListItem<ItemType>> ItemsList => ItemRecipe.GetItems<ItemType>();
+    public IEditableListItem<ItemType> LastItem { get; set; } = new ItemType();
+    private IEditableListItem<ItemType>? editingItem;
+    private IEditableListItem<ItemType>? tempItem;
+    private int editingItemIndex;
+    private List<string> AllItems = new();
+
+    private bool _searchLinkOpen = false;
+
+    private int _cursorStart;
+    private int _cursorEnd;
+    private string _nameId = "linkable-item-name";
+    private string _descriptionId = "linkable-item-description";
+    private string _detailsId = "linkable-item-details";
+    private string _editText = string.Empty;
+
+    private void OnTextChanged(string value) {
+        LastItem.Name = value;
+    }
+    private void UpdateEditingItem(string value) {
+        tempItem.Name = value;
+    }
+
+    private string DetailsToggleIcon(IEditableListItem<ItemType> ri) {
+        return ri.Details == string.Empty ? null : Icons.Material.Filled.ChevronRight;
+    }
+    private async Task OnSearchLinkClick(string id) {
+        CursorSpan span = await GetCursorSpan(id);
+        _cursorStart = span.Item1;
+        _cursorEnd = span.Item2;
+        _searchLinkOpen = true;
+    }
+    private async Task<CursorSpan> GetCursorSpan(string id) {
+        CursorSpan result = await _jsRuntime.InvokeAsync<CursorSpan>("getCursorPosition", id);
+        return result;
+    }
+    private void HandleLinkAdded(string newText) {
+        CurrentEditAction?.Invoke(newText);
+        _searchLinkOpen = false;
+    }
 }

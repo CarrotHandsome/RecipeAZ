@@ -1,7 +1,7 @@
 @using Microsoft.AspNetCore.Identity;
 @inject RecipeAZ.Services.RecipeService _recipeService
 
-<div class="notes-comments-shared">
+<div class="Details-comments-shared">
     @Recipe?.Comments?.Count() comments:
     @{
         var orderedComments = _recipeService.Recipe?.Comments?.OrderBy(c => c.CreatedAt);

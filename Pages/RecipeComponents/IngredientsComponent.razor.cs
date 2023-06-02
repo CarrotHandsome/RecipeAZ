@@ -20,7 +20,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
         }        
         private void AddRecipeIngredient(RecipeIngredient ri) {
             _recipeService.AddRecipeIngredient(ri);
-            detailsOpen[ri] = ri.Notes != string.Empty;            
+            detailsOpen[ri] = ri.Details != string.Empty;            
             ShowNewIngredientInput = false;
             LastItem = new();
             StateHasChanged();
@@ -31,7 +31,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 Name = name,
                 RecipeIngredients = new List<RecipeIngredient> { ri }
             };
-            _newIngredientToRemove = ingredient;
+            
             //DataContext.Ingredients.Add(ingredient);
             return ingredient;
         }

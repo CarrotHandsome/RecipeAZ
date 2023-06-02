@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using RecipeAZ.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -8,7 +9,7 @@ namespace RecipeAZ.Models
         public string RecipeId { get; set; }
         public string Name { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty; //aka Overview
-        public string Notes { get; set; } = string.Empty;
+        public string Details { get; set; } = string.Empty;
         public string? UserId { get; set; } = string.Empty;
         public string? ImagePath { get; set; } = "images/recipe_default.png";
         public AppUser? User { get; set; }
@@ -24,5 +25,13 @@ namespace RecipeAZ.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }
         
+        public List<IEditableListItem<T>> GetItems<T>() where T : new() {
+            string type = typeof(T).Name;
+            if (type == "RecipeIngredient") {
+                return RecipeIngredients?.Cast<IEditableListItem<T>>().ToList() ?? new List<IEditableListItem<T>>();
+            } else {
+                return RecipeSteps?.Cast<IEditableListItem<T>>().ToList() ?? new List<IEditableListItem<T>>();
+            }
+        }
     }
 }

@@ -3,8 +3,8 @@
 
 
 <MudPopover Open="@SearchOpen" TransformOrigin="Origin.BottomLeft">
-    <MudAutocomplete T="Recipe" Label="Link to a recipe" Value="_searchRecipe"    
-        SearchFunc="SearchFunction" ValueChanged="RecipeChanged"
+    <MudAutocomplete T="Recipe" Label="Link to a recipe" Value="_searchRecipe" Text="@_searchRecipeText"
+        SearchFunc="SearchFunction" ValueChanged="RecipeChanged" TextChanged="@TextChanged"
         ToStringFunc="@(r => r == null ? null : ($"{r.Name} by {r.User?.UserName}"))"
     />
     <MudTextField @bind-Value="_linkText" Label="Link Text"></MudTextField>
@@ -36,6 +36,7 @@
     [Parameter]
     public EventCallback OnClose { get; set; }
     private Recipe? _searchRecipe;
+    private string _searchRecipeText = string.Empty;
     private string _linkText;
     protected override async Task OnParametersSetAsync() {
         base.OnParametersSetAsync();
@@ -64,10 +65,13 @@
     private void RecipeChanged(Recipe r) {
         _searchRecipe = r;
     }
+    private void TextChanged(string s) {
+        _searchRecipeText = s;
+    }
 
     private async Task<IEnumerable<Recipe>> SearchFunction(string inputString) {
-        return await _recipeService.GetRecipesAsync(r => r.Name.ToLower().Contains(_searchRecipe.Name)
-            || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(_searchRecipe.Name))
-            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchRecipe.Name)), _searchRecipe.Name);
+        return await _recipeService.GetRecipesAsync(r => r.Name.ToLower().Contains(_searchRecipeText)
+            || r.RecipeIngredients.Any(ri => ri.Name.ToLower().Contains(_searchRecipeText))
+            || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchRecipeText)), _searchRecipeText);
     }
 }

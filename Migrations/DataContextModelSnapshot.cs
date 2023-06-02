@@ -240,14 +240,14 @@ namespace RecipeAZ.Migrations
                         {
                             Id = "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "c7be70b1-025c-43fa-8b26-98b0bf6057c4",
+                            ConcurrencyStamp = "9ecc1cf4-344b-4c83-84ae-8221977feb0c",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAELUounx1QAcKIZs4pyT7Ic8QmBoBK+X89z9VSJlKuscFsPyR3gQtlVVhDYS9BX6MbQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEO6rq2qhuFPqIK9s61Modu74p05EhXJwxCsD0l1rTN8sCUxjskbJo37JUqcTwTtQzw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "83846a1b-089e-4693-9236-b1eaee5532ec",
+                            SecurityStamp = "965af0a3-5212-4bb2-89d9-e475ff123e51",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -315,14 +315,14 @@ namespace RecipeAZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Details")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("ImagePath")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -347,7 +347,11 @@ namespace RecipeAZ.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("Amount")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Details")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -356,10 +360,6 @@ namespace RecipeAZ.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

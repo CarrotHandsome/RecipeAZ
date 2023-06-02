@@ -6,8 +6,8 @@
     "BeforeId": "1",
     "AfterId": "1",
     "Name": "@1/some@ ingredient like tarka dal",
-    "Notes": "wf @1/Tarka Dal@dsfsdfs @1/tarka dal@",
-    "Amount": "1000 cups",
+    "Details": "wf @1/Tarka Dal@dsfsdfs @1/tarka dal@",
+    "Description": "1000 cups",
     "Order": 1
   },
   {
@@ -16,9 +16,9 @@
     "IngredientId": "1",
     "BeforeId": "1",
     "AfterId": "1",
-    "Name": "",
-    "Notes": "",
-    "Amount": "to cover",
+    "Name": "water",
+    "Details": "",
+    "Description": "to cover",
     "Order": 2
   },
   {
@@ -28,8 +28,8 @@
     "BeforeId": "1",
     "AfterId": "1",
     "Name": "Another ingredient",
-    "Notes": "Also an ingredient",
-    "Amount": "45",
+    "Details": "Also an ingredient",
+    "Description": "45",
     "Order": 2
   },
   {
@@ -39,8 +39,8 @@
     "BeforeId": "1",
     "AfterId": "1",
     "Name": "water",
-    "Notes": "",
-    "Amount": "",
+    "Details": "",
+    "Description": "",
     "Order": 1
   }
 ]
