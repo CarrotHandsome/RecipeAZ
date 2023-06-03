@@ -31,9 +31,8 @@
                     </MudItem>
                     <MudItem xs="12">
                         @foreach (RecipeTag recipeTag in FeaturedRecipe.RecipeTags) {
-                            <MudChip Size="Size.Small">
-                                <MudText>@recipeTag.Tag.Name</MudText>
-                            </MudChip>
+                            <TagChip Tag="@recipeTag.Tag" Removable="false" />
+                            
                         }
                     </MudItem>
                     <MudItem xs="12" Class="text-truncate-height">
@@ -49,11 +48,9 @@
 <p/>
 <div>
     <MudGrid>
-        @foreach (Tag tag in TopTags) {
+        @foreach (Tag tag in TopTags ?? new List<Tag>()) {
             <MudItem Class="pa-0">
-                <MudChip Size="Size.Medium" Color="Color.Success">
-                    <MudText>@tag.Name</MudText>
-                </MudChip>
+                <TagChip Tag="@tag" Size="Size.Medium" Color="Color.Success" />                
             </MudItem>            
         }
     </MudGrid>
@@ -144,9 +141,8 @@
                                 <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Success" />
                                 @recipe.UsersWhoLikeMe.Count
                                 @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
-                                    <MudChip Size="Size.Small">
-                                        <MudText>@recipeTag.Tag.Name</MudText>
-                                    </MudChip>
+                                    <TagChip Tag="@recipeTag.Tag" Size="Size.Small" />
+                                    
                                 }
                             </div>
 

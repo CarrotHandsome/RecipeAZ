@@ -89,14 +89,7 @@
             <MudItem Class="d-flex align-center flex-grow-1 gap-0">
                     @if (Recipe.RecipeTags != null) {
                         foreach (RecipeTag recipeTag in Recipe.RecipeTags.Where(rt => rt.Tag != null)) {
-                            <MudChip Size="Size.Small">
-                                <MudText>@recipeTag.Tag.Name</MudText>
-                                @if (CanEdit && Editing) {
-                                    <MudIconButton Icon="@Icons.Material.Outlined.Cancel"
-                                   Color="Color.Default" Size="Size.Small"
-                                   OnClick="@(() => HandleChipClose(recipeTag))" />
-                                }
-                            </MudChip>
+                            <TagChip Tag="@recipeTag.Tag" Removable="@(CanEdit && Editing)" HandleChipClose="HandleChipClose"/>
                         }
                     }
                     
@@ -121,6 +114,13 @@
                     />             
                 
                 <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@AddTag"/>
+                <div class="d-flex d-row">
+                    <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" 
+                        Size="Size.Large" OnClick="AddTag" />
+                    <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error" Size="Size.Large" @onclick="async () => {                       
+                        NewTagOpen = false;                        
+                    }" />
+                </div>
             </div>
         </MudPopover>
         

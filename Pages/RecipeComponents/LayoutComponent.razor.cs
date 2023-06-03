@@ -117,45 +117,20 @@ namespace RecipeAZ.Pages.RecipeComponents {
             Editing = editState;
             StateHasChanged();
         }
-        private async Task HandleChipClose(RecipeTag recipeTag) {
-            Recipe.RecipeTags.Remove(recipeTag);
-            await _recipeService.DataContext.SaveChangesAsync();   
+        private async Task HandleChipClose(Tag tag) {
+            RecipeTag rt = Recipe.RecipeTags.Where(t => t.Tag == tag).FirstOrDefault();
+            if (rt != null) {
+                Recipe.RecipeTags.Remove(rt);
+                await _recipeService.DataContext.SaveChangesAsync();
+            }            
         }
         private async Task AddTag() {
-            Console.WriteLine(NewTagName == null);
-            Console.WriteLine(NewTagName);
-            //if (!string.IsNullOrEmpty(NewTagName)) {
-            //    Console.WriteLine("adding tag");
-            //    Tag tagToAdd;
-            //    Tag existingTag;
-            //    using (var context = await _contextFactory.CreateDbContextAsync()) {
-            //        Console.WriteLine("finding existing tag");
-            //        existingTag = await context.Tags.FirstOrDefaultAsync(t => t.Name == TextProcessing.ToTitleCase(NewTagName));
-            //        if (existingTag == null) {
-            //            Console.WriteLine("no existing tag");
-            //            tagToAdd = new Tag { Name = TextProcessing.ToTitleCase(NewTagName) };
-            //            context.Tags.Add(tagToAdd);
-            //            await context.SaveChangesAsync();
-            //        } else {
-            //            Console.WriteLine("found existing tag");
-            //            tagToAdd = existingTag;
-            //        }
-            //    }
-            //    Console.WriteLine("Added tag or found existing one");
-            //    if (!_recipeService.DataContext.RecipeTags.Any(rt => rt.RecipeId == Id && rt.TagId == tagToAdd.TagId)) {
-            //        RecipeTag recipeTag = new RecipeTag { RecipeId = Recipe.RecipeId, TagId = tagToAdd.TagId };
-            //        //_recipeService.DataContext.RecipeTags.Add(recipeTag);
-            //        Recipe.RecipeTags.Add(recipeTag);
-            //        //await _recipeService.DataContext.SaveChangesAsync();
-
-            //    }
-            //    
-
-            //}
-            await _recipeService.AddTag(NewTagName);
-            StateHasChanged();
-            NewTagName = string.Empty;
-            NewTagOpen = false;
+            if (!string.IsNullOrEmpty(NewTagName)) {
+                await _recipeService.AddTag(NewTagName);
+                StateHasChanged();
+                NewTagName = string.Empty;
+                NewTagOpen = false;
+            }
         }
 
         private void NavigateToProfile(string userId) {
