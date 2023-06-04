@@ -1,4 +1,4 @@
-﻿@inject NavigationManager navigationManager
+﻿@inject NavigationManager _navigationManager
 @inject ISnackbar snackBar
 @inject IDialogService dialogService
 @inject RecipeAZ.Services.RecipeService _recipeService
@@ -50,8 +50,8 @@
     public AppUser? User { get; set; }
     private bool ActionsVisible { get; set; }
 
-    private ItemListComponent<RecipeIngredient>? _ingredientsRef;
-    private ItemListComponent<RecipeStep>? _stepsRef;
+    private ItemListComponent<RecipeIngredient> _ingredientsRef = new ItemListComponent<RecipeIngredient>();
+    private ItemListComponent<RecipeStep> _stepsRef = new ItemListComponent<RecipeStep>();
     public string? _button;    
 
     public void NavigateHandler(string button) {
@@ -83,14 +83,14 @@
 
     private async Task RemoveRecipeAsync() {
 
-        if (Recipe.RecipeId == null) {
+        if (Recipe?.RecipeId == null) {
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
             snackBar.Configuration.VisibleStateDuration = 400;
             snackBar.Configuration.ShowTransitionDuration = 300;
             snackBar.Add("Recipe has not been saved yet.", MudBlazor.Severity.Warning);
         } else {
             await _recipeService.RemoveRecipe(Recipe);
-            navigationManager.NavigateTo($"/profile/{User.Id}");
+            _navigationManager.NavigateTo($"/profile/{User?.Id}");
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
             snackBar.Configuration.VisibleStateDuration = 500;
             snackBar.Configuration.ShowTransitionDuration = 300;
@@ -117,9 +117,15 @@
             ImagePath = Recipe.ImagePath,
             ParentRecipeId = Recipe.RecipeId,
             ChildRecipes = new List<Recipe>(),
-            RecipeTags = Recipe.RecipeTags
+            RecipeTags = new List<RecipeTag>()
 
         };
+        foreach (RecipeTag rt in Recipe.RecipeTags) {
+            copy.RecipeTags.Add(new RecipeTag {
+                Recipe = copy,
+                TagId = rt.TagId
+            });
+        }
         copy.RecipeSteps = new List<RecipeStep>();
         foreach (RecipeStep step in Recipe.RecipeSteps) {
             RecipeStep copyStep = new RecipeStep {
@@ -130,6 +136,7 @@
                 Order = step.Order
             };
             copy.RecipeSteps.Add(copyStep);
+            Console.WriteLine($"step:{copyStep.Description}");
         }
         copy.RecipeIngredients = new List<RecipeIngredient>();
         foreach (RecipeIngredient ri in Recipe.RecipeIngredients) {
@@ -141,17 +148,22 @@
                     Order = ri.Order
                 };
             copy.RecipeIngredients.Add(copyIngredient);
+            Console.WriteLine($"ingredient:{copyIngredient.Name}");
         }
         User.Recipes.Add(copy);
 
+        Console.WriteLine("creating context and updating");
         using (var context = await _contextFactory.CreateDbContextAsync()) {
-            context.Users.Update(User);
+            Console.WriteLine("created context");
             try {
+                context.Users.Update(User);
+                Console.WriteLine("attempting to update context");
+            
                 Console.WriteLine("adding to datacontext");
                 await context.Recipes.AddAsync(copy);
                 await context.SaveChangesAsync();
                 Console.WriteLine(copy.RecipeId);
-                navigationManager.NavigateTo($"/recipe/{copy.RecipeId}", true);
+                _navigationManager.NavigateTo($"/recipe/{copy.RecipeId}", true);
                 //StateHasChanged();
             } catch (Exception e) {
                 Console.WriteLine(e);

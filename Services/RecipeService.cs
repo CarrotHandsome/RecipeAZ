@@ -29,6 +29,7 @@ namespace RecipeAZ.Services {
                 .Include(r => r.RecipeTags)
                     .ThenInclude(rt => rt.Tag)
                 .Include(r => r.ParentRecipe)
+                    .ThenInclude(p => p.User)
                 .FirstOrDefaultAsync(r => r.RecipeId == id);
             } catch(Exception e) {
                 Console.WriteLine("EXCEPTION: " + e);
