@@ -18,10 +18,6 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace RecipeAZ.Pages {
     public partial class Browse {
-       
-
-
-
         protected override async Task OnInitializedAsync() {
             await base.OnInitializedAsync();
 
@@ -54,38 +50,26 @@ namespace RecipeAZ.Pages {
 
         private async Task UpdateRecipes() {
             _recipes = await SearchResults();
-            foreach(Tag r in _tagsFilter) {
-                Console.WriteLine($"FILTER: {r.Name}");
-            }
-            foreach (Recipe r in _recipes) {
-                Console.WriteLine(r.Name);
-                foreach (RecipeTag rt in r.RecipeTags) {
-                    Console.WriteLine(rt.Tag.Name);
-                }
-                Console.WriteLine($"{r.RecipeTags.Any(rt => _tagsFilter.Contains(rt.Tag))}");
-            }
+            
             _recipes = _recipes.Where(r =>
                 (_tagsFilter.Any() ? _tagsFilter.All(tag => r.RecipeTags.Any(rt => rt.Tag.TagId == tag.TagId)) : true) &&
                 (_ingredientsFilter.Any() ? _ingredientsFilter.All(ingredient => r.RecipeIngredients.Any(ri => ri.Ingredient.IngredientId == ingredient.IngredientId)) : true)
             ).ToList();
 
-
-            foreach (Recipe r in _recipes) {
-                Console.WriteLine($"AFTER FILTER: {r.Name}");
-            }
             StateHasChanged();
 
         }
         private async Task<List<Recipe>> SearchResults() {
             {
-                List<Recipe> recipes = await _recipeService.GetRecipesAsync(
-                    
-                    (r => r.Name.ToLower().Contains(_searchText.ToLower())
-                || r.RecipeIngredients.Any(ri => ri.Ingredient.Name.ToLower().Contains(_searchText.ToLower()))
-                || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) || string.IsNullOrEmpty(_searchText.ToLower())),
-                _searchText, -1);
+                Console.WriteLine("SEARCH TEXT: " + _searchText);
+                List<Recipe> recipes = await _recipeService.GetRecipesAsync(r => 
+                    r.Name.ToLower().Contains(_searchText.ToLower())
+                    || r.RecipeIngredients.Any(ri => ri.Ingredient.Name.ToLower().Contains(_searchText.ToLower()))
+                    || r.RecipeTags.Any(rt => rt.Tag.Name.ToLower().Contains(_searchText)) 
+                    || string.IsNullOrEmpty(_searchText.ToLower()),
+                    _searchText, -1);
 
-                switch (orderIconIndex % _orderIconOptions.Length) {
+                switch (_orderIconIndex % _orderIconOptions.Length) {
                     case 0:
                         if (ResultsAscending) {
                             recipes = recipes.OrderBy(r => r.Name).ToList();
@@ -203,7 +187,7 @@ namespace RecipeAZ.Pages {
         }
 
         private async Task ChangeOrderIcon() {
-            orderIconIndex++;
+            _orderIconIndex++;
             _recipes = await SearchResults();
             StateHasChanged();
         }

@@ -13,14 +13,14 @@
     <TextLinkMixComponent Text="@_recipeService.Recipe?.Details" />
     @if (CanEdit && Editing) {
         <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
-            OriginalDetails = Recipe?.Details ?? string.Empty;    
-            DetailsEditOpen = true;                
+            _originalDetails = Recipe?.Details ?? string.Empty;    
+            _detailsEditOpen = true;                
         }" />
     }
     
 </div>
 @if (_recipeService.Recipe != null) {
-    <MudPopover Open="@DetailsEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft"
+    <MudPopover Open="@_detailsEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft"
         Style="width:300px;height:490px"
     >
         <div class="d-flex flex-column">
@@ -31,11 +31,11 @@
                     @onclick="async () => await OnSearchLinkClick(_textId)" />
                 Don't forget to save your recipe!
                 <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Size="Size.Large" Color="Color.Success" @onclick="async () => {
-                    DetailsEditOpen = false;
+                    _detailsEditOpen = false;
                 }" />
                 <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Size="Size.Large" Color="Color.Error" @onclick="async () => {
-                    _recipeService.Recipe.Details = OriginalDetails;
-                    DetailsEditOpen = false;                    
+                    _recipeService.Recipe.Details = _originalDetails;
+                    _detailsEditOpen = false;                    
                 }" />
             </div>            
         </div>
@@ -51,8 +51,8 @@
     public bool CanEdit { get; set; }
     [CascadingParameter(Name = "EditingParam")]
     public bool Editing { get; set; }
-    private string OriginalDetails { get; set; } = string.Empty;
-    private bool DetailsEditOpen = false;
+    private string _originalDetails { get; set; } = string.Empty;
+    private bool _detailsEditOpen = false;
     private bool _searchLinkOpen = false;
     private int _cursorStart;
     private int _cursorEnd;

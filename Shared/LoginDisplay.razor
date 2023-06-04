@@ -1,14 +1,17 @@
 ﻿@inject NavigationManager navigationManager
 <AuthorizeView>
     <Authorized>
-        <MudAvatar Color="Color.Warning" Class="clickable" @onclick="() => GoToProfile()">@context.User.Identity?.Name!.Substring(0, 1).ToUpper()</MudAvatar>
+        <MudAvatar Color="Color.Warning" Class="clickable" 
+            @onclick="() => GoToProfile()">@context.User.Identity?.Name!.Substring(0, 1).ToUpper()</MudAvatar>
         <form method="POST" action="/Account/Logout">            
             <button type="submit" class="nav-link btn btn-link" style="color:black">Logout</button>
         </form>
     </Authorized>
     <NotAuthorized>
-        <a href="/Account/Register" style="margin-right: 5px;">Register</a>|
-        <a href="/Account/Login" style="margin-left: 5px;">Log in</a>
+        <div style="min-width:10em;border-style:dashed;border:1px 1px 1px 1px;">
+            <a href="/Account/Register" style="margin-right: 10px;">Register</a>|
+            <a href="/Account/Login" >Log in</a>
+        </div>        
     </NotAuthorized>
 </AuthorizeView>
 

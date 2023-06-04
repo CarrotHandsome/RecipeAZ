@@ -49,14 +49,14 @@
     public AppUser User { get; set; }
     [CascadingParameter(Name="ContextParam")]
     public DataContext _dataContext { get; set; }
+    private bool ActionsVisible { get; set; }
 
     private ItemListComponent<RecipeIngredient>? _ingredientsRef;
     private ItemListComponent<RecipeStep>? _stepsRef;
-    public string? button;
-    private bool ActionsVisible { get; set; }
+    public string? _button;    
 
     public void NavigateHandler(string button) {
-        this.button = button;
+        this._button = button;
     }
 
     private async Task OnEditClick() {

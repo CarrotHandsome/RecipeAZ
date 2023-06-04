@@ -9,7 +9,6 @@ namespace RecipeAZ.Pages.RecipeComponents {
     public partial class IngredientsComponent {
         protected override async Task OnInitializedAsync() {
             await base.OnInitializedAsync();
-            //DataContext = await _contextFactory.CreateDbContextAsync();
             if (ItemRecipe != null && ItemRecipe.RecipeIngredients != null) {
                 foreach (RecipeIngredient ri in ItemRecipe!.RecipeIngredients!) {
                     detailsOpen[ri] = false;
@@ -31,8 +30,6 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 Name = name,
                 RecipeIngredients = new List<RecipeIngredient> { ri }
             };
-            
-            //DataContext.Ingredients.Add(ingredient);
             return ingredient;
         }
 

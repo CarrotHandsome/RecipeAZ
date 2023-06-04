@@ -16,17 +16,17 @@ namespace RecipeAZ.Pages.RecipeComponents {
             _typeName = typeof(ItemType).Name;
             if (ItemRecipe != null) {
                 foreach (ItemType ri in ItemRecipe!.GetItems<ItemType>()!) {
-                    detailsOpen[ri] = false;
+                    _detailsOpen[ri] = false;
                 }
             }
-            AllItems = _typeName == "RecipeIngredient" ? await _recipeService.GetAllIngredientNames() : new();
+            _allItems = _typeName == "RecipeIngredient" ? await _recipeService.GetAllIngredientNames() : new();
             _typeNameSimple = _typeName == "RecipeIngredient" ? "ingredient" : "step";
             
         }
 
         private async Task AddItem(IEditableListItem<ItemType> ri) {
             await _recipeService.AddItem(ri);
-            detailsOpen[ri] = ri.Details != string.Empty;
+            _detailsOpen[ri] = ri.Details != string.Empty;
             ShowNewItemInput = false;
             LastItem = new ItemType();
             StateHasChanged();

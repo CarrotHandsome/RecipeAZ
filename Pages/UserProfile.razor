@@ -29,12 +29,9 @@
                         <h5 class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))">@recipe.Name</h5>
                         <div>@recipe.CreatedAt</div>
                         @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
-                            <MudChip Size="Size.Small" Color="Color.Success">
-                                <MudText>@recipeTag.Tag.Name</MudText>
-                            </MudChip>
-                        }                    
-                        
-                        
+                            <TagChip Tag="@recipeTag.Tag" Color="Color.Success" />                            
+                        }
+
                         <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Error" />
 
                         @recipe.UsersWhoLikeMe.Count
@@ -45,8 +42,6 @@
                         </div>
                     </MudItem>
                 </MudGrid>
-                
-
             </MudListItem>
         }
     </MudList>

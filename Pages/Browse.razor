@@ -95,20 +95,20 @@
 
     [Parameter]
     public string Terms { get; set; } = string.Empty;
-    private string _searchText = string.Empty;
+  
     public string TagFilterSearchText { get; set; } = string.Empty;
     public string IngredientFilterSearchText { get; set; } = string.Empty;
-
     public bool ResultsAscending { get; set; } = true;
+
+    private string _searchText = string.Empty;
     private string[] _orderIconOptions = { Icons.Material.Filled.SortByAlpha, Icons.Material.Filled.CalendarMonth, Icons.Material.Filled.Favorite };
-    private int orderIconIndex = 0;
-    private string CurrentIcon => _orderIconOptions[orderIconIndex % _orderIconOptions.Length];
+    private int _orderIconIndex = 0;
+    private string CurrentIcon => _orderIconOptions[_orderIconIndex % _orderIconOptions.Length];
     private List<Recipe>? _recipes = new();
     private int _rowsPerPage = 15;
     
     private List<Tag> _tagsFilter = new();
     private List<Ingredient> _ingredientsFilter = new();
-    private string tagName;
-    private string ingName;
+    
     
 }

@@ -14,11 +14,11 @@
 @inject RecipeAZ.Services.RecipeService _recipeService
 
 <div style="background-color:white;padding:16px;border-radius:10px;">
-    @if (Recipe != null) {
+    @if (_recipe != null) {
         <div class="d-flex d-row" >
             <div style="min-width:400px;border-style:solid;border-width:1px 0px 1px 1px;border-radius:10px;padding:14px;border-color:#fac951" 
                  >
-                <MudImage Src="@Recipe.ImagePath" Height="200" />
+                <MudImage Src="@_recipe.ImagePath" Height="200" Class="rounded-lg"/>
                 @if(CanEdit && Editing) {
                     
                         <MudFileUpload T="IBrowserFile" 
@@ -69,13 +69,13 @@
     <div class="view-recipe-container m-2">
         <MudGrid>
             <MudItem Class="pr-1">
-                <h3 style="margin-top: 0.5rem; margin-bottom: 0; margin-right: 0;">@Recipe.Name</h3>
+                <h3 style="margin-top: 0.5rem; margin-bottom: 0; margin-right: 0;">@_recipe.Name</h3>
             </MudItem>
             @if (CanEdit && Editing) {
                 <MudItem Class="pl-0">
                     <MudIconButton Icon="@Icons.Material.Filled.Edit" Size="Size.Small" @onclick="() => {
-                        OriginalTitle = Recipe?.Name ?? string.Empty;
-                        titleEditOpen = true;
+                        OriginalTitle = _recipe?.Name ?? string.Empty;
+                        TitleEditOpen = true;
                     }" style="margin-top: 0.75rem;" />
                 </MudItem>
             }
@@ -87,14 +87,14 @@
                     ToggledChanged="ToggleLike" />
             </MudItem>
             <MudItem Class="d-flex align-center flex-grow-1 gap-0">
-                    @if (Recipe.RecipeTags != null) {
-                        foreach (RecipeTag recipeTag in Recipe.RecipeTags.Where(rt => rt.Tag != null)) {
+                    @if (_recipe.RecipeTags != null) {
+                        foreach (RecipeTag recipeTag in _recipe.RecipeTags.Where(rt => rt.Tag != null)) {
                             <TagChip Tag="@recipeTag.Tag" Removable="@(CanEdit && Editing)" HandleChipClose="HandleChipClose"/>
                         }
                     }
                     
             </MudItem>
-            @if (CanEdit && Editing && Recipe.RecipeTags.Count < maxTags) {
+            @if (CanEdit && Editing && _recipe.RecipeTags.Count < _maxTags) {
                 <MudItem Class="d-flex align-center flex-grow-1 gap-4">
                     <MudButton Size="Size.Small" Variant="Variant.Outlined"
                        @onclick="() => { NewTagOpen = true; }"
@@ -124,17 +124,17 @@
             </div>
         </MudPopover>
         
-        <MudPopover Open="@titleEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft">
+        <MudPopover Open="@TitleEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft">
             <div class="d-flex flex-column">
-                <MudTextField @bind-Value="Recipe.Name" Variant="Variant.Text" Lines="1" Label="Recipe Title"></MudTextField>
+                <MudTextField @bind-Value="_recipe.Name" Variant="Variant.Text" Lines="1" Label="Recipe Title"></MudTextField>
                 <div class="d-flex d-row">
                     <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="async () => {
-                        titleEditOpen = false;
+                        TitleEditOpen = false;
                         StateHasChanged();
                     }" />
                     <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error" Size="Size.Large" @onclick="async () => {
-                        Recipe.Name = OriginalTitle;
-                        titleEditOpen = false;
+                        _recipe.Name = OriginalTitle;
+                        TitleEditOpen = false;
                         StateHasChanged();
                     }" />
                 </div>
@@ -143,7 +143,7 @@
         </MudPopover>
 
         <div class="recipe-halves">            
-            <CascadingValue Value="@Recipe" Name="RecipeParam">   
+            <CascadingValue Value="@_recipe" Name="RecipeParam">   
                 <CascadingValue Value="@CanEdit" Name="CanEditParam">
                     <CascadingValue Value="@Editing" Name="EditingParam" >
                             <div style="border-style:solid;border-width:0px 0px 1px 0px;border-radius:15px;border-color:#fac951">
@@ -158,8 +158,8 @@
         </div>       
     </div>
     <div>
-        @if (Recipe.ParentRecipe != null) {
-            <div @onclick="() => NavigateToParent()" class="clickable">Originally copied from @Recipe.ParentRecipe.Name by @Recipe.ParentRecipe.User.UserName</div>
+        @if (_recipe.ParentRecipe != null) {
+            <div @onclick="() => NavigateToParent()" class="clickable">Originally copied from @_recipe.ParentRecipe.Name by @_recipe.ParentRecipe.User.UserName</div>
         } 
         </div>
 } else {
@@ -171,8 +171,7 @@
     [CascadingParameter(Name= "UserParam")]
     protected AppUser? User { get; set; }
     [Parameter]
-    public string? Id { get; set; }        
-    private Recipe? Recipe;
+    public string? Id { get; set; }    
 
     public bool Liked { get; set; }
     private bool CanEdit { get; set; } = false; //logged in user is owner of recipe
@@ -180,9 +179,11 @@
     private bool NewTagOpen { get; set; } = false;
     private string NewTagName { get; set; } = string.Empty;
     private string OriginalTitle { get; set; } = string.Empty;
-    //private string? UserId { get; set; }
-    private int maxTags = 5;
-    private bool titleEditOpen { get; set; } = false;
+    private bool TitleEditOpen { get; set; } = false;
+    
+    private Recipe? _recipe;
+    private int _maxTags = 5;
+    
     public DataContext _dataContext;
     private Dictionary<Recipe, int> _relatedRecipesWeighted;
 
@@ -193,6 +194,6 @@
     }
 
     private void NavigateToParent() {
-        navigationManager.NavigateTo($"/recipe/{ Recipe.ParentRecipeId }", true);
+        navigationManager.NavigateTo($"/recipe/{ _recipe.ParentRecipeId }", true);
     }    
 }

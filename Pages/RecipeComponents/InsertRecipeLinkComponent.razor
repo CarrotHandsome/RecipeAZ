@@ -21,8 +21,7 @@
 </MudPopover>
 
 @code {
-    //[CascadingParameter(Name="RecipeParam")]
-    //public Recipe? Recipe { get; set; }
+
     [Parameter]
     public int CursorStart { get; set; }
     [Parameter]
@@ -35,9 +34,11 @@
     public EventCallback<string> OnLinkAdded { get; set; }
     [Parameter]
     public EventCallback OnClose { get; set; }
+    
     private Recipe? _searchRecipe;
     private string _searchRecipeText = string.Empty;
     private string _linkText;
+
     protected override async Task OnParametersSetAsync() {
         base.OnParametersSetAsync();
         Console.WriteLine(Text == null);

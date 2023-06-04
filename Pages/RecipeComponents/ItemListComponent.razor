@@ -36,14 +36,14 @@
                                     Size="Size.Small"
                                     aria-label="edit"
                                     @onclick="() => {
-                                        tempItem = new ItemType {
+                                        _tempItem = new ItemType {
                                             Name = context.Name,
                                             Description = context.Description,                                            
                                             Recipe = context.Recipe,
                                             Details = context.Details,
                                             Order = context.Order
                                         };
-                                    editingItem = context;
+                                    _editingItem = context;
                                     _itemEditOpen = true;
                                 }" />
                             }
@@ -61,13 +61,13 @@
                                 }                                
                             </div>
 
-                             <MudToggleIconButton @bind-Toggled="detailsOpen[context]"
+                             <MudToggleIconButton @bind-Toggled="_detailsOpen[context]"
                                 Icon="@DetailsToggleIcon(context)"
                                 ToggledIcon="@Icons.Material.Filled.ExpandMore"
                                 Color="Color.Success"
                                 Disabled="@string.IsNullOrEmpty(context.Details)" />
                         </div>
-                        @if (detailsOpen.ContainsKey(context) && detailsOpen[context]) {
+                        @if (_detailsOpen.ContainsKey(context) && _detailsOpen[context]) {
                             <MudItem xs="12">
                                 <MudPaper Class="pl-2" Elevation="0" Style="font-style:italic;">
                                     <TextLinkMixComponent Text="@context.Details" />
@@ -107,39 +107,39 @@
             <div class="d-flex d-row">
                 @if (_typeName == "RecipeIngredient") {
                     <MudAutocomplete T="string" Label="@NameYourItem" id="@_nameId"
-                        Value="tempItem.Name" TextChanged="UpdateEditingItem"
+                        Value="_tempItem.Name" TextChanged="UpdateEditingItem"
                         CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"                             
                         SearchFunc="FindItemMatchesSearchFunc" />
                 <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch"
                     Title="Insert link to another recipe"
                     @onclick="async () => {
-                        _editText = tempItem.Name;
-                        CurrentEditAction = new Action<string>((newText) => tempItem.Name = newText);
+                        _editText = _tempItem.Name;
+                        CurrentEditAction = new Action<string>((newText) => _tempItem.Name = newText);
                         await OnSearchLinkClick(_nameId);
                     }" />                    
                 }
                 
             </div>
             <div class="d-flex d-row">
-                <MudTextField @bind-Value="tempItem.Description" Lines="1" id="@_descriptionId" Label="@Description"/>
+                <MudTextField @bind-Value="_tempItem.Description" Lines="1" id="@_descriptionId" Label="@Description"/>
                 @if (_typeName == "RecipeStep") {
                     <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch"
                         Title="Insert link to another recipe"
                         @onclick="async () => {
-                            _editText = tempItem.Description;
-                            CurrentEditAction = new Action<string>((newText) => tempItem.Description = newText);
+                            _editText = _tempItem.Description;
+                            CurrentEditAction = new Action<string>((newText) => _tempItem.Description = newText);
                             await OnSearchLinkClick(_descriptionId);
                         }" />
                 }
             </div>    
 
             <div class="d-flex d-row">
-                <MudTextField @bind-Value="tempItem.Details" Lines="5" id="@_detailsId" />
+                <MudTextField @bind-Value="_tempItem.Details" Lines="5" id="@_detailsId" />
                 <MudIconButton Icon="@Icons.Material.Filled.ContentPasteSearch"
                     Title="Insert link to another recipe"
                     @onclick="async () => {
-                        _editText = tempItem.Details;
-                        CurrentEditAction = new Action<string>((newText) => tempItem.Details = newText);
+                        _editText = _tempItem.Details;
+                        CurrentEditAction = new Action<string>((newText) => _tempItem.Details = newText);
                         await OnSearchLinkClick(_detailsId);
                     }" />
             </div>
@@ -147,19 +147,19 @@
             <div class="d-flex d-row">
                 Dont forget to save your recipe!
                 <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" Size="Size.Large" @onclick="() => {
-                    editingItem.Name = tempItem.Name;
-                    editingItem.Details = tempItem.Details;
-                    editingItem.Description = tempItem.Description;
-                    editingItem.Order = tempItem.Order;
-                    editingItem.Recipe = tempItem.Recipe;
+                    _editingItem.Name = _tempItem.Name;
+                    _editingItem.Details = _tempItem.Details;
+                    _editingItem.Description = _tempItem.Description;
+                    _editingItem.Order = _tempItem.Order;
+                    _editingItem.Recipe = _tempItem.Recipe;
 
                     _itemEditOpen = false;
                     //AddItem(editingItem);
 
                 }" />
                 <MudIconButton Icon="@Icons.Material.Filled.Cancel" Class="ml-0 mr-0 mb-1" Color="Color.Error" Size="Size.Large" @onclick="async () => {
-                    editingItem = tempItem;
-                    tempItem = null;
+                    _editingItem = _tempItem;
+                    _tempItem = null;
                     _itemEditOpen = false;
                     StateHasChanged();
                 }" />
@@ -179,30 +179,25 @@
     public bool CannotAddItem => LastItem == null;
     [Parameter]
     public Type? Type { get; set; }
+    public List<IEditableListItem<ItemType>> ItemsList => ItemRecipe.GetItems<ItemType>();
+    public IEditableListItem<ItemType> LastItem { get; set; } = new ItemType();
 
+    private Action<string> CurrentEditAction { get; set; }
+    private bool ShowNewItemInput { get; set; } = false;
     private string NameYourItem => $"name your {_typeNameSimple}";
     private string NewItem => $"new {_typeNameSimple}";
     private string Description => _typeName == "RecipeIngredient" ? "amount" : "describe the step";
+    private bool IsItemDisabled(IEditableListItem<ItemType> i) => !CanEdit || !Editing;
 
     private string _typeName;
     private string _typeNameSimple;
-
-    private bool IsItemDisabled(IEditableListItem<ItemType> i) => !CanEdit || !Editing;
-    private bool ShowNewItemInput { get; set; } = false;
-    private Action<string> CurrentEditAction { get; set; }
-    private Dictionary<IEditableListItem<ItemType>, bool> detailsOpen = new Dictionary<IEditableListItem<ItemType>, bool>();
+    private Dictionary<IEditableListItem<ItemType>, bool> _detailsOpen = new Dictionary<IEditableListItem<ItemType>, bool>();
     private bool _itemEditOpen = false;
-    //[Parameter]
-    //public Expression<Func<IEditableListItem<ItemType>, bool>> 
-    public List<IEditableListItem<ItemType>> ItemsList => ItemRecipe.GetItems<ItemType>();
-    public IEditableListItem<ItemType> LastItem { get; set; } = new ItemType();
-    private IEditableListItem<ItemType>? editingItem;
-    private IEditableListItem<ItemType>? tempItem;
-    private int editingItemIndex;
-    private List<string> AllItems = new();
-
+    private IEditableListItem<ItemType>? _editingItem;
+    private IEditableListItem<ItemType>? _tempItem;
+    private int _editingItemIndex;
+    private List<string> _allItems = new();
     private bool _searchLinkOpen = false;
-
     private int _cursorStart;
     private int _cursorEnd;
     private string _nameId = "linkable-item-name";
@@ -214,7 +209,7 @@
         LastItem.Name = value;
     }
     private void UpdateEditingItem(string value) {
-        tempItem.Name = value;
+        _tempItem.Name = value;
     }
 
     private string DetailsToggleIcon(IEditableListItem<ItemType> ri) {
