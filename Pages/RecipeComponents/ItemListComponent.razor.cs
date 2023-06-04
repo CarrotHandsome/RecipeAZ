@@ -10,8 +10,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
     public partial class ItemListComponent<ItemType> where ItemType : IEditableListItem<ItemType>, new() {
 
         protected override async Task OnInitializedAsync() { 
-            await base.OnInitializedAsync();
-            
+            await base.OnInitializedAsync();           
             
             _typeName = typeof(ItemType).Name;
             if (ItemRecipe != null) {
@@ -20,16 +19,19 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 }
             }
             _allItems = _typeName == "RecipeIngredient" ? await _recipeService.GetAllIngredientNames() : new();
-            _typeNameSimple = _typeName == "RecipeIngredient" ? "ingredient" : "step";
-            
+            _typeNameSimple = _typeName == "RecipeIngredient" ? "ingredient" : "step";            
         }
-
         private async Task AddItem(IEditableListItem<ItemType> ri) {
             await _recipeService.AddItem(ri);
-            _detailsOpen[ri] = ri.Details != string.Empty;
+            if (_detailsOpen.ContainsKey(ri)) {
+                _detailsOpen[ri] = ri.Details != string.Empty;
+            } else {
+                _detailsOpen.Add(ri, ri.Details != string.Empty);
+            }
+            
             ShowNewItemInput = false;
             LastItem = new ItemType();
-            StateHasChanged();
+            
         }
         public void ItemDropUpdateOrder<T>(MudItemDropInfo<IEditableListItem<T>> dropItem) where T : new() {
             

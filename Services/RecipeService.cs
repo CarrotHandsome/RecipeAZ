@@ -16,9 +16,10 @@ namespace RecipeAZ.Services {
         }
         public async Task<Recipe> GetRecipeAsync(string id) {
             Console.WriteLine($"Getting recipe from Id {id}");
-            return await DataContext.Recipes
+            try {
+                return await DataContext.Recipes
                 .Include(r => r.RecipeIngredients)
-                    .ThenInclude(ri => ri.Ingredient)                
+                    .ThenInclude(ri => ri.Ingredient)
                 .Include(r => r.RecipeSteps)
                 .Include(r => r.User)
                     .ThenInclude(u => u.RecipesILike)
@@ -29,6 +30,11 @@ namespace RecipeAZ.Services {
                     .ThenInclude(rt => rt.Tag)
                 .Include(r => r.ParentRecipe)
                 .FirstOrDefaultAsync(r => r.RecipeId == id);
+            } catch(Exception e) {
+                Console.WriteLine("EXCEPTION: " + e);
+                return new();
+            }
+            
         }
         public async Task<Recipe> LoadRecipeAsync(string id, AppUser user) {
             Console.WriteLine($"Loading Recipe");
@@ -90,7 +96,7 @@ namespace RecipeAZ.Services {
         }
         public async Task<List<string>> GetAllIngredientNames() {
             Console.WriteLine("Getting all ingredient names");
-            return DataContext.Ingredients.Select(i => i.Name).ToList();
+            return await DataContext.Ingredients.Select(i => i.Name).ToListAsync();
         }
         public async Task<bool> DoesIngredientExist(string name) {
             Console.WriteLine($"Does ingredient exist: {name}?");
@@ -127,7 +133,7 @@ namespace RecipeAZ.Services {
 
         public async Task AddRecipeIngredient(RecipeIngredient ri) {
             Console.WriteLine("Adding RI");
-            Ingredient existingIngredient = DataContext.Ingredients.FirstOrDefault(i => i.Name == ri.Name);
+            Ingredient existingIngredient = await DataContext.Ingredients.FirstOrDefaultAsync(i => i.Name == ri.Name);
             if (existingIngredient == null) {
                 ri.Ingredient = new Ingredient {
                     Name = ri.Name
@@ -142,7 +148,7 @@ namespace RecipeAZ.Services {
         public async Task RemoveRecipeIngredient(RecipeIngredient ri) {
             Console.WriteLine("Removing RI");
             //List<RecipeIngredient> befores = DataContext.RecipeIngredients.Where(before => before.RecipeId == ri.RecipeId && ri.Order > before.Order).ToList();
-            List<RecipeIngredient> afters = DataContext.RecipeIngredients.Where(after => after.RecipeId == ri.RecipeId && ri.Order < after.Order).ToList();
+            List<RecipeIngredient> afters = await DataContext.RecipeIngredients.Where(after => after.RecipeId == ri.RecipeId && ri.Order < after.Order).ToListAsync();
             foreach (RecipeIngredient after in afters) {
                 after.Order = after.Order - 1;
             }
@@ -154,19 +160,23 @@ namespace RecipeAZ.Services {
 
         public async Task AddRecipeStep(RecipeStep rs) {
             Console.WriteLine("Adding RS");
-            RecipeStep newStep = new RecipeStep {
-                Name = rs.Name,
-                Description = rs.Description,
-                Details = rs.Details,
-                Recipe = rs.Recipe
-            };
-            newStep.Order = rs.Recipe.RecipeSteps.Count() + 1;
-            rs.Recipe!.RecipeSteps!.Add(newStep);
-            
+            try {
+                RecipeStep newStep = new RecipeStep {
+                    Name = rs.Name ?? string.Empty,
+                    Description = rs.Description ?? "Description",
+                    Details = rs.Details ?? "Details",
+                    Recipe = Recipe
+                };
+                Console.WriteLine($"rs null:{rs == null}, Recipe null:{rs?.Recipe == null}, RecipeSteps null:{rs?.Recipe?.RecipeSteps == null}");
+                newStep.Order = Recipe.RecipeSteps.Count() + 1;
+                Recipe!.RecipeSteps!.Add(newStep);
+            } catch (Exception e) {
+                Console.WriteLine("EXCEPTION: " + e);
+            }
         }
         public async Task RemoveRecipeStep(Recipe recipe, RecipeStep rs) {
             Console.WriteLine("Removing RS");
-            List<RecipeStep> afters = DataContext.RecipeSteps.Where(after => after.RecipeId == rs.RecipeId && rs.Order < after.Order).ToList();
+            List<RecipeStep> afters = await DataContext.RecipeSteps.Where(after => after.RecipeId == rs.RecipeId && rs.Order < after.Order).ToListAsync();
             foreach (RecipeStep after in afters) {
                 after.Order = after.Order - 1;
             }

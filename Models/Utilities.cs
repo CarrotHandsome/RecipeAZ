@@ -58,7 +58,7 @@ namespace RecipeAZ.Models {
             foreach (Match match in matches) {
                 string matchValue = match.Value;
                 bool isId = matchValue.StartsWith("@") && matchValue.EndsWith("@");
-                string afterSlash = null;
+                string? afterSlash = null;
 
                 if (isId) {
                     // Strip the '@' characters from the start and end.

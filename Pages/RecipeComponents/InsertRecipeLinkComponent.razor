@@ -29,7 +29,7 @@
     [Parameter]
     public bool SearchOpen { get; set; }
     [Parameter]
-    public string Text { get; set; }
+    public string? Text { get; set; }
     [Parameter]
     public EventCallback<string> OnLinkAdded { get; set; }
     [Parameter]
@@ -37,10 +37,10 @@
     
     private Recipe? _searchRecipe;
     private string _searchRecipeText = string.Empty;
-    private string _linkText;
+    private string? _linkText;
 
     protected override async Task OnParametersSetAsync() {
-        base.OnParametersSetAsync();
+        await base.OnParametersSetAsync();
         Console.WriteLine(Text == null);
         _linkText = Text.Substring(CursorStart, CursorEnd - CursorStart);        
     }

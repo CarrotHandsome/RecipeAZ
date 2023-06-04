@@ -2,6 +2,7 @@
 @inject ISnackbar snackBar
 @inject IDialogService dialogService
 @inject RecipeAZ.Services.RecipeService _recipeService
+@inject IDbContextFactory<DataContext> _contextFactory
 
 <MudPaper Class="ml-0 pl-0" Elevation="0">
     <MudGrid Spacing="0">
@@ -34,7 +35,7 @@
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public string? Id { get; set; }
 
     [Parameter]
     public EventCallback<bool> OnEditUpdate { get; set; }
@@ -44,11 +45,9 @@
     [CascadingParameter(Name = "CanEditParam")]
     protected bool CanEdit { get; set; }
     [CascadingParameter(Name = "RecipeParam")]
-    public Recipe Recipe { get; set; }
+    public Recipe? Recipe { get; set; }
     [CascadingParameter(Name = "UserParam")]
-    public AppUser User { get; set; }
-    [CascadingParameter(Name="ContextParam")]
-    public DataContext _dataContext { get; set; }
+    public AppUser? User { get; set; }
     private bool ActionsVisible { get; set; }
 
     private ItemListComponent<RecipeIngredient>? _ingredientsRef;
@@ -144,17 +143,20 @@
             copy.RecipeIngredients.Add(copyIngredient);
         }
         User.Recipes.Add(copy);
-        _dataContext.Users.Update(User);
-        try {
-            Console.WriteLine("adding to datacontext");
-            await _dataContext.Recipes.AddAsync(copy);
-            await _dataContext.SaveChangesAsync();
-            Console.WriteLine(copy.RecipeId);
-            navigationManager.NavigateTo($"/recipe/{copy.RecipeId}", true);
-            //StateHasChanged();
-        } catch(Exception e) {
-            Console.WriteLine(e);
-        }        
+
+        using (var context = await _contextFactory.CreateDbContextAsync()) {
+            context.Users.Update(User);
+            try {
+                Console.WriteLine("adding to datacontext");
+                await context.Recipes.AddAsync(copy);
+                await context.SaveChangesAsync();
+                Console.WriteLine(copy.RecipeId);
+                navigationManager.NavigateTo($"/recipe/{copy.RecipeId}", true);
+                //StateHasChanged();
+            } catch (Exception e) {
+                Console.WriteLine(e);
+            }
+        }         
     }
 
 }

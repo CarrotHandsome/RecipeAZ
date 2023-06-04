@@ -55,17 +55,18 @@
 
                             <div style="margin-top: 0.75rem; margin-bottom: 0;">
                                 @if (_typeName == "RecipeStep") {
-                                    <TextLinkMixComponent Text="@context.Description" />
+                                    <TextLinkMixComponent Text="@context?.Description" />
                                 } else {
-                                    @context.Description
+                                    @context?.Description
                                 }                                
                             </div>
-
-                             <MudToggleIconButton @bind-Toggled="_detailsOpen[context]"
+                            @if (_detailsOpen.ContainsKey(context) && _detailsOpen[context]) {
+                                <MudToggleIconButton @bind-Toggled="_detailsOpen[context]"
                                 Icon="@DetailsToggleIcon(context)"
                                 ToggledIcon="@Icons.Material.Filled.ExpandMore"
                                 Color="Color.Success"
                                 Disabled="@string.IsNullOrEmpty(context.Details)" />
+                            }
                         </div>
                         @if (_detailsOpen.ContainsKey(context) && _detailsOpen[context]) {
                             <MudItem xs="12">
@@ -96,7 +97,7 @@
             <MudTextField @bind-Value="LastItem.Description" Label="@Description"></MudTextField>
             <MudTextField @bind-Value="LastItem.Details" Label="add details if you want"></MudTextField>
             <MudIconButton Color="Color.Primary" Icon="@Icons.Material.Filled.Add" Disabled="@CannotAddItem" aria-label="add"
-                @onclick="() => { AddItem(LastItem); }" />
+                @onclick="async () => { await AddItem(LastItem); }" />
         }
     }
 </div>
@@ -182,7 +183,7 @@
     public List<IEditableListItem<ItemType>> ItemsList => ItemRecipe.GetItems<ItemType>();
     public IEditableListItem<ItemType> LastItem { get; set; } = new ItemType();
 
-    private Action<string> CurrentEditAction { get; set; }
+    private Action<string>? CurrentEditAction { get; set; }
     private bool ShowNewItemInput { get; set; } = false;
     private string NameYourItem => $"name your {_typeNameSimple}";
     private string NewItem => $"new {_typeNameSimple}";
@@ -190,7 +191,7 @@
     private bool IsItemDisabled(IEditableListItem<ItemType> i) => !CanEdit || !Editing;
 
     private string _typeName;
-    private string _typeNameSimple;
+    private string? _typeNameSimple;
     private Dictionary<IEditableListItem<ItemType>, bool> _detailsOpen = new Dictionary<IEditableListItem<ItemType>, bool>();
     private bool _itemEditOpen = false;
     private IEditableListItem<ItemType>? _editingItem;
@@ -212,7 +213,7 @@
         _tempItem.Name = value;
     }
 
-    private string DetailsToggleIcon(IEditableListItem<ItemType> ri) {
+    private string? DetailsToggleIcon(IEditableListItem<ItemType> ri) {
         return ri.Details == string.Empty ? null : Icons.Material.Filled.ChevronRight;
     }
     private async Task OnSearchLinkClick(string id) {

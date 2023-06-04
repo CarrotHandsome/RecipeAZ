@@ -199,16 +199,17 @@
         string? randomRecipeId = await _dataContext.Recipes
        .OrderBy(r => Guid.NewGuid())
        .Select(r => r.RecipeId)
-       .FirstOrDefaultAsync();
+       .FirstOrDefaultAsync() ?? "1";
 
         return randomRecipeId;
     }
+
     public async Task<Recipe> GetRecipeWithUserAsync(string recipeId) {
         Recipe? recipe = await _dataContext.Recipes
             .Include(r => r.User)
             .Include(r => r.RecipeTags)
                 .ThenInclude(rt => rt.Tag)
-            .FirstOrDefaultAsync(r => r.RecipeId == recipeId);
+            .FirstOrDefaultAsync(r => r.RecipeId == recipeId) ?? new();
 
         return recipe;
     }

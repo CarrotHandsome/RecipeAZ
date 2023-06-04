@@ -1,7 +1,7 @@
 ﻿@inject TextProcessing _textProcessing
 @inject NavHelperService _navHelp
 
-@foreach (Tuple<string, bool, string> t in _textProcessing.ProcessString(Text)) {
+@foreach (Tuple<string, bool, string> t in _textProcessing.ProcessString(Text ?? string.Empty)) {
     if (t.Item2 && UseLinks) {
         <MudText Class="clickable" Style="display: inline; margin: 0px; padding: 0px;font-weight:bold;"
             @onclick="() => {
@@ -19,7 +19,7 @@
 
 @code {
     [Parameter]
-    public string Text { get; set; }
+    public string? Text { get; set; }
     [Parameter]
     public bool UseLinks { get; set; } = true;
 }
