@@ -139,3 +139,7 @@ span.link:hover {
 .orange-lines .mud-input-slot .mud-input {
     color: #fac951 !important;
 }
+
+.recipe-image-small {
+    border-radius: 7px;
+}

@@ -66,7 +66,7 @@
                         <MudGrid Spacing="0">
                             <MudItem xs="12" Class="d-flex flex-row">
                                 <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))" style="margin-right:5px;">
-                                    <MudImage Src="@recipe.ImagePath" Height="50" />
+                                    <MudImage Src="@recipe.ImagePath" Height="50" Class="rounded-1"/>
                                 </div>
                                 <div>
                                     <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
@@ -115,7 +115,7 @@
                     <MudGrid Spacing="0">
                         <MudItem xs="12" Class="d-flex flex-row">
                             <div class="clickable" @onclick="@(() => NavigateToRecipe(recipe.RecipeId))" style="margin-right:5px;">
-                                <MudImage Src="@recipe.ImagePath" Height="50" />
+                                <MudImage Src="@recipe.ImagePath" Height="50" Class="rounded-1"/>
                             </div>
                             <div>
                                 <MudLink @onclick="@(() => NavigateToRecipe(recipe.RecipeId))"
@@ -141,8 +141,7 @@
                                 <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Success" />
                                 @recipe.UsersWhoLikeMe.Count
                                 @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
-                                    <TagChip Tag="@recipeTag.Tag" Size="Size.Small" />
-                                    
+                                    <TagChip Tag="@recipeTag.Tag" Size="Size.Small" />                                    
                                 }
                             </div>
 
