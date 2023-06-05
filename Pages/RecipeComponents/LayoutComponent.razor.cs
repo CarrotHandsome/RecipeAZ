@@ -87,16 +87,18 @@ namespace RecipeAZ.Pages.RecipeComponents {
                         await uploadedImage.OpenReadStream(imageSizeMaxBytes).CopyToAsync(stream);
                         await stream.FlushAsync();
                     }
-
+                    
                     if (!string.IsNullOrEmpty(_recipe.ImagePath)) {
                         string oldImagePath = Path.Combine(env.WebRootPath, _recipe.ImagePath);
-
-                        if (System.IO.File.Exists(oldImagePath) && oldImagePath != Path.Combine(env.WebRootPath, "images/recipe_default.png")) {
-                            Console.WriteLine("deleted old image");
-                            System.IO.File.Delete(oldImagePath);
+                        List<Recipe> recipesUsingImage = 
+                            await _recipeService.GetRecipesAsync(r => r.ImagePath == _recipe.ImagePath, "", -1);
+                        if (System.IO.File.Exists(oldImagePath)
+                            && oldImagePath != Path.Combine(env.WebRootPath, "images/recipe_default.png")
+                            && recipesUsingImage.Count == 0) {
+                                Console.WriteLine("deleted old image");
+                                System.IO.File.Delete(oldImagePath);
                         }
                     }
-
                     _recipe.ImagePath = $"{imageFolder}/{fileName}";
                     await _recipeService.SaveRecipeAsync(Id);
                 }

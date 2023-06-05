@@ -139,7 +139,7 @@
                             <p style="margin: 0;" />
                             <div class="d-flex flex-row">
                                 <MudIcon Icon="@Icons.Material.Filled.Favorite" Color="Color.Success" />
-                                @recipe.UsersWhoLikeMe.Count
+                                @(recipe?.UsersWhoLikeMe?.Count ?? 0)
                                 @foreach (RecipeTag recipeTag in recipe.RecipeTags) {
                                     <TagChip Tag="@recipeTag.Tag" Size="Size.Small" />                                    
                                 }

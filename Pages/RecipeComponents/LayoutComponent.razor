@@ -16,9 +16,8 @@
 <div style="background-color:white;padding:16px;border-radius:10px;">
     @if (_recipe != null) {
         <div class="d-flex d-row" >
-            <div style="min-width:400px;border-style:solid;border-width:1px 0px 1px 1px;border-radius:10px;padding:14px;border-color:#fac951" 
-                 >
-                <MudImage Src="@_recipe.ImagePath" Height="200" Class="rounded-lg"/>
+            <div style="min-width:400px;border-style:solid;border-width:1px 0px 1px 1px;border-radius:10px;padding:14px;border-color:#fac951">
+                <MudImage Src="@_recipe?.ImagePath" Height="200" Class="rounded-lg"/>
                 @if(CanEdit && Editing) {                    
                         <MudFileUpload T="IBrowserFile" 
                             FilesChanged="OnImageUpload"
@@ -55,12 +54,9 @@
                                                 @TextProcessing.UserAttribution(kvp.Key?.User?.UserName!)
                                             </MudButton>
                                         </div>
-                                    }                                    
-                               
+                                    }
                             }
-                        }                        
-                    
-                    
+                        }          
                 </MudPaper>
             </div>
         </div>
@@ -68,7 +64,7 @@
     <div class="view-recipe-container m-2">
         <MudGrid>
             <MudItem Class="pr-1">
-                <h3 style="margin-top: 0.5rem; margin-bottom: 0; margin-right: 0;">@_recipe.Name</h3>
+                <h3 style="margin-top: 0.5rem; margin-bottom: 0; margin-right: 0;">@_recipe?.Name</h3>
             </MudItem>
             @if (CanEdit && Editing) {
                 <MudItem Class="pl-0">
@@ -86,14 +82,14 @@
                     ToggledChanged="ToggleLike" />
             </MudItem>
             <MudItem Class="d-flex align-center flex-grow-1 gap-0">
-                    @if (_recipe.RecipeTags != null) {
+                    @if (_recipe?.RecipeTags != null) {
                         foreach (RecipeTag recipeTag in _recipe.RecipeTags.Where(rt => rt.Tag != null)) {
                             <TagChip Tag="@recipeTag.Tag" Removable="@(CanEdit && Editing)" HandleChipClose="HandleChipClose"/>
                         }
                     }
                     
             </MudItem>
-            @if (CanEdit && Editing && _recipe.RecipeTags.Count < _maxTags) {
+            @if (CanEdit && Editing && _recipe?.RecipeTags.Count < _maxTags) {
                 <MudItem Class="d-flex align-center flex-grow-1 gap-4">
                     <MudButton Size="Size.Small" Variant="Variant.Outlined"
                        @onclick="() => { NewTagOpen = true; }"
@@ -109,8 +105,7 @@
                     Value="NewTagName"
                     TextChanged="OnValueChanged"                    
                     CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
-                    SearchFunc="TagSearch"
-                    />             
+                    SearchFunc="TagSearch" />             
                 
                 <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@AddTag"/>
                 <div class="d-flex d-row">
@@ -157,7 +152,7 @@
         </div>       
     </div>
     <div>
-        @if (_recipe.ParentRecipe != null) {
+        @if (_recipe?.ParentRecipe != null) {
             <div @onclick="() => NavigateToParent()" class="clickable">Originally copied from @_recipe.ParentRecipe.Name by @_recipe?.ParentRecipe?.User?.UserName</div>
         } 
         </div>
@@ -193,6 +188,6 @@
     }
 
     private void NavigateToParent() {
-        navigationManager.NavigateTo($"/recipe/{ _recipe.ParentRecipeId }", true);
+        navigationManager.NavigateTo($"/recipe/{ _recipe?.ParentRecipeId }", true);
     }    
 }
