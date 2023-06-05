@@ -33,6 +33,12 @@ namespace RecipeAZ.Pages {
             if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("ing", out var ingValue)) {
                 ing = ingValue.First() == null ? "" : ingValue.First();
             }
+            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("by", out var byValue)) {
+                _orderIconIndex = int.Parse(byValue.First() == null ? "" : byValue.First());
+            }
+            if (QueryHelpers.ParseQuery(uri.Query).TryGetValue("ascending", out var ascendingValue)) {
+                ResultsAscending = bool.Parse(ascendingValue.First() == null ? "" : ascendingValue.First());
+            }
 
             using (var context = _contextFactory.CreateDbContext()) {
                 var tagToAdd = context.Tags.Where(t => t.Name == tag).FirstOrDefault();
@@ -166,8 +172,7 @@ namespace RecipeAZ.Pages {
                 _ingredientsFilter.Add(ingredient);
                 await UpdateRecipes();
             }
-        }
-        
+        }        
         private async Task HandleTagFilterClose(Tag tag) {
             _tagsFilter.Remove(tag);
             await UpdateRecipes();

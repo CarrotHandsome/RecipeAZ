@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Components;
+using Microsoft.EntityFrameworkCore;
 using RecipeAZ.Interfaces;
 using RecipeAZ.Models;
 using System.ComponentModel.DataAnnotations;
@@ -115,6 +116,72 @@ namespace RecipeAZ.Services {
             return candidates.Where(x => (x.Contains(matchTo, StringComparison.InvariantCultureIgnoreCase) || matchTo.Contains(x, StringComparison.InvariantCultureIgnoreCase)));
         }
 
+        public async Task<Recipe> CopyRecipe(AppUser User) {
+            Console.WriteLine("copying");
+            Recipe copy = new Recipe {
+                Name = "Copy of " + Recipe.Name,
+                Description = Recipe.Description,
+                Details = Recipe.Details,
+                RecipeSteps = new List<RecipeStep>(),
+                RecipeIngredients = new List<RecipeIngredient>(),
+                ImagePath = Recipe.ImagePath,
+                ParentRecipeId = Recipe.RecipeId,
+                ChildRecipes = new List<Recipe>(),
+                RecipeTags = new List<RecipeTag>()
+
+            };
+            foreach (RecipeTag rt in Recipe.RecipeTags) {
+                copy.RecipeTags.Add(new RecipeTag {
+                    Recipe = copy,
+                    TagId = rt.TagId
+                });
+            }
+            copy.RecipeSteps = new List<RecipeStep>();
+            foreach (RecipeStep step in Recipe.RecipeSteps) {
+                RecipeStep copyStep = new RecipeStep {
+                    Name = step.Name,
+                    Description = step.Description,
+                    Details = step.Details,
+                    Recipe = copy,
+                    Order = step.Order
+                };
+                copy.RecipeSteps.Add(copyStep);
+                Console.WriteLine($"step:{copyStep.Description}");
+            }
+            copy.RecipeIngredients = new List<RecipeIngredient>();
+            foreach (RecipeIngredient ri in Recipe.RecipeIngredients) {
+                RecipeIngredient copyIngredient = new RecipeIngredient {
+                    Name = ri.Name,
+                    IngredientId = ri.IngredientId,
+                    Details = ri.Details,
+                    Description = ri.Description,
+                    Order = ri.Order
+                };
+                copy.RecipeIngredients.Add(copyIngredient);
+                Console.WriteLine($"ingredient:{copyIngredient.Name}");
+            }
+            User.Recipes.Add(copy);
+
+            Console.WriteLine("creating context and updating");
+            using (var context = await _contextFactory.CreateDbContextAsync()) {
+                Console.WriteLine("created context");
+                try {
+                    context.Users.Update(User);
+                    Console.WriteLine("attempting to update context");
+
+                    Console.WriteLine("adding to datacontext");
+                    await context.Recipes.AddAsync(copy);
+                    await context.SaveChangesAsync();
+                    Console.WriteLine(copy.RecipeId);
+
+                    return copy;
+                } catch (Exception e) {
+                    Console.WriteLine(e);
+                    return null;
+                }
+            }
+        }
+    
         public async Task AddItem<T>(IEditableListItem<T> item) where T : new() {
             Console.WriteLine("Adding item");
             if (item.GetType().Name == "RecipeIngredient") {

@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using RecipeAZ.Pages.RecipeComponents
 @inject IDbContextFactory<DataContext> _contextFactory
-@inject NavigationManager navigationManager
+@inject NavigationManager _navigationManager
 
 <PageTitle>RecipeAZ</PageTitle>
 
@@ -59,7 +59,7 @@
 <MudGrid Spacing="0">
         <MudItem xs="6" >
         <MudList>
-            <MudListSubheader>Browse popular recipes</MudListSubheader>
+                <MudListSubheader @onclick="BrowseByLikes" Class="clickable">Browse popular recipes</MudListSubheader>
                 <div style="border-style:solid;border-width:0px 1px 1px 0px;border-radius:15px;border-color:#81C784">
                 @foreach (Recipe recipe in TopRecipes) {
                     <MudListItem>
@@ -108,7 +108,7 @@
     </MudItem>
     <MudItem xs="6">
         <MudList>
-            <MudListSubheader>Browse recent recipes</MudListSubheader>
+            <MudListSubheader @onclick="BrowseByDate" Class="clickable">Browse recent recipes</MudListSubheader>
                 <div style="border-style:solid;border-width:1px 0px 0px 1px;border-radius:15px;border-color:#81C784">
             @foreach (Recipe recipe in RecentRecipes) {               
                 <MudListItem>
@@ -187,11 +187,11 @@
     }
 
     private void NavigateToRecipe(string recipeId) {
-        navigationManager.NavigateTo("/recipe/" + recipeId);            
+        _navigationManager.NavigateTo("/recipe/" + recipeId);            
     }
 
     private void NavigateToProfile(string userId) {
-        navigationManager.NavigateTo("/profile/" + userId);
+        _navigationManager.NavigateTo("/profile/" + userId);
     }
 
     public async Task<string> GetRandomRecipeIdAsync() {
@@ -221,4 +221,12 @@
             .ToListAsync();
         return topTags;
     }
+
+    private void BrowseByDate() {
+        _navigationManager.NavigateTo("/browse/?by=1&ascending=false");
+    }
+    private void BrowseByLikes() {
+        _navigationManager.NavigateTo("/browse/?by=2&ascending=false");
+    }
+    
 }

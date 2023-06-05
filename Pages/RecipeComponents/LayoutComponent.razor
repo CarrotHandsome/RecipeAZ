@@ -83,13 +83,13 @@
             </MudItem>
             <MudItem Class="d-flex align-center flex-grow-1 gap-0">
                     @if (_recipe?.RecipeTags != null) {
-                        foreach (RecipeTag recipeTag in _recipe.RecipeTags.Where(rt => rt.Tag != null)) {
+                        foreach (RecipeTag recipeTag in _recipe?.RecipeTags.Where(rt => rt.Tag != null) ?? new List<RecipeTag>()) {
                             <TagChip Tag="@recipeTag.Tag" Removable="@(CanEdit && Editing)" HandleChipClose="HandleChipClose"/>
                         }
                     }
                     
             </MudItem>
-            @if (CanEdit && Editing && _recipe?.RecipeTags.Count < _maxTags) {
+            @if (CanEdit && Editing && (_recipe?.RecipeTags?.Count ?? 0) < _maxTags) {
                 <MudItem Class="d-flex align-center flex-grow-1 gap-4">
                     <MudButton Size="Size.Small" Variant="Variant.Outlined"
                        @onclick="() => { NewTagOpen = true; }"
