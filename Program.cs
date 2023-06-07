@@ -49,6 +49,7 @@ builder.Services.AddScoped<TextProcessing>();
 builder.Services.AddScoped<NavHelperService>();
 builder.Services.AddScoped<RecipeService>();
 builder.Services.AddScoped<JsonDbService>();
+builder.Services.AddScoped<MailService>();
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();

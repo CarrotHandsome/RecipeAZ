@@ -2,14 +2,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc;
 using RecipeAZ.Models;
+using RecipeAZ.Services;
 
 public class ConfirmEmailModel : PageModel {
     private readonly UserManager<AppUser> _userManager;
     private readonly SignInManager<AppUser> _signInManager;
+    private readonly MailService _mailService;
 
-    public ConfirmEmailModel(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager) {
+    public ConfirmEmailModel(UserManager<AppUser> userManager, SignInManager<AppUser> signInManager, MailService mailService) {
         _userManager = userManager;
         _signInManager = signInManager;
+        _mailService = mailService;
     }
 
     public async Task<IActionResult> OnGetAsync(string userId, string code) {
