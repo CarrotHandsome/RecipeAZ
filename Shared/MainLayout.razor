@@ -19,7 +19,7 @@
     <MudAppBar Elevation="1" Color="Color.Success">
         
         <MudText Typo="Typo.h5" Class="ml-3 clickable" @onclick="ReturnToIndex" Style="margin-right:10px">RecipeAZ</MudText>
-        @if (User.Id == "02174cf0–9412–4cfe - afbf - 59f706d72cf6") {
+        @if (User?.Id == "02174cf0–9412–4cfe - afbf - 59f706d72cf6") {
             <MudIconButton Icon="@Icons.Material.Filled.FileUpload" OnClick="@_jsonDbService.ExportToJson"/>
             <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@_jsonDbService.ImportFromJson" />
         }        
@@ -52,9 +52,6 @@
         <MudSpacer />
         <LoginDisplay />
     </MudAppBar>
-    @*<MudDrawer @bind-Open="_drawerOpen" ClipMode="DrawerClipMode.Always" Elevation="2">
-        <NavMenu />
-    </MudDrawer>*@
     
     <MudMainContent Class="">
         @Body
