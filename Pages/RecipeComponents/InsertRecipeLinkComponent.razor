@@ -41,7 +41,7 @@
 
     protected override async Task OnParametersSetAsync() {
         await base.OnParametersSetAsync();
-        Console.WriteLine(Text == null);
+        //Console.WriteLine(Text == null);
         _linkText = Text.Substring(CursorStart, CursorEnd - CursorStart);        
     }
 

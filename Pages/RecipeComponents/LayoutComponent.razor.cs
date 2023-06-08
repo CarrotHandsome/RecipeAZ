@@ -27,7 +27,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
             }
         }
         private async Task LoadData() {
-            Console.WriteLine("Id: " + Id);
+            //Console.WriteLine("Id: " + Id);
             if (Id == null && User != null) {
                 _recipe = _recipeService.NewRecipe(User);
                 CanEdit = true;
@@ -44,7 +44,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                 Liked = User.RecipesILike
                 .Any(rl => rl.RecipeId == Id);
             }
-            Console.WriteLine($"Recipe is null in LoadData: {_recipe == null}");
+            //Console.WriteLine($"Recipe is null in LoadData: {_recipe == null}");
             _relatedRecipesWeighted = await _recipeService.GetRelatedRecipesWeightedAsync(_recipe ?? new());
         }
         private async Task SaveRecipe(bool fromCreator=true) {
@@ -58,7 +58,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
         }
 
         private async Task OnImageUpload(IBrowserFile file) {
-            Console.WriteLine("Uploading image...");
+            //Console.WriteLine("Uploading image...");
             try {
                 IBrowserFile uploadedImage = file;
                 if (uploadedImage.Size <= imageSizeMaxBytes) {
@@ -74,7 +74,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     using var image = Image.Load(memoryStream);
                     
                     if (image.Width > image.Height * 2) {
-                        Console.WriteLine("Image too wide");
+                        //Console.WriteLine("Image too wide");
                         snackBar.Add("Image width must not be more than double image height.");
                         return;
                     }
@@ -95,7 +95,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                         if (System.IO.File.Exists(oldImagePath)
                             && oldImagePath != Path.Combine(env.WebRootPath, "images/recipe_default.png")
                             && recipesUsingImage.Count == 0) {
-                                Console.WriteLine("deleted old image");
+                                //Console.WriteLine("deleted old image");
                                 System.IO.File.Delete(oldImagePath);
                         }
                     }
@@ -103,7 +103,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                     await _recipeService.SaveRecipeAsync(Id);
                 }
                 else {
-                    Console.WriteLine("Image too large");
+                    //Console.WriteLine("Image too large");
                     snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
                     snackBar.Configuration.VisibleStateDuration = 500;
                     snackBar.Add($"Image file too large. Maximum size is {imageSizeMaxBytes} bytes", MudBlazor.Severity.Error);
@@ -151,7 +151,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
         }
 
         private void ToggleLike(bool toggled) {
-            Console.WriteLine(toggled);
+            //Console.WriteLine(toggled);
             RecipeLike rl = new RecipeLike {
                 AppUserId = User.Id!,
                 RecipeId = _recipe.RecipeId

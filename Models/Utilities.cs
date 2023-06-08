@@ -31,7 +31,7 @@ namespace RecipeAZ.Models {
         public event Action OnEditButtonClick;
 
         public void NotifyEditButtonClick() {
-            Console.WriteLine("Edit button clicked");
+            //Console.WriteLine("Edit button clicked");
             OnEditButtonClick?.Invoke();
         }
     }
@@ -42,8 +42,8 @@ namespace RecipeAZ.Models {
             _navigationManager = navigationManager;
         }
         public void NavigateToRecipe(string id) {
-            Console.WriteLine(_navigationManager == null);
-            Console.WriteLine("navigating to recipe " + id);
+            //Console.WriteLine(_navigationManager == null);
+            //Console.WriteLine("navigating to recipe " + id);
             _navigationManager.NavigateTo($"/recipe/{id}", true);
         }
         public void NavigateToUser(string id) {

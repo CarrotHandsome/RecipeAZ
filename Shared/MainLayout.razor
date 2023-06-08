@@ -130,7 +130,7 @@
     }
     private void GoToBrowse() {
         string sanitizedTerms = System.Net.WebUtility.UrlEncode(_searchValue);
-        Console.WriteLine("SANITIZED" + sanitizedTerms);
+       // Console.WriteLine("SANITIZED" + sanitizedTerms);
         navigationManager.NavigateTo($"/browse/{ _searchValue }");
     }
 

@@ -67,7 +67,7 @@ namespace RecipeAZ.Pages {
         }
         private async Task<List<Recipe>> SearchResults() {
             {
-                Console.WriteLine("SEARCH TEXT: " + _searchText);
+                //Console.WriteLine("SEARCH TEXT: " + _searchText);
                 List<Recipe> recipes = await _recipeService.GetRecipesAsync(r => 
                     r.Name.ToLower().Contains(_searchText.ToLower())
                     || r.RecipeIngredients.Any(ri => ri.Ingredient.Name.ToLower().Contains(_searchText.ToLower()))

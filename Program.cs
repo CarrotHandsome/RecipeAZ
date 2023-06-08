@@ -21,7 +21,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 string password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? string.Empty;
-Console.WriteLine($"Password: { password  }");
+//Console.WriteLine($"Password: { password  }");
 string connectionString;
 if (OperatingSystem.IsWindows()) {
     connectionString = builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");

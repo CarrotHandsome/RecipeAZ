@@ -35,11 +35,11 @@ namespace RecipeAZ.Pages.RecipeComponents {
         }
         public void ItemDropUpdateOrder<T>(MudItemDropInfo<IEditableListItem<T>> dropItem) where T : new() {
             
-            Console.WriteLine("starting reorder update");
+            //Console.WriteLine("starting reorder update");
             int originalOrder = dropItem.Item.Order;
-            Console.WriteLine($"Original Order: {originalOrder}");
+            //Console.WriteLine($"Original Order: {originalOrder}");
 
-            Console.WriteLine($"Parsed Order: {dropItem.Item.Order}");
+            //Console.WriteLine($"Parsed Order: {dropItem.Item.Order}");
             var targetOrder = int.Parse(dropItem.DropzoneIdentifier);
             var targetItem = ItemsList.FirstOrDefault(ri => ri.Order == targetOrder);
 

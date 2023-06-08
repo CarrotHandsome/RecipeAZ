@@ -44,9 +44,9 @@ namespace RecipeAZ.Services {
                     //ConfigurationSetName = configSet
                 };
                 try {
-                    Console.WriteLine("Sending email using Amazon SES...");
+                    //Console.WriteLine("Sending email using Amazon SES...");
                     var response = await client.SendEmailAsync(sendRequest);
-                    Console.WriteLine("The email was sent successfully.");
+                    //Console.WriteLine("The email was sent successfully.");
                 } catch (Exception ex) {
                     Console.WriteLine("The email was not sent.");
                     Console.WriteLine("Error message: " + ex.Message);

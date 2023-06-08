@@ -65,19 +65,19 @@
 
     private async Task SaveRecipe(bool fromCreator = true)
     {
-        Console.WriteLine("Starting to save");
+        //Console.WriteLine("Starting to save");
         await _recipeService.SaveRecipeAsync(Id);
 
         _ingredientsRef.LastItem = new RecipeIngredient();
         _stepsRef.LastItem = new RecipeStep();
-        Console.WriteLine("Saved");
+        //Console.WriteLine("Saved");
         if (fromCreator)
         {
             snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.BottomCenter;
             snackBar.Configuration.VisibleStateDuration = 500;
             snackBar.Add("Saved Recipe", MudBlazor.Severity.Success);
         }
-        Console.WriteLine(Recipe!.RecipeId);
+        //Console.WriteLine(Recipe!.RecipeId);
         //navigationManager.NavigateTo($"/recipe/{Recipe!.RecipeId}");
     }
 

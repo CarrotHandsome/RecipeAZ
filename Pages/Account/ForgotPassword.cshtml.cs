@@ -58,7 +58,7 @@ namespace RecipeAZ.Pages.Account
                 var user = await _userManager.FindByEmailAsync(Input.Email);
                 if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
                 {
-                    Console.WriteLine("user not found");
+                    //Console.WriteLine("user not found");
                     // Don't reveal that the user does not exist or is not confirmed
                     return RedirectToPage("./ForgotPasswordConfirmation");
                 }
