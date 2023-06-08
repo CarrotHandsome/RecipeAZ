@@ -60,7 +60,7 @@
                                     @context?.Description
                                 }                                
                             </div>
-                            @if (_detailsOpen.ContainsKey(context) && _detailsOpen[context]) {
+                            @if (_detailsOpen.ContainsKey(context)) {
                                 <MudToggleIconButton @bind-Toggled="_detailsOpen[context]"
                                 Icon="@DetailsToggleIcon(context)"
                                 ToggledIcon="@Icons.Material.Filled.ExpandMore"

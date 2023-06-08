@@ -22,7 +22,16 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 string password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? string.Empty;
 Console.WriteLine($"Password: { password  }");
-string connectionString = $"Server=localhost,1433;Database=Recipes;User Id=sa;Password={password};MultipleActiveResultSets=True;TrustServerCertificate=True";
+string connectionString;
+if (OperatingSystem.IsWindows()) {
+    connectionString = builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
+} else if (OperatingSystem.IsLinux()) {
+    connectionString = $"Server=localhost,1433;Database=Recipes;User Id=sa;Password={password};MultipleActiveResultSets=True;TrustServerCertificate=True";
+} else {
+    connectionString = string.Empty;
+    Console.WriteLine("Running on wrong OS");
+}
+
 //builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 
 builder.Services.AddDbContextFactory<DataContext>(opts => {

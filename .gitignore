@@ -4,5 +4,6 @@ wwwroot/css/bootstrap/
 wwwroot/css/open-iconic/
 wwwroot/images/
 .vs/
+.vscode/
 *.dll
 empyrean-aurora-327423-c4288918044c.json

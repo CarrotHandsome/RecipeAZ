@@ -39,7 +39,7 @@
                 <MudPaper Width="95%" Height="95%" Elevation="0" Class="overflow-hidden d-flex flex-wrap d-row" Style="width:100%;">
                     
                         @if (_relatedRecipesWeighted != null) {
-                            foreach (KeyValuePair<Recipe, int> kvp in _relatedRecipesWeighted.OrderByDescending(r => r.Value).Take(10)) {                              
+                            foreach (KeyValuePair<Recipe, int> kvp in _relatedRecipesWeighted.OrderByDescending(r => r.Value).Take(6)) {                              
                                     @if (kvp.Key != null) {     
                                         <div class="related-recipe">
                                             <MudButton Size="Size.Small" Style="position:relative;white-space:nowrap;" 
@@ -105,9 +105,8 @@
                     Value="NewTagName"
                     TextChanged="OnValueChanged"                    
                     CoerceText="false" CoerceValue="false" ResetValueOnEmptyText="true"
-                    SearchFunc="TagSearch" />             
+                    SearchFunc="TagSearch" />                             
                 
-                <MudIconButton Icon="@Icons.Material.Filled.Save" OnClick="@AddTag"/>
                 <div class="d-flex d-row">
                     <MudIconButton Icon="@Icons.Material.Filled.CheckCircle" Class="ml-auto mr-0 mb-1" Color="Color.Success" 
                         Size="Size.Large" OnClick="AddTag" />

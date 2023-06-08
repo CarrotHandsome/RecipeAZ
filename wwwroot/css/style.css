@@ -38,6 +38,7 @@ span.link:hover {
 .related-recipe { /*for related text recipe name button on recipe page*/
     position: relative;
     margin-right: 6px;
+    margin-bottom: 20px;
     padding-left: 6px;
     padding-top: 6px;
     line-height: 1em; /* Adjust this value based on your needs */

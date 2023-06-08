@@ -325,8 +325,11 @@ namespace RecipeAZ.Services {
             return new List<Recipe>();
         }
 
-        public async Task<IEnumerable<Recipe>> GetRelatedRecipesByIngredientAsync(Recipe originalRecipe) {
+        public async Task<IEnumerable<Recipe>> GetRelatedRecipesByIngredientAsync(Recipe? originalRecipe) {
             var originalIngredientIds = originalRecipe?.RecipeIngredients?.Select(ri => ri.IngredientId).ToList();
+            if (originalIngredientIds == null) {
+                return new List<Recipe>();
+            }
             using (var context = await _contextFactory.CreateDbContextAsync()) {
                 return await context.Recipes
                 .Include(r => r.RecipeIngredients)

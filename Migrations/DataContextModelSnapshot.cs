@@ -282,7 +282,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Ingredient", b =>
@@ -297,7 +297,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasKey("IngredientId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Recipe", b =>
@@ -338,7 +338,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeIngredient", b =>
@@ -376,7 +376,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeIngredients");
+                    b.ToTable("RecipeIngredients", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeLike", b =>
@@ -398,7 +398,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeLikes");
+                    b.ToTable("RecipeLikes", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeStep", b =>
@@ -430,7 +430,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeSteps");
+                    b.ToTable("RecipeSteps", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeTag", b =>
@@ -445,7 +445,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("RecipeTags");
+                    b.ToTable("RecipeTags", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Tag", b =>
@@ -460,7 +460,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
