@@ -20,7 +20,10 @@ using Microsoft.Extensions.Logging;
 var builder = WebApplication.CreateBuilder(args);
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-var connectionString = builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
+string password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? string.Empty;
+Console.WriteLine($"Password: { password  }");
+string connectionString = $"Server=localhost,1433;Database=Recipes;User Id=sa;Password={password};MultipleActiveResultSets=True;TrustServerCertificate=True";
+//builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 
 builder.Services.AddDbContextFactory<DataContext>(opts => {
     opts.UseSqlServer(connectionString);
