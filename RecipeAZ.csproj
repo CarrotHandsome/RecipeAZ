@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AWSSDK.S3" Version="3.7.104.29" />
     <PackageReference Include="AWSSDK.SimpleEmail" Version="3.7.100.142" />
     <PackageReference Include="Google.Apis.Auth" Version="1.60.0" />
     <PackageReference Include="Google.Apis.Gmail.v1" Version="1.60.0.3056" />
