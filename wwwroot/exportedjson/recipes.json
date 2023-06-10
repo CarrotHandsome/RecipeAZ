@@ -1,62 +1,102 @@
 [
   {
-    "RecipeId": "0f68fb90-18ac-4022-8973-e078eca8bef4",
-    "Name": "Fun Soup",
-    "Description": "Fun Soup is a delightful and whimsical dish that promises to bring joy to your taste buds and put a smile on your face. Bursting with vibrant colors, delightful flavors, and a touch of playfulness, this soup is a perfect choice for those seeking a unique and entertaining culinary experience.",
-    "Details": "Details",
+    "RecipeId": "2",
+    "Name": "Vegetarian Paella",
+    "Description": "A Spanish classic with a vegetarian twist. Bursting with vibrant vegetables, this dish is a feast for the senses.",
+    "Details": "This is a family recipe passed down through generations with a healthy twist. Make sure to use fresh vegetables for the best flavor.",
     "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
-    "ImagePath": "images/recipe_default.png",
-    "ParentRecipeId": null,
-    "CreatedAt": "2023-05-28T19:39:40.0833333"
-  },
-  {
-    "RecipeId": "1",
-    "Name": "Tarka Dal",
-    "Description": "Nulla @c333920b-0b34-4e93-98aa-85f9066246d8/turpis @risus, mollis sed mi non, congue posuere enim. Fusce vehicula ligula nec nibh vehicula tempor. Maecenas accumsan quis mauris a imperdiet. Phasellus venenatis, dolor vitae venenatis aliquet, mi nisi consequat ligula, vel facilisis arcu eros id justo. Vestibulum id porta tellus, nec porttitor diam. Praesent hendrerit nulla sed eros finibus, eu sodales mauris semper. Praesent eros velit, sollicitudin a ex id, sagittis eleifend turpis. Pellentesque facilisis sem eu varius elementum. Sed ac justo dolor. Donec malesuada justo eu urna luctus, et cursus magna laoreet. Vivamus a accumsan risus. Nullam rutrum porta elementum. Curabitur lectus odio, euismod et dolor sit amet, efficitur elementum felis. Mauris quam sapien, commodo sed libero facilisis, cursus feugiat ligula.",
-    "Details": "@1/Donec @quis ullamcorper erat, id tempor ante. Integer ut lorem viverra, laoreet orci nec, aliquam nisl. Fusce placerat nisl ac mauris condimentum, sed efficitur urna faucibus. Suspendisse laoreet laoreet malesuada. Quisque congue ut leo ac rhoncus. Aenean commodo dui ut urna ullamcorper tristique. Proin ac feugiat enim, vitae tempus magna. Nam suscipit luctus maximus. Sed laoreet dolor nibh, quis vestibulum leo facilisis a. Integer at mi convallis, porttitor leo non, eleifend enim. Mauris et dolor diam. Morbi metus ligula, pretium ac lectus in, tempus ullamcorper leo.",
-    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
-    "ImagePath": "images/recipe_default.png",
+    "ImagePath": "",
     "ParentRecipeId": null,
     "CreatedAt": "2023-05-21T14:39:26.4059135"
   },
   {
-    "RecipeId": "2c2009e6-2de3-4f50-a953-902179e0a9c0",
-    "Name": "Local Berries",
-    "Description": "So, you think you can handle the fierce and rebellious flavors of Local Berries? Well, get ready for a taste experience that will challenge your palate and test your culinary mettle. These wild, untamed berries are not for the faint of heart or those seeking a mild, pleasant treat. No, my friend, Local Berries will knock you off your feet with their audacious flavors and prickly personalities.\n\nThis recipe requires a daring spirit and a willingness to embrace the unexpected. From the moment you lay eyes on these defiant berries, you'll know you're in for a tumultuous ride. Their vibrant colors and enigmatic aromas will lure you in, but beware—they bite back.\n\nThe preparation of Local Berries demands courage and precision. You'll need nerves of steel to handle their relentless tartness and unruly textures. These berries won't be tamed; they defy your attempts to control them. Their sharp acidity will challenge your taste buds, leaving you teetering on the edge of flavor rebellion.\n\nTo truly appreciate Local Berries, you must surrender to their belligerent nature. Each bite is a clash of flavors, a battleground of sweet and sour, with an undercurrent of bitterness that will keep you on your toes. These berries are relentless, unyielding, and utterly uncompromising.\n\nSo, if you're brave enough to face the fierce world of Local Berries, gather your wits and embark on this culinary adventure. But remember, once you enter their domain, there's no turning back. Local Berries will test your limits, challenge your preconceptions, and leave an indelible mark on your taste buds.\n\nAre you ready to confront the defiant spirit of Local Berries? Prepare yourself, summon your courage, and embark on a journey where sweetness meets hostility, and only the boldest survive.",
-    "Details": "@1/Details @@1/Tarka Dal@Details @1/tarka dal@ klsd @1/Tarka Dal@slsjf ",
+    "RecipeId": "3",
+    "Name": "Quinoa Salad",
+    "Description": "This fresh, zingy salad is super easy and always a crowd-pleaser! The vibrant colors and flavors make it a joy to both make and eat.",
+    "Details": "Perfect for a summer barbecue or a healthy lunch option. You can substitute the vegetables listed with your favorite ones.",
     "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
-    "ImagePath": "images/recipe_default.png",
+    "ImagePath": "",
     "ParentRecipeId": null,
-    "CreatedAt": "2023-05-23T17:30:44.27"
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
   },
   {
-    "RecipeId": "30682d3f-7e59-4b49-b825-357a3dd4f9dd",
-    "Name": "Grey Pasta",
-    "Description": "Introducing Grey Pasta, a mysterious dish that leaves you pondering its allure. This enigmatic recipe dances on the fine line between curiosity and uncertainty, daring you to take a leap of faith and explore its peculiar flavors. Prepare to embark on a culinary adventure where the outcome is as hazy as the pasta itself.\n\nGrey Pasta is an unconventional creation that challenges traditional notions of color and presentation. Its subdued, monochromatic appearance may leave you questioning its visual appeal. Yet, hidden within this unassuming hue lies a world of unknown possibilities.\n\nPrepare yourself for a taste experience that defies expectations. The flavors of Grey Pasta teeter between intriguing and perplexing, keeping you guessing with every bite. Will it captivate your taste buds and transport you to a realm of gustatory delight? Or will it leave you searching for familiar flavors amidst the uncertainty?\n\nUncertainty permeates every aspect of this dish, from its preparation to its final presentation. As you mix the ingredients and cook the pasta, you may find yourself questioning the outcome. Will it be a culinary masterpiece that surprises and delights, or will it fall into the realm of culinary enigma?\n\nGrey Pasta challenges your senses, demanding that you open your mind to unexplored tastes. Its flavors are neither entirely comforting nor completely unfamiliar. They hover in a gray area, leaving you unsure of where your culinary journey will lead.\n\nSo, if you possess an adventurous spirit and a taste for the unknown, Grey Pasta beckons you to partake in its enigmatic feast. Embrace the uncertainty, and let your palate be the judge. Will this unconventional creation become a staple in your culinary repertoire, or will it remain a perplexing mystery, forever shrouded in ambiguity?\n\nPrepare to indulge in Grey Pasta—a dish that invites both curiosity and uncertainty. Take a leap into the unknown, and let your taste buds guide you through this intriguing culinary exploration.",
-    "Details": "Details",
+    "RecipeId": "4",
+    "Name": "Classic French Ratatouille",
+    "Description": "A hearty and healthy vegetable dish, ratatouille combines eggplant, zucchini, bell peppers, and tomatoes in a basil-infused simmer that warms the home and soul.",
+    "Details": "The trick to a perfect Ratatouille is to cook the vegetables separately so each will taste truly good in its own right.",
     "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
-    "ImagePath": "images/recipe_default.png",
+    "ImagePath": "",
     "ParentRecipeId": null,
-    "CreatedAt": "2023-05-27T23:59:13.63"
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
   },
   {
-    "RecipeId": "483c2159-830e-4471-b4fc-fd818d19ebd2",
-    "Name": "Exquisite Broccoli Delight",
-    "Description": "Behold, a new recipe that takes the humble broccoli to dazzling heights and promises a culinary adventure like no other. Prepare yourself for an exquisite Broccoli Delight, where this beloved vegetable takes center stage, transformed into a dish that will leave you craving for more.\n\nBroccoli, with its vibrant green florets and earthy flavor, serves as the foundation for this extraordinary creation. With each bite, you'll experience a symphony of textures and tastes that dance harmoniously on your palate.\n\nThe recipe begins with carefully selected, tender broccoli florets, bursting with freshness and vibrancy. These emerald jewels are gently blanched to retain their natural crispness, ensuring a delightful crunch with every bite.\n\nBut this dish doesn't stop at the basics; it's the supporting cast of flavors that elevates the broccoli to a whole new level. Imagine the tantalizing aroma of garlic sautéed in fragrant olive oil, mingling with the broccoli's earthy Details. Picture the subtle hints of lemon zest, adding a burst of freshness and brightness to the dish.\n\nTo create a delightful interplay of textures, we introduce a generous sprinkle of toasted almonds, adding a satisfying crunch and nutty undertones that complement the broccoli beautifully. These carefully selected ingredients are meticulously combined to create a harmonious blend that tantalizes both the taste buds and the senses.\n\nAs you take your first bite of this Broccoli Delight, you'll be greeted with a burst of flavors that intertwine effortlessly. The tender yet firm broccoli, infused with the aroma of garlic and the zesty essence of lemon, dances on your tongue, while the toasted almonds provide a delightful crunch and a touch of indulgence.\n\nThis recipe invites you to experience the wonders of broccoli in a whole new light. It celebrates the versatility of this beloved vegetable, showcasing its ability to captivate and surprise. Whether you're a long-time fan of broccoli or someone looking to explore new culinary horizons, this Broccoli Delight promises to satisfy your cravings and ignite your taste buds.\n\nPrepare to embark on a gastronomic journey with this exquisite Broccoli Delight. Let the flavors unfold and enchant your senses, as you savor each mouthwatering bite. Discover the joy of this newfound broccoli experience and let it become a cherished addition to your repertoire of culinary delights.",
-    "Details": "Details",
+    "RecipeId": "5",
+    "Name": "Spaghetti Carbonara",
+    "Description": "A classic Italian pasta dish from Rome made with egg, hard cheese, guanciale, and black pepper.",
+    "Details": "The dish is not made with cream. The creamy texture is achieved through the mixture of egg, cheese and pasta water.",
     "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
-    "ImagePath": "images/recipe_default.png",
+    "ImagePath": "",
     "ParentRecipeId": null,
-    "CreatedAt": "2023-05-28T20:08:01.0766667"
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
   },
   {
-    "RecipeId": "c333920b-0b34-4e93-98aa-85f9066246d8",
-    "Name": "Beefy Pork and Apple",
-    "Description": "Indulge in a tantalizing fusion of flavors with this extraordinary recipe for Beefy Pork and Apple Delight. Prepare to be captivated by the succulent combination of tender beef and juicy pork, complemented by the sweetness of ripe apples. This dish promises a harmonious symphony of taste that will leave you craving more.\n\nThe star of this recipe is a marriage of two delectable meats—beef and pork. Picture succulent chunks of beef and juicy pork, lovingly seared to perfection, locking in their natural flavors and juices. As you take your first bite, you'll be greeted by a medley of rich, meaty goodness that will satisfy even the most discerning palate.\n\nBut what truly sets this dish apart is the addition of sweet, ripe apples. These luscious fruits lend a natural sweetness and a hint of tartness that balances the robustness of the meats. Imagine the aroma of the apples as they cook, releasing their fragrant essence, infusing the dish with an irresistible allure.\n\nTo enhance the flavors further, we introduce a symphony of herbs and spices. Fragrant garlic, aromatic thyme, and a touch of warm cinnamon add depth and complexity to the dish. These carefully selected ingredients work in harmony, creating a tantalizing symphony of flavors that will transport you to a realm of pure culinary bliss.\n\nAs you savor each mouthwatering bite of this Beefy Pork and Apple Delight, you'll experience a delightful interplay of tastes and textures. The tender, juicy meats meld seamlessly with the sweet and slightly tangy apples, creating a captivating contrast that is both comforting and indulgent.\n\nThis recipe invites you to embark on a gastronomic adventure, where the robustness of beef and pork intertwines with the delicate sweetness of apples. It celebrates the beauty of contrast and showcases the art of balancing flavors in a truly delectable way.\n\nPrepare to delight your taste buds with this extraordinary Beefy Pork and Apple creation. Let the flavors unfold and enchant your senses, as you revel in the succulence of the meats and the tantalizing sweetness of the apples. Embrace the culinary harmony of this exquisite dish and let it become a cherished favorite in your repertoire of flavorful delights.",
-    "Details": "Details",
+    "RecipeId": "6",
+    "Name": "Chicken Tikka Masala",
+    "Description": "A dish of chunks of roasted marinated chicken in a spiced curry sauce. The sauce is usually creamy and orange-coloured.",
+    "Details": "The dish has been claimed as a national dish of the United Kingdom, and its origins are debated.",
     "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
-    "ImagePath": "images/recipe_default.png",
+    "ImagePath": "",
     "ParentRecipeId": null,
-    "CreatedAt": "2023-05-28T20:25:03.17"
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "7",
+    "Name": "Pad Thai",
+    "Description": "Stir fried rice noodle dish commonly served as a street food and at most restaurants in Thailand.",
+    "Details": "Pad Thai has been popular in Thailand since the 1930s when the government promoted it in an effort to reduce rice consumption.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "8",
+    "Name": "Tacos al Pastor",
+    "Description": "Mexican dish featuring a pork and pineapple mix, cooked on a spit, it is served on tortillas.",
+    "Details": "This dish was created in the 20th century in Puebla, Mexico by Lebanese immigrants.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "9",
+    "Name": "Japanese Ramen",
+    "Description": "Noodle soup dish that was originally imported from China and has become one of the most popular dishes in Japan in recent decades.",
+    "Details": "Ramen are inexpensive and widely available, two factors that also make them an ideal option for budget travelers.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "10",
+    "Name": "American Cheeseburger",
+    "Description": "Classic American dish consisting of a hamburger topped with cheese and served in a bun.",
+    "Details": "You can add various toppings like lettuce, tomato, mayonnaise, ketchup, and pickles. Serve with a side of fries.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "11",
+    "Name": "Sushi",
+    "Description": "Japanese dish consisting of small balls or rolls of vinegar-flavoured cold rice served with a garnish of raw fish, vegetables, or egg.",
+    "Details": "Sushi can be enjoyed many ways and with various ingredients, making it a versatile and delightful dish.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
   }
 ]

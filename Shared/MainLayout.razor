@@ -16,9 +16,9 @@
 <CascadingValue Value="@User" Name="UserParam">    
 
 <MudLayout>
-    <MudAppBar Elevation="1" Color="Color.Success">
+    <MudAppBar Elevation="1" Color="Color.Success" Style="padding-bottom:10px;">
         
-        <MudText Typo="Typo.h5" Class="ml-3 clickable" @onclick="ReturnToIndex" Style="margin-right:10px">RecipeAZ</MudText>
+        <MudText Typo="Typo.h3" Class="ml-3 clickable" @onclick="ReturnToIndex" Style="margin-right:10px;font-weight:bolder;">RecipeAZ</MudText>
         @if (User?.Id == "02174cf0–9412–4cfe - afbf - 59f706d72cf6") {
             <MudIconButton Icon="@Icons.Material.Filled.FileUpload" OnClick="@_jsonDbService.ExportToJson"/>
             <MudIconButton Icon="@Icons.Material.Filled.FileDownload" OnClick="@_jsonDbService.ImportFromJson" />

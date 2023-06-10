@@ -68,7 +68,7 @@ namespace RecipeAZ.Services {
                 var json = await File.ReadAllTextAsync(path);
                 var dtos = JsonConvert.DeserializeObject<List<D>>(json);
 
-                var entities = dtos.Select(d => MapToEntity<T, D>(d)).ToList();
+                var entities = dtos?.Select(d => MapToEntity<T, D>(d)).ToList();
                 foreach (var entity in entities) {
                     await dbSet.AddAsync(entity);
                 }
