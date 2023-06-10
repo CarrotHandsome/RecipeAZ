@@ -1,0 +1,156 @@
+[
+  {
+    "RecipeIngredientId": "3",
+    "RecipeId": "2",
+    "IngredientId": "3",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Arborio rice",
+    "Details": "",
+    "Description": "1 cup",
+    "Order": 1
+  },
+  {
+    "RecipeIngredientId": "4",
+    "RecipeId": "2",
+    "IngredientId": "4",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Olive oil",
+    "Details": "",
+    "Description": "2 tablespoons",
+    "Order": 2
+  },
+  {
+    "RecipeIngredientId": "5",
+    "RecipeId": "2",
+    "IngredientId": "5",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Onion",
+    "Details": "Chopped",
+    "Description": "1",
+    "Order": 3
+  },
+  {
+    "RecipeIngredientId": "6",
+    "RecipeId": "3",
+    "IngredientId": "6",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Garlic",
+    "Details": "Minced",
+    "Description": "2 cloves",
+    "Order": 1
+  },
+  {
+    "RecipeIngredientId": "7",
+    "RecipeId": "3",
+    "IngredientId": "7",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Tomato",
+    "Details": "Chopped",
+    "Description": "1",
+    "Order": 2
+  },
+  {
+    "RecipeIngredientId": "8",
+    "RecipeId": "4",
+    "IngredientId": "8",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Bell Peppers",
+    "Details": "Diced",
+    "Description": "2",
+    "Order": 1
+  },
+  {
+    "RecipeIngredientId": "9",
+    "RecipeId": "4",
+    "IngredientId": "9",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Cumin powder",
+    "Details": "",
+    "Description": "1 teaspoon",
+    "Order": 2
+  },
+  {
+    "RecipeIngredientId": "10",
+    "RecipeId": "5",
+    "IngredientId": "10",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Chicken broth",
+    "Details": "",
+    "Description": "4 cups",
+    "Order": 1
+  },
+  {
+    "RecipeIngredientId": "11",
+    "RecipeId": "5",
+    "IngredientId": "11",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "White rice",
+    "Details": "",
+    "Description": "1 cup",
+    "Order": 2
+  },
+  {
+    "RecipeIngredientId": "12",
+    "RecipeId": "6",
+    "IngredientId": "12",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Canned tuna",
+    "Details": "Drained",
+    "Description": "1 can",
+    "Order": 1
+  },
+  {
+    "RecipeIngredientId": "13",
+    "RecipeId": "6",
+    "IngredientId": "13",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Macaroni",
+    "Details": "Cooked",
+    "Description": "2 cups",
+    "Order": 2
+  },
+  {
+    "RecipeIngredientId": "14",
+    "RecipeId": "7",
+    "IngredientId": "14",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Olive oil",
+    "Details": "",
+    "Description": "3 tablespoons",
+    "Order": 1
+  },
+  {
+    "RecipeIngredientId": "15",
+    "RecipeId": "7",
+    "IngredientId": "15",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Onion",
+    "Details": "Diced",
+    "Description": "1",
+    "Order": 2
+  },
+  {
+    "RecipeIngredientId": "16",
+    "RecipeId": "7",
+    "IngredientId": "16",
+    "BeforeId": "1",
+    "AfterId": "1",
+    "Name": "Feta cheese",
+    "Details": "Crumbled",
+    "Description": "1 cup",
+    "Order": 3
+  }
+]

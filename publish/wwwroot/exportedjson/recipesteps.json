@@ -1,0 +1,130 @@
+[
+  {
+    "RecipeStepId": "1",
+    "Name": "Step 1",
+    "Description": "Heat the olive oil in a large skillet over medium heat.",
+    "Details": "",
+    "RecipeId": "2",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "2",
+    "Name": "Step 2",
+    "Description": "Add the onion, and cook until tender.",
+    "Details": "",
+    "RecipeId": "2",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "3",
+    "Name": "Step 3",
+    "Description": "Stir in the Arborio rice, and cook for a few minutes, until the oil has coated each grain of rice.",
+    "Details": "",
+    "RecipeId": "2",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "4",
+    "Name": "Step 1",
+    "Description": "Heat the olive oil in a large skillet over medium heat.",
+    "Details": "",
+    "RecipeId": "3",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "5",
+    "Name": "Step 2",
+    "Description": "Add the minced garlic, and cook until fragrant.",
+    "Details": "",
+    "RecipeId": "3",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "6",
+    "Name": "Step 3",
+    "Description": "Stir in the chopped tomato, and cook until softened.",
+    "Details": "",
+    "RecipeId": "3",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "7",
+    "Name": "Step 1",
+    "Description": "Heat the olive oil in a large skillet over medium heat.",
+    "Details": "",
+    "RecipeId": "4",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "8",
+    "Name": "Step 2",
+    "Description": "Add the diced bell peppers, and cook until softened.",
+    "Details": "",
+    "RecipeId": "4",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "9",
+    "Name": "Step 3",
+    "Description": "Stir in the cumin powder, and cook for a minute, until fragrant.",
+    "Details": "",
+    "RecipeId": "4",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "10",
+    "Name": "Step 1",
+    "Description": "In a large pot, bring the chicken broth to a boil.",
+    "Details": "",
+    "RecipeId": "5",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "11",
+    "Name": "Step 2",
+    "Description": "Add the white rice, stir, reduce the heat to low, cover the pot, and simmer for 20 minutes, or until the rice is tender and the liquid is absorbed.",
+    "Details": "",
+    "RecipeId": "5",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "12",
+    "Name": "Step 1",
+    "Description": "In a large bowl, combine the drained canned tuna and the cooked macaroni.",
+    "Details": "",
+    "RecipeId": "6",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "13",
+    "Name": "Step 2",
+    "Description": "Stir to combine, then serve.",
+    "Details": "",
+    "RecipeId": "6",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "14",
+    "Name": "Step 1",
+    "Description": "Heat the olive oil in a large skillet over medium heat.",
+    "Details": "",
+    "RecipeId": "7",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "15",
+    "Name": "Step 2",
+    "Description": "Add the diced onion, and cook until tender.",
+    "Details": "",
+    "RecipeId": "7",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "16",
+    "Name": "Step 3",
+    "Description": "Remove the skillet from the heat, stir in the crumbled feta cheese, and serve.",
+    "Details": "",
+    "RecipeId": "7",
+    "Order": 3
+  }
+]

@@ -18,8 +18,10 @@ namespace RecipeAZ.Services {
         public async static Task Send(string recipientAddress, string subject, string body) {
             // Replace USWest2 with the AWS Region you're using for Amazon SES.
             // Acceptable values are EUWest1, USEast1, and USWest2.
-            
-            using (var client = new AmazonSimpleEmailServiceClient(RegionEndpoint.USWest2)) {
+            string aws_key_id = Environment.GetEnvironmentVariable("AWS_ACCESS_KEY_ID") ?? string.Empty;
+            string aws_secret_key = Environment.GetEnvironmentVariable("AWS_SECRET_ACCESS_KEY") ?? string.Empty;
+
+            using (var client = new AmazonSimpleEmailServiceClient(aws_key_id, aws_secret_key, RegionEndpoint.USWest2)) {
                 var sendRequest = new SendEmailRequest {
                     Source = "carrothands@gmail.com",
                     Destination = new Destination {

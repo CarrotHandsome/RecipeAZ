@@ -1,0 +1,102 @@
+[
+  {
+    "RecipeId": "2",
+    "Name": "Vegetarian Paella",
+    "Description": "A Spanish classic with a vegetarian twist. Bursting with vibrant vegetables, this dish is a feast for the senses.",
+    "Details": "This is a family recipe passed down through generations with a healthy twist. Make sure to use fresh vegetables for the best flavor.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "3",
+    "Name": "Quinoa Salad",
+    "Description": "This fresh, zingy salad is super easy and always a crowd-pleaser! The vibrant colors and flavors make it a joy to both make and eat.",
+    "Details": "Perfect for a summer barbecue or a healthy lunch option. You can substitute the vegetables listed with your favorite ones.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "4",
+    "Name": "Classic French Ratatouille",
+    "Description": "A hearty and healthy vegetable dish, ratatouille combines eggplant, zucchini, bell peppers, and tomatoes in a basil-infused simmer that warms the home and soul.",
+    "Details": "The trick to a perfect Ratatouille is to cook the vegetables separately so each will taste truly good in its own right.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "5",
+    "Name": "Spaghetti Carbonara",
+    "Description": "A classic Italian pasta dish from Rome made with egg, hard cheese, guanciale, and black pepper.",
+    "Details": "The dish is not made with cream. The creamy texture is achieved through the mixture of egg, cheese and pasta water.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "6",
+    "Name": "Chicken Tikka Masala",
+    "Description": "A dish of chunks of roasted marinated chicken in a spiced curry sauce. The sauce is usually creamy and orange-coloured.",
+    "Details": "The dish has been claimed as a national dish of the United Kingdom, and its origins are debated.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "7",
+    "Name": "Pad Thai",
+    "Description": "Stir fried rice noodle dish commonly served as a street food and at most restaurants in Thailand.",
+    "Details": "Pad Thai has been popular in Thailand since the 1930s when the government promoted it in an effort to reduce rice consumption.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "8",
+    "Name": "Tacos al Pastor",
+    "Description": "Mexican dish featuring a pork and pineapple mix, cooked on a spit, it is served on tortillas.",
+    "Details": "This dish was created in the 20th century in Puebla, Mexico by Lebanese immigrants.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "9",
+    "Name": "Japanese Ramen",
+    "Description": "Noodle soup dish that was originally imported from China and has become one of the most popular dishes in Japan in recent decades.",
+    "Details": "Ramen are inexpensive and widely available, two factors that also make them an ideal option for budget travelers.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "10",
+    "Name": "American Cheeseburger",
+    "Description": "Classic American dish consisting of a hamburger topped with cheese and served in a bun.",
+    "Details": "You can add various toppings like lettuce, tomato, mayonnaise, ketchup, and pickles. Serve with a side of fries.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  },
+  {
+    "RecipeId": "11",
+    "Name": "Sushi",
+    "Description": "Japanese dish consisting of small balls or rolls of vinegar-flavoured cold rice served with a garnish of raw fish, vegetables, or egg.",
+    "Details": "Sushi can be enjoyed many ways and with various ingredients, making it a versatile and delightful dish.",
+    "UserId": "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
+    "ImagePath": "",
+    "ParentRecipeId": null,
+    "CreatedAt": "2023-05-21T14:39:26.4059135"
+  }
+]

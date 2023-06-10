@@ -1,0 +1,146 @@
+﻿.recipe-halves {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0px;
+}
+
+.recipe-left-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    gap: 10px;
+}
+
+span.link:hover {
+    cursor: pointer;
+}
+.clickable {
+    cursor: pointer;
+}
+.text-truncate-height {
+    overflow: hidden;
+    position: relative;
+    line-height: 1em; /* Adjust this value based on your needs */
+    max-height: 4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
+    text-align: justify;
+    margin-right: 1em;
+    padding-right: 1em;
+}
+.userpage-text-truncate-height {
+    overflow: hidden;
+    position: relative;
+    line-height: 1em; /* Adjust this value based on your needs */
+    max-height: 6em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
+    text-align: justify;
+    margin-right: 1em;
+    padding-right: 1em;
+    margin-top: 3em;
+}
+.related-recipe { /*for related text recipe name button on recipe page*/
+    position: relative;
+    margin-right: 6px;
+    margin-bottom: 20px;
+    padding-left: 6px;
+    padding-top: 6px;
+    line-height: 1em; /* Adjust this value based on your needs */
+    max-height: 4em; /* Adjust this value based on your needs, it should be a multiple of the line-height */
+    border-style: solid;
+    border-width: 1px 1px 0px 0px;
+    border-radius: 10px;
+    border-color: #81C784;
+}
+
+.text-truncate-height:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.userpage-text-truncate-height:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 4px;
+}
+
+.text-truncate-height:after, .userpage-text-truncate-height:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: white;
+}
+.index-recipe-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px; /* Adjust this value based on your desired length */
+}
+.image-container {
+    width: auto;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+}
+
+.mud-image-cropped {
+    width: 100%;
+    height: auto;
+}
+
+.browse-text-limit-width {
+    width: 400px; /* adjust as needed */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.profile-description-limit {
+    width: 300px; /* adjust as needed */
+    line-height: 1em;
+    max-height: 4em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.vcenter {
+    display: flex;
+    align-items: center;
+}
+
+.custom-small-button {
+    font-size: 0.6rem;
+    padding: 0px;
+}
+
+.custom-tab .mud-tab-active {
+    color: green;
+}
+
+.Details-comments-shared {
+    padding: 10px;
+}
+
+.featured-recipe-grid {
+    padding-bottom: 14px;
+    border-style: solid;
+    border-width:0px 0px 1px 0px;
+    border-radius:10px;
+    border-color:green;
+}
+
+.mud-tab-slider {
+    background-color:green !important;
+}
+
+.orange-lines .mud-outlined-input {
+    border-color: #fac951 !important;
+}
+
+.orange-lines .mud-input-slot .mud-input {
+    color: #fac951 !important;
+}
+
+.recipe-image-small {
+    border-radius: 7px;
+}

@@ -7,3 +7,5 @@ wwwroot/images/
 .vscode/
 *.dll
 empyrean-aurora-327423-c4288918044c.json
+.env
+Dockerfile

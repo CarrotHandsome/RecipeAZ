@@ -17,8 +17,7 @@
 </div>
 @if (Recipe != null) {
     <MudPopover Open="@_overviewEditOpen" Fixed="false" Class="px-4 pt-4" AnchorOrigin="Origin.TopLeft" 
-        Style="width:500px;height:390px;"        
-    >
+        Style="width:500px;height:390px;" >
         <div class="d-flex flex-column">
             <MudTextField @bind-Value="Recipe.Description" Lines="15" id="linkable-overview" />
                       
