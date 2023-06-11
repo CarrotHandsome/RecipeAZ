@@ -22,7 +22,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 string password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? string.Empty;
 string server = Environment.GetEnvironmentVariable("DB_SERVER") ?? "localhost";
-Console.WriteLine("PASSWORD AND SERVER: " + password + " " + server);
+//Console.WriteLine("PASSWORD AND SERVER: " + password + " " + server);
 //Console.WriteLine($"Password: { password  }");
 string connectionString;
 if (OperatingSystem.IsWindows()) {

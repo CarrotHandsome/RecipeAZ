@@ -17,7 +17,7 @@ namespace RecipeAZ.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -240,14 +240,14 @@ namespace RecipeAZ.Migrations
                         {
                             Id = "02174cf0–9412–4cfe - afbf - 59f706d72cf6",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "05def0ec-eb2c-4cb9-850d-5fd3b027e645",
+                            ConcurrencyStamp = "9ecc1cf4-344b-4c83-84ae-8221977feb0c",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEEhOTHEKVNv/FxPmWn94j4LgzEU06gBKUJzfv6o5zPTPI4cIdKUT3RFqGwxlbRBFsQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEO6rq2qhuFPqIK9s61Modu74p05EhXJwxCsD0l1rTN8sCUxjskbJo37JUqcTwTtQzw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "62111856-84c8-4ea8-891a-1d4a010ed089",
+                            SecurityStamp = "965af0a3-5212-4bb2-89d9-e475ff123e51",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
@@ -282,7 +282,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Ingredient", b =>
@@ -297,7 +297,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasKey("IngredientId");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Recipe", b =>
@@ -338,7 +338,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Recipes");
+                    b.ToTable("Recipes", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeIngredient", b =>
@@ -363,9 +363,6 @@ namespace RecipeAZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Optional")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
@@ -379,7 +376,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeIngredients");
+                    b.ToTable("RecipeIngredients", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeLike", b =>
@@ -401,7 +398,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeLikes");
+                    b.ToTable("RecipeLikes", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeStep", b =>
@@ -422,9 +419,6 @@ namespace RecipeAZ.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("Optional")
-                        .HasColumnType("bit");
-
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
@@ -436,7 +430,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("RecipeId");
 
-                    b.ToTable("RecipeSteps");
+                    b.ToTable("RecipeSteps", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.RecipeTag", b =>
@@ -451,7 +445,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasIndex("TagId");
 
-                    b.ToTable("RecipeTags");
+                    b.ToTable("RecipeTags", (string)null);
                 });
 
             modelBuilder.Entity("RecipeAZ.Models.Tag", b =>
@@ -466,7 +460,7 @@ namespace RecipeAZ.Migrations
 
                     b.HasKey("TagId");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
