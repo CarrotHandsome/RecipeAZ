@@ -1,6 +1,6 @@
 ﻿@inject NavigationManager _navigationManager
 @inject ISnackbar snackBar
-@inject IDialogService dialogService
+@inject IDialogService _dialogService
 @inject RecipeAZ.Services.RecipeService _recipeService
 @inject IDbContextFactory<DataContext> _contextFactory
 
@@ -98,7 +98,7 @@
         }
     }
     private async Task ShowDeleteConfirmation() {
-        bool? result = await dialogService.ShowMessageBox(
+        bool? result = await _dialogService.ShowMessageBox(
             "Are you sure?",
             "Deleting your recipe cannot be undone.",
             yesText:"Delete it", noText:"I take it back");

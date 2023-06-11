@@ -10,14 +10,12 @@ namespace RecipeAZ.Models {
         public Recipe? Recipe { get; set; }
         public string RecipeId { get; set; }
         public Ingredient? Ingredient { get; set; }
-        public string IngredientId { get; set; }
-        
-        [StringLength(25)]
-        public string Name { get; set; } = string.Empty;    
-        [StringLength(15)]    
+        public string IngredientId { get; set; }        
+        public string Name { get; set; } = string.Empty;      
         public string Description { get; set; } = string.Empty;
         public string Details { get; set; } = string.Empty;        
         public int Order { get; set; }
+        public bool Optional { get; set; }
 
         
     }

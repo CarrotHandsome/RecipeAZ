@@ -6,6 +6,7 @@ namespace RecipeAZ.Interfaces {
         public string Description { get; set; }
         public string Details { get; set; }
         public int Order { get; set; }
-        public Recipe Recipe { get; set; }        
+        public Recipe Recipe { get; set; }  
+        public bool Optional { get; set; }
     }
 }

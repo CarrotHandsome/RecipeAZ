@@ -297,13 +297,20 @@ namespace RecipeAZ.Services {
             //Console.WriteLine("Adding comment");
             try {
                 DataContext.Comments.Add(comment);
-                await SaveRecipeAsync(Recipe.RecipeId);
+                await DataContext.SaveChangesAsync();
             } catch (Exception e) {
                 //Console.WriteLine("EXCEPTION:" + e);
-            }
-            
+            }            
         }
         
+        public async Task RemoveComment(Comment comment) {
+            try {
+                DataContext.Comments.Remove(comment);
+                await DataContext.SaveChangesAsync();
+            } catch (Exception e) {
+                Console.WriteLine(e);
+            }
+        }
 
         public async Task<List<Recipe>> GetRecipesAsync(Expression<Func<Recipe, bool>> filter, string searchText, int minLength=2) {
             //Console.WriteLine("Getting recipes async");

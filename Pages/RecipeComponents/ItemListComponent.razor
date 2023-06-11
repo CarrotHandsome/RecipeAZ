@@ -49,7 +49,10 @@
                             }
                             @if (_typeName == "RecipeIngredient") {
                                 <div class="mr-1" style="margin-top: 0.75rem; margin-bottom: 0;">
-                                    <TextLinkMixComponent Text="@context.Name" />:
+                                    <TextLinkMixComponent Text="@context.Name" />
+                                     @if (context.Optional) {
+                                        <div style="font-size:smaller;">optional</div>
+                                    }
                                 </div>
                             }                     
 
@@ -66,6 +69,9 @@
                                 ToggledIcon="@Icons.Material.Filled.ExpandMore"
                                 Color="Color.Success"
                                 Disabled="@string.IsNullOrEmpty(context.Details)" />
+                            }
+                            @if (CanEdit && Editing) {
+                                <MudCheckBox @bind-Checked="@context.Optional" Label="Optional"></MudCheckBox>
                             }
                         </div>
                         @if (_detailsOpen.ContainsKey(context) && _detailsOpen[context]) {
@@ -170,8 +176,8 @@
             SearchOpen="@_searchLinkOpen" OnLinkAdded="HandleLinkAdded" OnClose="() => _searchLinkOpen=false" />
     </MudPopover>
 }
-@code {
-    [CascadingParameter(Name="RecipeParam")]
+                            @code {
+                                [CascadingParameter(Name="RecipeParam")]
     public Recipe? ItemRecipe { get; set; }
     [CascadingParameter(Name = "CanEditParam")]
     protected bool CanEdit { get; set; }
@@ -181,7 +187,7 @@
     [Parameter]
     public Type? Type { get; set; }
     public List<IEditableListItem<ItemType>> ItemsList => ItemRecipe.GetItems<ItemType>();
-    public IEditableListItem<ItemType> LastItem { get; set; } = new ItemType();
+    public IEditableListItem<ItemType> LastItem { get; set; } = new ItemType();    
 
     private Action<string>? CurrentEditAction { get; set; }
     private bool ShowNewItemInput { get; set; } = false;
@@ -205,6 +211,7 @@
     private string _descriptionId = "linkable-item-description";
     private string _detailsId = "linkable-item-details";
     private string _editText = string.Empty;
+    
 
     private void OnTextChanged(string value) {
         LastItem.Name = value;
