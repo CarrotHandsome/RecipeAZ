@@ -51,7 +51,7 @@ namespace RecipeAZ.Models {
             };
 
             PasswordHasher<AppUser> passwordHasher = new PasswordHasher<AppUser>();
-            user.PasswordHash = passwordHasher.HashPassword(user, "P@ssw0rd!");
+            user.PasswordHash = passwordHasher.HashPassword(user, Environment.GetEnvironmentVariable("ADMIN_PASSWORD") ?? "P@$$w0rD");
             modelBuilder.Entity<AppUser>().HasData(user);
 
             modelBuilder.Entity<IdentityUserRole<string>>().HasData(new IdentityUserRole<string> {

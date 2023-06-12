@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# Stop and remove the existing container
+docker kill recipeaz
+docker rm recipeaz
+
+# Build the Docker image
+docker build -t carrothands/recipeaz:latest .
+
+# Run the new container
+docker run -p 8080:80 -d --name recipeaz --network recipeaz-network carrothands/recipeaz:latest

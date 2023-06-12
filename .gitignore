@@ -3,6 +3,7 @@ obj/
 wwwroot/css/bootstrap/
 wwwroot/css/open-iconic/
 wwwroot/images/
+wwwroot/recipeaz-images
 .vs/
 .vscode/
 *.dll

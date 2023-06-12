@@ -1,0 +1,4 @@
+docker run -p 8080:80 -d --name recipeaz --network recipeaz-network carrothands/recipeaz:latest
+docker run -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=CarinNeva82!" -p 1433:1433 --name recipeaz-db --hostname recipeaz-host --network recipeaz-network -d mcr.microsoft.com/mssql/server:2022-latest
+
+docker build -t carrothands/recipeaz:latest .

@@ -18,12 +18,12 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("http://0.0.0.0:8080");
+builder.WebHost.UseUrls("http://0.0.0.0:80");
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-string password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? string.Empty;
+string password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "P@$$w0rD";
 string server = Environment.GetEnvironmentVariable("DB_SERVER") ?? "localhost";
-Console.WriteLine("PASSWORD AND SERVER: " + password + " " + server);
+//Console.WriteLine("PASSWORD AND SERVER: " + password + " " + server);
 //Console.WriteLine($"Password: { password  }");
 string connectionString;
 if (OperatingSystem.IsWindows()) {
@@ -39,7 +39,7 @@ if (OperatingSystem.IsWindows()) {
 
 builder.Services.AddDbContextFactory<DataContext>(opts => {
     opts.UseSqlServer(connectionString);
-    opts.EnableSensitiveDataLogging(true);
+    opts.EnableSensitiveDataLogging(false);
     opts.UseLoggerFactory(LoggerFactory.Create(builder => builder.AddConsole()));
 });
 

@@ -11,7 +11,7 @@ namespace RecipeAZ.Models
         public string Description { get; set; } = string.Empty; //aka Overview
         public string Details { get; set; } = string.Empty;
         public string? UserId { get; set; } = string.Empty;
-        public string? ImagePath { get; set; } = "images/recipe_default.png";
+        public string? ImagePath { get; set; } = "recipeaz-images/dd870e50-f702-43c9-8282-b3ed92dd4033.png";
         public AppUser? User { get; set; }
         public string? ParentRecipeId { get; set; }
         public Recipe? ParentRecipe { get; set; }

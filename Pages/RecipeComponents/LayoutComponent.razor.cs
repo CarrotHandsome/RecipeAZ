@@ -30,6 +30,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
             //Console.WriteLine("Id: " + Id);
             if (Id == null && User != null) {
                 _recipe = _recipeService.NewRecipe(User);
+                _recipe.ImagePath = "recipeaz-images/dd870e50-f702-43c9-8282-b3ed92dd4033.png"
                 CanEdit = true;
                 Editing = true;
             } else if (Id == null && User == null) {
@@ -62,7 +63,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
             try {
                 IBrowserFile uploadedImage = file;
                 if (uploadedImage.Size <= imageSizeMaxBytes) {
-                    string imageFolder = "images";
+                    string imageFolder = "recipeaz-images";
                     string fileName = $"{Guid.NewGuid()}{Path.GetExtension(uploadedImage.Name)}";
                     string folderPath = Path.Combine(env.WebRootPath, imageFolder);
                     string fullPath = Path.Combine(folderPath, fileName);
@@ -93,7 +94,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
                         List<Recipe> recipesUsingImage = 
                             await _recipeService.GetRecipesAsync(r => r.ImagePath == _recipe.ImagePath, "", -1);
                         if (System.IO.File.Exists(oldImagePath)
-                            && oldImagePath != Path.Combine(env.WebRootPath, "images/recipe_default.png")
+                            && oldImagePath != Path.Combine(env.WebRootPath, "recipeaz-images/dd870e50-f702-43c9-8282-b3ed92dd4033.png")
                             && recipesUsingImage.Count == 0) {
                                 //Console.WriteLine("deleted old image");
                                 System.IO.File.Delete(oldImagePath);
