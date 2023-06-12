@@ -15,18 +15,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using RecipeAZ.Models;
+using RecipeAZ.Services;
 
 namespace RecipeAZ.Pages.Account
 {
     public class ForgotPasswordModel : PageModel
     {
         private readonly UserManager<AppUser> _userManager;
-        private readonly IEmailSender _emailSender;
+        private readonly MailService _mailService;
 
-        public ForgotPasswordModel(UserManager<AppUser> userManager, IEmailSender emailSender)
+        public ForgotPasswordModel(UserManager<AppUser> userManager, MailService mailService)
         {
             _userManager = userManager;
-            _emailSender = emailSender;
+            _mailService = mailService;
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace RecipeAZ.Pages.Account
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
 
-                await _emailSender.SendEmailAsync(
+                await MailService.Send(
                     Input.Email,
                     "Reset Password",
                     $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");

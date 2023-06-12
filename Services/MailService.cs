@@ -12,7 +12,6 @@ namespace RecipeAZ.Services {
         // configuration set, comment out the following property and the
         // ConfigurationSetName = configSet argument below. 
         static readonly string configSet = "ConfigSet";
-
         
 
         public async static Task Send(string recipientAddress, string subject, string body) {
