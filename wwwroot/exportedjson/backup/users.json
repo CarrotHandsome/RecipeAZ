@@ -1,0 +1,13 @@
+[
+  {
+    "Id": "cbe324a4-6815-46ff-bc37-e8bf5d89478d",
+    "UserName": "peeman",
+    "NormalizedUserName": "PEEMAN",
+    "Email": "akekajoo@gmail.com",
+    "NormalizedEmail": "AKEKAJOO@GMAIL.COM",
+    "EmailConfirmed": true,
+    "PasswordHash": "AQAAAAIAAYagAAAAEEMvSCG9fMOmjqB2Kb0oNrLKBcaceAqm01JOFZ3zjv4YWRYtmxoQmFZTwEasV26R7A==",
+    "SecurityStamp": "LSJDRWAZEPGLMRYEEPKNPITCSMC6HAGL",
+    "ConcurrencyStamp": "344c4a70-c1d8-4ca3-a612-01669a694d79"
+  }
+]

@@ -4,36 +4,40 @@
     "Name": "Flour"
   },
   {
+    "IngredientId": "2",
+    "Name": "Sugar"
+  },
+  {
+    "IngredientId": "3",
+    "Name": "Salt"
+  },
+  {
+    "IngredientId": "4",
+    "Name": "Baking Powder"
+  },
+  {
+    "IngredientId": "5",
+    "Name": "Baking Soda"
+  },
+  {
+    "IngredientId": "6",
+    "Name": "Yeast"
+  },
+  {
+    "IngredientId": "7",
+    "Name": "Butter"
+  },
+  {
+    "IngredientId": "8",
+    "Name": "Eggs"
+  },
+  {
+    "IngredientId": "9",
+    "Name": "Milk"
+  },
+  {
     "IngredientId": "10",
     "Name": "Cream"
-  },
-  {
-    "IngredientId": "100",
-    "Name": "Caramel"
-  },
-  {
-    "IngredientId": "101",
-    "Name": "Marshmallows"
-  },
-  {
-    "IngredientId": "102",
-    "Name": "Graham Crackers"
-  },
-  {
-    "IngredientId": "103",
-    "Name": "Jelly"
-  },
-  {
-    "IngredientId": "104",
-    "Name": "Peanut Butter"
-  },
-  {
-    "IngredientId": "105",
-    "Name": "White Rice"
-  },
-  {
-    "IngredientId": "106",
-    "Name": "Brown Rice"
   },
   {
     "IngredientId": "11",
@@ -70,10 +74,6 @@
   {
     "IngredientId": "19",
     "Name": "Pasta"
-  },
-  {
-    "IngredientId": "2",
-    "Name": "Sugar"
   },
   {
     "IngredientId": "20",
@@ -116,10 +116,6 @@
     "Name": "Garlic"
   },
   {
-    "IngredientId": "3",
-    "Name": "Salt"
-  },
-  {
     "IngredientId": "30",
     "Name": "Onions"
   },
@@ -158,10 +154,6 @@
   {
     "IngredientId": "39",
     "Name": "Basil"
-  },
-  {
-    "IngredientId": "4",
-    "Name": "Baking Powder"
   },
   {
     "IngredientId": "40",
@@ -204,10 +196,6 @@
     "Name": "Ground Beef"
   },
   {
-    "IngredientId": "5",
-    "Name": "Baking Soda"
-  },
-  {
     "IngredientId": "50",
     "Name": "Chicken"
   },
@@ -246,10 +234,6 @@
   {
     "IngredientId": "59",
     "Name": "Salmon"
-  },
-  {
-    "IngredientId": "6",
-    "Name": "Yeast"
   },
   {
     "IngredientId": "60",
@@ -292,10 +276,6 @@
     "Name": "Broccoli"
   },
   {
-    "IngredientId": "7",
-    "Name": "Butter"
-  },
-  {
     "IngredientId": "70",
     "Name": "Cauliflower"
   },
@@ -334,10 +314,6 @@
   {
     "IngredientId": "79",
     "Name": "Oranges"
-  },
-  {
-    "IngredientId": "8",
-    "Name": "Eggs"
   },
   {
     "IngredientId": "80",
@@ -380,10 +356,6 @@
     "Name": "Cashews"
   },
   {
-    "IngredientId": "9",
-    "Name": "Milk"
-  },
-  {
     "IngredientId": "90",
     "Name": "Sunflower Seeds"
   },
@@ -422,5 +394,33 @@
   {
     "IngredientId": "99",
     "Name": "Chocolate Chips"
+  },
+  {
+    "IngredientId": "100",
+    "Name": "Caramel"
+  },
+  {
+    "IngredientId": "101",
+    "Name": "Marshmallows"
+  },
+  {
+    "IngredientId": "102",
+    "Name": "Graham Crackers"
+  },
+  {
+    "IngredientId": "103",
+    "Name": "Jelly"
+  },
+  {
+    "IngredientId": "104",
+    "Name": "Peanut Butter"
+  },
+  {
+    "IngredientId": "105",
+    "Name": "White Rice"
+  },
+  {
+    "IngredientId": "106",
+    "Name": "Brown Rice"
   }
 ]

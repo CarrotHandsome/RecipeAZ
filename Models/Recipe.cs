@@ -20,7 +20,7 @@ namespace RecipeAZ.Models
         public ICollection<RecipeStep>? RecipeSteps { get; set; } 
         public ICollection<Comment>? Comments { get; set; }
         public HashSet<RecipeLike>? UsersWhoLikeMe { get; set; }
-        public ICollection<RecipeTag> RecipeTags { get; set; }
+        public ICollection<RecipeTag> RecipeTags { get; set; } = new List<RecipeTag>();
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime CreatedAt { get; set; }

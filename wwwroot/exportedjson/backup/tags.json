@@ -4,6 +4,38 @@
     "Name": "Poultry"
   },
   {
+    "TagId": "2",
+    "Name": "Beef"
+  },
+  {
+    "TagId": "3",
+    "Name": "Seafood"
+  },
+  {
+    "TagId": "4",
+    "Name": "Vegetarian"
+  },
+  {
+    "TagId": "5",
+    "Name": "Pasta"
+  },
+  {
+    "TagId": "6",
+    "Name": "Soup"
+  },
+  {
+    "TagId": "7",
+    "Name": "Salad"
+  },
+  {
+    "TagId": "8",
+    "Name": "Dessert"
+  },
+  {
+    "TagId": "9",
+    "Name": "Bread"
+  },
+  {
     "TagId": "10",
     "Name": "Pork"
   },
@@ -44,39 +76,7 @@
     "Name": "Healthy"
   },
   {
-    "TagId": "2",
-    "Name": "Beef"
-  },
-  {
     "TagId": "20",
     "Name": "Comfort Food"
-  },
-  {
-    "TagId": "3",
-    "Name": "Seafood"
-  },
-  {
-    "TagId": "4",
-    "Name": "Vegetarian"
-  },
-  {
-    "TagId": "5",
-    "Name": "Pasta"
-  },
-  {
-    "TagId": "6",
-    "Name": "Soup"
-  },
-  {
-    "TagId": "7",
-    "Name": "Salad"
-  },
-  {
-    "TagId": "8",
-    "Name": "Dessert"
-  },
-  {
-    "TagId": "9",
-    "Name": "Bread"
   }
 ]

@@ -1,130 +1,1554 @@
 [
   {
     "RecipeStepId": "1",
-    "Name": "Step 1",
-    "Description": "Heat the olive oil in a large skillet over medium heat.",
-    "Details": "",
-    "RecipeId": "2",
+    "Name": "",
+    "Description": "Boil the pasta according to the package instructions",
+    "Details": "Salt the water before adding the pasta. Cook until al dente (cooked so as to still be firm when bitten).",
+    "RecipeId": "1",
     "Order": 1
   },
   {
-    "RecipeStepId": "2",
-    "Name": "Step 2",
-    "Description": "Add the onion, and cook until tender.",
-    "Details": "",
-    "RecipeId": "2",
+    "RecipeStepId": "100",
+    "Name": "",
+    "Description": "When ready to serve, gently toss the salad again and sprinkle with extra cilantro, if desired",
+    "Details": "The extra cilantro adds a fresh touch right before serving.",
+    "RecipeId": "14",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "101",
+    "Name": "",
+    "Description": "In a large pot, heat the olive oil over medium heat and add the onions, carrots, and celery",
+    "Details": "Sauté the vegetables until they're tender, which should take about 5-7 minutes.",
+    "RecipeId": "15",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "102",
+    "Name": "",
+    "Description": "Add the garlic to the pot and cook for another minute",
+    "Details": "Make sure not to burn the garlic as it can give a bitter taste.",
+    "RecipeId": "15",
     "Order": 2
   },
   {
-    "RecipeStepId": "3",
-    "Name": "Step 3",
-    "Description": "Stir in the Arborio rice, and cook for a few minutes, until the oil has coated each grain of rice.",
-    "Details": "",
-    "RecipeId": "2",
+    "RecipeStepId": "103",
+    "Name": "",
+    "Description": "Add the chicken to the pot and cook until it's no longer pink",
+    "Details": "This should take about 5-7 minutes. Make sure to stir occasionally to prevent sticking.",
+    "RecipeId": "15",
     "Order": 3
   },
   {
-    "RecipeStepId": "4",
-    "Name": "Step 1",
-    "Description": "Heat the olive oil in a large skillet over medium heat.",
-    "Details": "",
-    "RecipeId": "3",
+    "RecipeStepId": "104",
+    "Name": "",
+    "Description": "Add the chicken broth, bay leaves, thyme, and salt to the pot",
+    "Details": "Stir everything together and bring the mixture to a boil.",
+    "RecipeId": "15",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "105",
+    "Name": "",
+    "Description": "Once the soup is boiling, add the noodles and reduce the heat to a simmer",
+    "Details": "Cook the noodles in the soup until they're tender. This should take about 10-15 minutes.",
+    "RecipeId": "15",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "106",
+    "Name": "",
+    "Description": "When the noodles are cooked, remove the bay leaves and season the soup with more salt if needed",
+    "Details": "You can also add some freshly ground black pepper for extra flavor.",
+    "RecipeId": "15",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "107",
+    "Name": "",
+    "Description": "Serve the soup hot with a sprinkle of fresh parsley on top",
+    "Details": "The parsley adds a nice fresh touch to the rich soup.",
+    "RecipeId": "15",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "108",
+    "Name": "",
+    "Description": "Preheat your oven to 375 degrees F (190 degrees C) and grease a pie dish",
+    "Details": "You can use butter or a non-stick cooking spray to grease the pie dish.",
+    "RecipeId": "16",
     "Order": 1
   },
   {
-    "RecipeStepId": "5",
-    "Name": "Step 2",
-    "Description": "Add the minced garlic, and cook until fragrant.",
-    "Details": "",
-    "RecipeId": "3",
+    "RecipeStepId": "109",
+    "Name": "",
+    "Description": "In a large bowl, combine the apples, sugar, flour, cinnamon, and nutmeg",
+    "Details": "Toss everything together until the apples are evenly coated in the sugar and spices.",
+    "RecipeId": "16",
     "Order": 2
   },
   {
-    "RecipeStepId": "6",
-    "Name": "Step 3",
-    "Description": "Stir in the chopped tomato, and cook until softened.",
-    "Details": "",
-    "RecipeId": "3",
+    "RecipeStepId": "110",
+    "Name": "",
+    "Description": "Roll out half of the pie crust and place it in the bottom of the pie dish",
+    "Details": "Make sure to press the crust into the corners of the dish.",
+    "RecipeId": "16",
     "Order": 3
   },
   {
-    "RecipeStepId": "7",
-    "Name": "Step 1",
-    "Description": "Heat the olive oil in a large skillet over medium heat.",
-    "Details": "",
-    "RecipeId": "4",
+    "RecipeStepId": "111",
+    "Name": "",
+    "Description": "Pour the apple filling into the pie crust",
+    "Details": "Spread the filling out evenly so that the pie bakes uniformly.",
+    "RecipeId": "16",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "112",
+    "Name": "",
+    "Description": "Roll out the second half of the pie crust and place it on top of the apple filling",
+    "Details": "Crimp the edges of the crusts together to seal the pie. Cut a few slits in the top crust to let steam escape.",
+    "RecipeId": "16",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "113",
+    "Name": "",
+    "Description": "Bake the pie in the preheated oven for about 50 minutes, or until the crust is golden brown",
+    "Details": "If the edges of the crust start to get too brown, you can cover them with aluminum foil.",
+    "RecipeId": "16",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "114",
+    "Name": "",
+    "Description": "Let the pie cool for at least 2 hours before slicing and serving",
+    "Details": "This allows the filling to set and makes the pie easier to slice.",
+    "RecipeId": "16",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "115",
+    "Name": "",
+    "Description": "In a large pot, cook the spaghetti in salted boiling water until al dente",
+    "Details": "This should take about 8-10 minutes. Be careful not to overcook the pasta.",
+    "RecipeId": "17",
     "Order": 1
   },
   {
-    "RecipeStepId": "8",
-    "Name": "Step 2",
-    "Description": "Add the diced bell peppers, and cook until softened.",
-    "Details": "",
-    "RecipeId": "4",
+    "RecipeStepId": "116",
+    "Name": "",
+    "Description": "While the pasta is cooking, cook the bacon in a large skillet over medium heat until crispy",
+    "Details": "This should take about 5-7 minutes. Remove the bacon from the skillet and drain on paper towels.",
+    "RecipeId": "17",
     "Order": 2
   },
   {
-    "RecipeStepId": "9",
-    "Name": "Step 3",
-    "Description": "Stir in the cumin powder, and cook for a minute, until fragrant.",
-    "Details": "",
-    "RecipeId": "4",
+    "RecipeStepId": "117",
+    "Name": "",
+    "Description": "In the same skillet, add the garlic and cook until fragrant",
+    "Details": "This should only take about a minute. Be careful not to burn the garlic.",
+    "RecipeId": "17",
     "Order": 3
   },
   {
-    "RecipeStepId": "10",
-    "Name": "Step 1",
-    "Description": "In a large pot, bring the chicken broth to a boil.",
-    "Details": "",
-    "RecipeId": "5",
+    "RecipeStepId": "118",
+    "Name": "",
+    "Description": "In a separate bowl, whisk together the eggs and Parmesan cheese",
+    "Details": "The mixture should be well combined and creamy.",
+    "RecipeId": "17",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "119",
+    "Name": "",
+    "Description": "Once the pasta is done cooking, drain it and add it to the skillet with the garlic",
+    "Details": "Reserve some of the pasta water for later.",
+    "RecipeId": "17",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "120",
+    "Name": "",
+    "Description": "Remove the skillet from the heat and slowly pour in the egg and cheese mixture, stirring constantly",
+    "Details": "The heat from the pasta will cook the egg slightly and create a creamy sauce. If the sauce is too thick, add some of the reserved pasta water.",
+    "RecipeId": "17",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "121",
+    "Name": "",
+    "Description": "Add the cooked bacon to the pasta and season with salt and black pepper",
+    "Details": "Toss everything together until the pasta is evenly coated in the sauce.",
+    "RecipeId": "17",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "122",
+    "Name": "",
+    "Description": "Serve the pasta hot with extra Parmesan cheese on top",
+    "Details": "You can also garnish with fresh parsley if desired.",
+    "RecipeId": "17",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "123",
+    "Name": "",
+    "Description": "Preheat your grill on high heat",
+    "Details": "Make sure the grill grates are clean and oiled.",
+    "RecipeId": "18",
     "Order": 1
   },
   {
-    "RecipeStepId": "11",
-    "Name": "Step 2",
-    "Description": "Add the white rice, stir, reduce the heat to low, cover the pot, and simmer for 20 minutes, or until the rice is tender and the liquid is absorbed.",
-    "Details": "",
-    "RecipeId": "5",
+    "RecipeStepId": "124",
+    "Name": "",
+    "Description": "In a small bowl, mix together the lemon juice, olive oil, dill, garlic, salt, and pepper",
+    "Details": "This will be the marinade for the salmon.",
+    "RecipeId": "18",
     "Order": 2
   },
   {
-    "RecipeStepId": "12",
-    "Name": "Step 1",
-    "Description": "In a large bowl, combine the drained canned tuna and the cooked macaroni.",
-    "Details": "",
-    "RecipeId": "6",
+    "RecipeStepId": "125",
+    "Name": "",
+    "Description": "Place the salmon fillets in a shallow dish and pour the marinade over them",
+    "Details": "Turn the fillets to make sure they're coated on all sides. Let them marinate for 15-30 minutes.",
+    "RecipeId": "18",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "126",
+    "Name": "",
+    "Description": "Place the salmon fillets on the preheated grill",
+    "Details": "Cook them for about 4-5 minutes on each side, or until the salmon flakes easily with a fork.",
+    "RecipeId": "18",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "127",
+    "Name": "",
+    "Description": "Serve the grilled salmon with lemon slices and fresh dill",
+    "Details": "You can also serve it with a side of roasted vegetables or a fresh salad.",
+    "RecipeId": "18",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "128",
+    "Name": "",
+    "Description": "In a large skillet, heat the oil over medium heat",
+    "Details": "Use enough oil to coat the bottom of the skillet.",
+    "RecipeId": "19",
     "Order": 1
   },
   {
-    "RecipeStepId": "13",
-    "Name": "Step 2",
-    "Description": "Stir to combine, then serve.",
-    "Details": "",
-    "RecipeId": "6",
+    "RecipeStepId": "129",
+    "Name": "",
+    "Description": "Add the pork to the skillet and cook until browned on all sides",
+    "Details": "This should take about 5-7 minutes. Remove the pork from the skillet and set it aside.",
+    "RecipeId": "19",
     "Order": 2
   },
   {
-    "RecipeStepId": "14",
-    "Name": "Step 1",
-    "Description": "Heat the olive oil in a large skillet over medium heat.",
-    "Details": "",
-    "RecipeId": "7",
+    "RecipeStepId": "130",
+    "Name": "",
+    "Description": "In the same skillet, add the broccoli and bell peppers",
+    "Details": "Cook them until they're crisp-tender, about 5 minutes.",
+    "RecipeId": "19",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "131",
+    "Name": "",
+    "Description": "Return the pork to the skillet and add the soy sauce, garlic, and ginger",
+    "Details": "Stir everything together and cook for a few more minutes, until the pork is cooked through and the vegetables are tender.",
+    "RecipeId": "19",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "132",
+    "Name": "",
+    "Description": "Serve the stir-fry hot with a side of rice",
+    "Details": "You can garnish with sesame seeds and sliced green onions if desired.",
+    "RecipeId": "19",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "133",
+    "Name": "",
+    "Description": "Preheat your oven to 350°F (175°C) and grease a loaf pan",
+    "Details": "You can use butter or cooking spray to grease the pan.",
+    "RecipeId": "20",
     "Order": 1
+  },
+  {
+    "RecipeStepId": "134",
+    "Name": "",
+    "Description": "In a large bowl, combine the flour, baking soda, and salt",
+    "Details": "These are the dry ingredients for the banana bread.",
+    "RecipeId": "20",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "135",
+    "Name": "",
+    "Description": "In a separate bowl, cream together the butter and brown sugar",
+    "Details": "You can use an electric mixer to do this. The mixture should be light and fluffy.",
+    "RecipeId": "20",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "136",
+    "Name": "",
+    "Description": "Beat the eggs into the butter and sugar mixture one at a time",
+    "Details": "Make sure each egg is fully incorporated before adding the next one.",
+    "RecipeId": "20",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "137",
+    "Name": "",
+    "Description": "Stir in the mashed bananas",
+    "Details": "Make sure they're well combined with the rest of the ingredients.",
+    "RecipeId": "20",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "138",
+    "Name": "",
+    "Description": "Gradually add the dry ingredients to the wet ingredients, mixing just until combined",
+    "Details": "Don't overmix the batter, or the bread will be tough.",
+    "RecipeId": "20",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "139",
+    "Name": "",
+    "Description": "Fold in the chocolate chips",
+    "Details": "Make sure they're evenly distributed throughout the batter.",
+    "RecipeId": "20",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "140",
+    "Name": "",
+    "Description": "Pour the batter into the prepared loaf pan and bake for 60-65 minutes",
+    "Details": "The bread is done when a toothpick inserted into the center comes out clean. Let the bread cool in the pan for 10 minutes, then transfer it to a wire rack to cool completely.",
+    "RecipeId": "20",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "141",
+    "Name": "",
+    "Description": "Slice the banana bread and serve",
+    "Details": "You can serve it warm or at room temperature, and it's delicious with a pat of butter or a drizzle of honey.",
+    "RecipeId": "20",
+    "Order": 9
+  },
+  {
+    "RecipeStepId": "142",
+    "Name": "",
+    "Description": "Rinse the rice under cold water until the water runs clear",
+    "Details": "This removes excess starch and helps the rice cook evenly.",
+    "RecipeId": "21",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "143",
+    "Name": "",
+    "Description": "In a saucepan, bring the broth to a boil",
+    "Details": "You can use vegetable or chicken broth for this recipe.",
+    "RecipeId": "21",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "144",
+    "Name": "",
+    "Description": "Add the rice to the boiling broth and reduce heat to low",
+    "Details": "You want the rice to simmer gently for the next steps.",
+    "RecipeId": "21",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "145",
+    "Name": "",
+    "Description": "Cover the saucepan and let the rice cook for about 15 minutes",
+    "Details": "Check the rice every few minutes to make sure it's not sticking to the bottom of the pan.",
+    "RecipeId": "21",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "146",
+    "Name": "",
+    "Description": "In a separate pan, sauté the onions and garlic in olive oil",
+    "Details": "You want them to be soft and translucent, but not browned.",
+    "RecipeId": "21",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "147",
+    "Name": "",
+    "Description": "Add the mushrooms to the onions and garlic, and cook until the mushrooms are browned",
+    "Details": "This should take about 10 minutes. You want the mushrooms to release their liquid and then become browned and flavorful.",
+    "RecipeId": "21",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "148",
+    "Name": "",
+    "Description": "Stir the cooked mushrooms and onions into the cooked rice",
+    "Details": "Make sure they're evenly distributed throughout the rice.",
+    "RecipeId": "21",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "149",
+    "Name": "",
+    "Description": "Season the risotto with salt and pepper to taste, and serve hot",
+    "Details": "You can also stir in some grated Parmesan cheese for extra flavor if you like.",
+    "RecipeId": "21",
+    "Order": 8
   },
   {
     "RecipeStepId": "15",
-    "Name": "Step 2",
-    "Description": "Add the diced onion, and cook until tender.",
-    "Details": "",
-    "RecipeId": "7",
+    "Name": "",
+    "Description": "Heat oil in a pan over medium heat",
+    "Details": "Use a large, non-stick skillet for best results.",
+    "RecipeId": "3",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "150",
+    "Name": "",
+    "Description": "Preheat your oven to 350°F (175°C) and line a muffin tin with paper liners",
+    "Details": "You can also grease the muffin tin if you prefer.",
+    "RecipeId": "22",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "151",
+    "Name": "",
+    "Description": "In a large bowl, combine the flour, sugar, baking powder, baking soda, and salt",
+    "Details": "These are the dry ingredients for the muffins.",
+    "RecipeId": "22",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "152",
+    "Name": "",
+    "Description": "In a separate bowl, whisk together the eggs, milk, vegetable oil, vanilla extract, and lemon juice",
+    "Details": "These are the wet ingredients for the muffins.",
+    "RecipeId": "22",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "153",
+    "Name": "",
+    "Description": "Gradually add the wet ingredients to the dry ingredients, mixing just until combined",
+    "Details": "Don't overmix the batter, or the muffins will be tough.",
+    "RecipeId": "22",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "154",
+    "Name": "",
+    "Description": "Fold in the poppy seeds",
+    "Details": "Make sure they're evenly distributed throughout the batter.",
+    "RecipeId": "22",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "155",
+    "Name": "",
+    "Description": "Spoon the batter into the prepared muffin tin, filling each cup about 2/3 full",
+    "Details": "You should have enough batter for about 12 muffins.",
+    "RecipeId": "22",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "156",
+    "Name": "",
+    "Description": "Bake the muffins for about 20 minutes, or until a toothpick inserted into the center of a muffin comes out clean",
+    "Details": "Let the muffins cool in the tin for 5 minutes, then transfer them to a wire rack to cool completely.",
+    "RecipeId": "22",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "157",
+    "Name": "",
+    "Description": "Serve the muffins warm or at room temperature",
+    "Details": "They're delicious with a bit of butter or a drizzle of honey.",
+    "RecipeId": "22",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "158",
+    "Name": "",
+    "Description": "Peel and devein the shrimp, then set aside",
+    "Details": "This can be done ahead of time to save on prep time.",
+    "RecipeId": "23",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "159",
+    "Name": "",
+    "Description": "Heat the oil in a large pan or wok over medium-high heat",
+    "Details": "You want the oil to be hot, but not smoking.",
+    "RecipeId": "23",
     "Order": 2
   },
   {
     "RecipeStepId": "16",
-    "Name": "Step 3",
-    "Description": "Remove the skillet from the heat, stir in the crumbled feta cheese, and serve.",
-    "Details": "",
+    "Name": "",
+    "Description": "Add shrimp and cook until pink",
+    "Details": "This should take about 2-3 minutes per side. Be careful not to overcook.",
+    "RecipeId": "3",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "160",
+    "Name": "",
+    "Description": "Add the garlic and sauté until fragrant",
+    "Details": "This should only take about 30 seconds. Be careful not to burn the garlic.",
+    "RecipeId": "23",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "161",
+    "Name": "",
+    "Description": "Add the shrimp and stir-fry until they turn pink",
+    "Details": "This should take about 2-3 minutes. Don't overcook the shrimp or they'll become tough.",
+    "RecipeId": "23",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "162",
+    "Name": "",
+    "Description": "Stir in the curry paste and mix well to coat the shrimp",
+    "Details": "You can add more or less curry paste depending on how spicy you like your food.",
+    "RecipeId": "23",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "163",
+    "Name": "",
+    "Description": "Add the coconut milk and fish sauce, then reduce heat to low",
+    "Details": "Let the curry simmer for a few minutes to let the flavors meld together.",
+    "RecipeId": "23",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "164",
+    "Name": "",
+    "Description": "Stir in the chopped cilantro and remove from heat",
+    "Details": "You can also add a squeeze of lime juice for some added acidity if you like.",
+    "RecipeId": "23",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "165",
+    "Name": "",
+    "Description": "Serve the curry hot, over steamed rice",
+    "Details": "You can garnish with more cilantro and a slice of lime if you like.",
+    "RecipeId": "23",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "166",
+    "Name": "",
+    "Description": "Preheat the oven to 375 degrees Fahrenheit and prepare a pie dish",
+    "Details": "You can lightly grease the pie dish or line it with parchment paper for easy removal.",
+    "RecipeId": "24",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "167",
+    "Name": "",
+    "Description": "Roll out your pie dough and place it in the dish",
+    "Details": "Make sure the dough evenly covers the bottom and sides of the dish.",
+    "RecipeId": "24",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "168",
+    "Name": "",
+    "Description": "In a large bowl, combine the blueberries, sugar, flour, lemon juice, and cinnamon",
+    "Details": "Mix well until the blueberries are fully coated.",
+    "RecipeId": "24",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "169",
+    "Name": "",
+    "Description": "Pour the blueberry mixture into the pie dish",
+    "Details": "Spread the mixture evenly over the dough.",
+    "RecipeId": "24",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "17",
+    "Name": "",
+    "Description": "Remove the shrimp from the pan and set aside",
+    "Details": "Keep the shrimp warm by covering with aluminum foil.",
+    "RecipeId": "3",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "170",
+    "Name": "",
+    "Description": "Roll out the second pie dough and place it over the blueberry filling",
+    "Details": "You can cut slits in the top for steam to escape, or weave a lattice pattern if you're feeling fancy.",
+    "RecipeId": "24",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "171",
+    "Name": "",
+    "Description": "Crimp the edges of the dough together and cut off any excess",
+    "Details": "You can use a fork or your fingers to create a decorative edge.",
+    "RecipeId": "24",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "172",
+    "Name": "",
+    "Description": "Brush the top of the pie with a beaten egg and sprinkle with sugar",
+    "Details": "This will give the pie a beautiful, golden-brown color and a little extra sweetness.",
+    "RecipeId": "24",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "173",
+    "Name": "",
+    "Description": "Bake the pie for 50-60 minutes, or until the crust is golden and the filling is bubbling",
+    "Details": "If the edges of the pie start to brown too quickly, you can cover them with foil.",
+    "RecipeId": "24",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "174",
+    "Name": "",
+    "Description": "Let the pie cool completely before slicing and serving",
+    "Details": "This will allow the filling to set and make it easier to cut into neat slices.",
+    "RecipeId": "24",
+    "Order": 9
+  },
+  {
+    "RecipeStepId": "175",
+    "Name": "",
+    "Description": "Wash all vegetables thoroughly and dry",
+    "Details": "Make sure all grit and dirt is removed, especially from the lettuce leaves.",
+    "RecipeId": "25",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "176",
+    "Name": "",
+    "Description": "Chop the lettuce, tomatoes, cucumbers and bell peppers into bite-sized pieces",
+    "Details": "You can vary the size of the pieces based on personal preference.",
+    "RecipeId": "25",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "177",
+    "Name": "",
+    "Description": "Slice the onions and olives thinly",
+    "Details": "If you don't like raw onions, you can soak them in cold water for a few minutes to remove some of their bite.",
+    "RecipeId": "25",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "178",
+    "Name": "",
+    "Description": "In a large bowl, combine all vegetables, olives, and feta cheese",
+    "Details": "Toss gently to combine. Make sure not to crumble the feta cheese too much.",
+    "RecipeId": "25",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "179",
+    "Name": "",
+    "Description": "In a small bowl, combine the olive oil, vinegar, mustard, oregano, and a pinch of salt and pepper",
+    "Details": "Whisk until well blended to create the dressing.",
+    "RecipeId": "25",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "18",
+    "Name": "",
+    "Description": "In the same pan, add garlic and cook until fragrant",
+    "Details": "This should take about 1 minute. Be careful not to burn the garlic.",
+    "RecipeId": "3",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "180",
+    "Name": "",
+    "Description": "Pour the dressing over the salad",
+    "Details": "Toss again until everything is well coated.",
+    "RecipeId": "25",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "181",
+    "Name": "",
+    "Description": "Serve immediately",
+    "Details": "Greek salad is best when eaten fresh, as the vegetables can get soggy if left to sit for too long.",
+    "RecipeId": "25",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "182",
+    "Name": "",
+    "Description": "Cook the pasta according to package instructions",
+    "Details": "Be sure to salt the water for flavor. Cook until al dente, then drain and set aside, reserving some pasta water.",
+    "RecipeId": "26",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "183",
+    "Name": "",
+    "Description": "While the pasta is cooking, season the chicken with salt and pepper, then cook in a large skillet over medium heat with some olive oil",
+    "Details": "Cook until the chicken is fully cooked through and golden brown, then remove from the skillet and set aside.",
+    "RecipeId": "26",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "184",
+    "Name": "",
+    "Description": "In the same skillet, add a bit more olive oil and sauté the garlic until fragrant",
+    "Details": "Be careful not to burn the garlic, as it can become bitter.",
+    "RecipeId": "26",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "185",
+    "Name": "",
+    "Description": "Add the pesto to the skillet and stir to combine with the garlic",
+    "Details": "You can use store-bought or homemade pesto.",
+    "RecipeId": "26",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "186",
+    "Name": "",
+    "Description": "Add the cooked pasta and chicken to the skillet and toss until everything is coated in the pesto",
+    "Details": "If the pasta looks dry, add a bit of the reserved pasta water.",
+    "RecipeId": "26",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "187",
+    "Name": "",
+    "Description": "Serve warm, garnished with freshly grated Parmesan cheese and fresh basil leaves",
+    "Details": "You can also add a sprinkle of red pepper flakes for some heat, if you like.",
+    "RecipeId": "26",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "188",
+    "Name": "",
+    "Description": "In a large pot, heat the olive oil over medium heat",
+    "Details": "You can also use canola or vegetable oil if you prefer.",
+    "RecipeId": "27",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "189",
+    "Name": "",
+    "Description": "Add the onions, bell peppers, and garlic to the pot and sauté until softened",
+    "Details": "Stir occasionally to prevent burning.",
+    "RecipeId": "27",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "19",
+    "Name": "",
+    "Description": "Add vegetables and stir-fry until tender",
+    "Details": "Use a mix of colorful vegetables for a vibrant dish.",
+    "RecipeId": "3",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "190",
+    "Name": "",
+    "Description": "Add the chili powder, cumin, and cayenne pepper to the pot and stir until the vegetables are coated",
+    "Details": "If you like your chili extra spicy, feel free to add more cayenne pepper.",
+    "RecipeId": "27",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "191",
+    "Name": "",
+    "Description": "Add the beans, tomatoes, and vegetable broth to the pot",
+    "Details": "You can use any type of beans you like, just make sure to drain and rinse them if using canned beans.",
+    "RecipeId": "27",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "192",
+    "Name": "",
+    "Description": "Bring the mixture to a simmer and let it cook for about 20-30 minutes, until the flavors have melded together",
+    "Details": "Stir occasionally to prevent sticking. If the chili seems too thick, you can add a bit more broth.",
+    "RecipeId": "27",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "193",
+    "Name": "",
+    "Description": "Taste and adjust the seasoning as needed",
+    "Details": "Add more salt, pepper, or spices as necessary.",
+    "RecipeId": "27",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "194",
+    "Name": "",
+    "Description": "Serve hot, with your choice of toppings",
+    "Details": "Some good options include shredded cheese, sour cream, chopped green onions, or fresh cilantro.",
+    "RecipeId": "27",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "195",
+    "Name": "",
+    "Description": "Combine the oats, cinnamon, and a pinch of salt in a pot",
+    "Details": "Make sure the pot is large enough to accommodate the oats and the liquid.",
+    "RecipeId": "28",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "196",
+    "Name": "",
+    "Description": "Add the milk and water to the pot",
+    "Details": "You can also use all milk or all water, depending on your preference.",
+    "RecipeId": "28",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "197",
+    "Name": "",
+    "Description": "Bring the mixture to a boil over medium-high heat",
+    "Details": "Once boiling, reduce the heat to low and let it simmer.",
+    "RecipeId": "28",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "198",
+    "Name": "",
+    "Description": "While the oats are cooking, dice the apple into small pieces",
+    "Details": "You can leave the skin on for added fiber and nutrients.",
+    "RecipeId": "28",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "199",
+    "Name": "",
+    "Description": "When the oats have absorbed most of the liquid, add the diced apple and maple syrup",
+    "Details": "Stir well to combine and let it cook for a few more minutes.",
+    "RecipeId": "28",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "2",
+    "Name": "",
+    "Description": "In a large skillet, melt the butter over medium heat",
+    "Details": "Use unsalted butter if possible.",
+    "RecipeId": "1",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "20",
+    "Name": "",
+    "Description": "Return the shrimp to the pan and stir in soy sauce",
+    "Details": "Stir everything together to combine.",
+    "RecipeId": "3",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "200",
+    "Name": "",
+    "Description": "Serve the oatmeal hot, with a sprinkle of extra cinnamon on top if desired",
+    "Details": "You can also add some chopped nuts or a spoonful of yogurt for added protein.",
+    "RecipeId": "28",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "21",
+    "Name": "",
+    "Description": "Serve over rice or noodles",
+    "Details": "You can also enjoy the stir-fry on its own for a low-carb option.",
+    "RecipeId": "3",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "22",
+    "Name": "",
+    "Description": "In a medium bowl, mix together sugar, cream, milk, and vanilla extract",
+    "Details": "You can use a whisk or a spoon to mix the ingredients until well combined.",
+    "RecipeId": "4",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "23",
+    "Name": "",
+    "Description": "Pour the mixture into an ice cream maker",
+    "Details": "Follow the manufacturer's instructions for your specific machine.",
+    "RecipeId": "4",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "24",
+    "Name": "",
+    "Description": "Churn the mixture according to the ice cream maker's instructions",
+    "Details": "Usually, this step takes about 20 to 30 minutes.",
+    "RecipeId": "4",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "25",
+    "Name": "",
+    "Description": "Transfer the ice cream to a lidded container",
+    "Details": "A shallow, airtight container works best for this step.",
+    "RecipeId": "4",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "26",
+    "Name": "",
+    "Description": "Freeze the ice cream for at least 2 hours before serving",
+    "Details": "For best results, freeze overnight.",
+    "RecipeId": "4",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "27",
+    "Name": "",
+    "Description": "In a large pot, brown the beef on all sides over medium heat",
+    "Details": "This step takes about 10 minutes. Add a bit of oil if the meat sticks to the pot.",
+    "RecipeId": "5",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "28",
+    "Name": "",
+    "Description": "Remove the beef from the pot and set aside",
+    "Details": "Place the beef on a plate or in a bowl.",
+    "RecipeId": "5",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "29",
+    "Name": "",
+    "Description": "In the same pot, sauté onions, carrots, and celery until tender",
+    "Details": "This step takes about 5-7 minutes. Stir occasionally to prevent burning.",
+    "RecipeId": "5",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "3",
+    "Name": "",
+    "Description": "Add the garlic and cook for 1-2 minutes",
+    "Details": "Until fragrant. Do not burn the garlic as it can become bitter.",
+    "RecipeId": "1",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "30",
+    "Name": "",
+    "Description": "Add garlic and cook for another minute",
+    "Details": "Stir constantly to prevent the garlic from burning.",
+    "RecipeId": "5",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "31",
+    "Name": "",
+    "Description": "Return the beef to the pot, add potatoes, broth, and herbs",
+    "Details": "Mix well to combine all the ingredients.",
+    "RecipeId": "5",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "32",
+    "Name": "",
+    "Description": "Bring the stew to a simmer, cover the pot, and let it cook for about 2 hours",
+    "Details": "Stir occasionally to prevent sticking. The stew is ready when the meat is tender and the flavors are well combined.",
+    "RecipeId": "5",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "33",
+    "Name": "",
+    "Description": "Season with salt and pepper to taste before serving",
+    "Details": "You can also garnish with fresh parsley if desired.",
+    "RecipeId": "5",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "34",
+    "Name": "",
+    "Description": "Preheat oven to 400 degrees F (200 degrees C)",
+    "Details": "Ensure the oven is fully preheated before you put your salmon in.",
+    "RecipeId": "6",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "35",
+    "Name": "",
+    "Description": "In a bowl, mix together butter, honey, garlic, lemon juice, and salt",
+    "Details": "You want to make sure everything is well combined. The butter should be at room temperature to make mixing easier.",
+    "RecipeId": "6",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "36",
+    "Name": "",
+    "Description": "Place the salmon on a lined baking sheet and pour the mixture over the salmon",
+    "Details": "Make sure the salmon is fully coated with the mixture.",
+    "RecipeId": "6",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "37",
+    "Name": "",
+    "Description": "Bake in the preheated oven for about 15-20 minutes",
+    "Details": "The salmon is done when it flakes easily with a fork.",
+    "RecipeId": "6",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "38",
+    "Name": "",
+    "Description": "Serve the salmon with a side of your choice",
+    "Details": "This salmon goes great with a side of roasted vegetables or a fresh salad.",
+    "RecipeId": "6",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "39",
+    "Name": "",
+    "Description": "Cook the pasta according to package instructions",
+    "Details": "It's important to not overcook the pasta as it will continue to cook when mixed with the sauce. Reserve some pasta water for the sauce.",
+    "RecipeId": "7",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "4",
+    "Name": "",
+    "Description": "Add the chicken and cook until it is no longer pink",
+    "Details": "Ensure the chicken is cooked thoroughly to prevent foodborne illness.",
+    "RecipeId": "1",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "40",
+    "Name": "",
+    "Description": "In a large pan, sauté mushrooms and garlic in olive oil over medium heat",
+    "Details": "Sauté until the mushrooms are golden brown and the garlic is fragrant.",
+    "RecipeId": "7",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "41",
+    "Name": "",
+    "Description": "Add the spinach and cook until wilted",
+    "Details": "This step should be fairly quick as spinach wilts rapidly.",
     "RecipeId": "7",
     "Order": 3
+  },
+  {
+    "RecipeStepId": "42",
+    "Name": "",
+    "Description": "In a separate bowl, mix together the cream, cheese, and some pasta water",
+    "Details": "The pasta water will help create a smooth and creamy sauce.",
+    "RecipeId": "7",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "43",
+    "Name": "",
+    "Description": "Add the cream mixture to the pan and cook until the sauce thickens",
+    "Details": "The heat will help melt the cheese and bind the sauce together.",
+    "RecipeId": "7",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "44",
+    "Name": "",
+    "Description": "Add the cooked pasta to the pan and toss to coat",
+    "Details": "Make sure every piece of pasta is coated with the creamy sauce.",
+    "RecipeId": "7",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "45",
+    "Name": "",
+    "Description": "Serve hot with some extra cheese on top",
+    "Details": "You can use parmesan cheese or any other cheese you prefer.",
+    "RecipeId": "7",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "46",
+    "Name": "",
+    "Description": "In a large bowl, mix together the flour, sugar, baking powder, baking soda, salt, and cinnamon",
+    "Details": "Make sure these dry ingredients are well combined before proceeding.",
+    "RecipeId": "8",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "47",
+    "Name": "",
+    "Description": "In another bowl, whisk together the eggs, milk, and melted butter",
+    "Details": "This will be your wet ingredients. Ensure that the eggs are thoroughly whisked into the mixture.",
+    "RecipeId": "8",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "48",
+    "Name": "",
+    "Description": "Stir the wet ingredients into the dry ingredients",
+    "Details": "The batter might be a bit lumpy, and that's okay. Do not overmix.",
+    "RecipeId": "8",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "49",
+    "Name": "",
+    "Description": "Fold in the diced apples",
+    "Details": "Ensure the apples are evenly distributed in the batter.",
+    "RecipeId": "8",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "5",
+    "Name": "",
+    "Description": "Stir in the cream and bring the mixture to a simmer",
+    "Details": "Allow the cream to heat slowly to prevent it from curdling.",
+    "RecipeId": "1",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "50",
+    "Name": "",
+    "Description": "Heat a pan or griddle over medium heat and lightly grease it",
+    "Details": "You can use butter or non-stick cooking spray to grease the pan.",
+    "RecipeId": "8",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "51",
+    "Name": "",
+    "Description": "Pour 1/4 cup of batter onto the pan for each pancake",
+    "Details": "You can use a ladle or a measuring cup to ensure consistent size.",
+    "RecipeId": "8",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "52",
+    "Name": "",
+    "Description": "Cook until bubbles form on the surface, then flip and cook until browned on the other side",
+    "Details": "This usually takes 2-3 minutes per side, depending on the heat of your pan.",
+    "RecipeId": "8",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "53",
+    "Name": "",
+    "Description": "Serve hot with maple syrup or your choice of toppings",
+    "Details": "You can add a pat of butter, a sprinkle of powdered sugar, or even some whipped cream.",
+    "RecipeId": "8",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "54",
+    "Name": "",
+    "Description": "Preheat your oven to 400 degrees F (200 degrees C)",
+    "Details": "Make sure to properly preheat your oven for best results.",
+    "RecipeId": "9",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "55",
+    "Name": "",
+    "Description": "Rinse the chicken thoroughly and pat dry with paper towels",
+    "Details": "Removing excess moisture helps the skin get nice and crispy.",
+    "RecipeId": "9",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "56",
+    "Name": "",
+    "Description": "Rub the chicken all over with the cut sides of the lemon",
+    "Details": "This gives the chicken a subtle citrus flavor.",
+    "RecipeId": "9",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "57",
+    "Name": "",
+    "Description": "Mix together the salt, pepper, and paprika, and rub this mixture all over the chicken",
+    "Details": "This is your dry rub. Make sure to get it under the skin as well for extra flavor.",
+    "RecipeId": "9",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "58",
+    "Name": "",
+    "Description": "Place the garlic cloves and the squeezed-out lemon halves inside the chicken's cavity",
+    "Details": "These will release flavor as the chicken roasts.",
+    "RecipeId": "9",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "59",
+    "Name": "",
+    "Description": "Place the chicken in a roasting pan and put it in the preheated oven",
+    "Details": "Roast it for about 20 minutes per pound, or until the internal temperature reaches 165 degrees F (74 degrees C).",
+    "RecipeId": "9",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "6",
+    "Name": "",
+    "Description": "Stir in the cheese until it is fully melted",
+    "Details": "Grate the cheese yourself for the best result.",
+    "RecipeId": "1",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "60",
+    "Name": "",
+    "Description": "Let the chicken rest for 10-15 minutes before carving and serving",
+    "Details": "This allows the juices to redistribute throughout the chicken, making it juicier and easier to carve.",
+    "RecipeId": "9",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "61",
+    "Name": "",
+    "Description": "Preheat your oven to 500 degrees F (260 degrees C)",
+    "Details": "The high heat will give your pizza a nice crispy crust.",
+    "RecipeId": "10",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "62",
+    "Name": "",
+    "Description": "Roll out your pizza dough on a floured surface to your desired thickness",
+    "Details": "If you like a thinner crust, you can roll it out to about 1/4 inch thick. For a thicker crust, aim for about 1/2 inch thick.",
+    "RecipeId": "10",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "63",
+    "Name": "",
+    "Description": "Spread a thin layer of tomato sauce over the dough, leaving a border around the edges for the crust",
+    "Details": "Use a spoon to spread the sauce evenly. Don't use too much, or your pizza will be soggy.",
+    "RecipeId": "10",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "64",
+    "Name": "",
+    "Description": "Sprinkle the shredded mozzarella cheese evenly over the sauce",
+    "Details": "Use more or less cheese depending on your preference.",
+    "RecipeId": "10",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "65",
+    "Name": "",
+    "Description": "Arrange the sliced tomatoes and fresh basil leaves over the cheese",
+    "Details": "You can also add other toppings if you'd like, but this is a classic Margherita pizza.",
+    "RecipeId": "10",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "66",
+    "Name": "",
+    "Description": "Drizzle a little bit of olive oil over the top of the pizza",
+    "Details": "This will help the toppings cook evenly and give the pizza a nice sheen.",
+    "RecipeId": "10",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "67",
+    "Name": "",
+    "Description": "Bake the pizza in the preheated oven for about 10-15 minutes, or until the crust is golden and the cheese is bubbly and slightly browned",
+    "Details": "Keep an eye on it to prevent it from burning.",
+    "RecipeId": "10",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "68",
+    "Name": "",
+    "Description": "Remove the pizza from the oven and let it cool for a few minutes before slicing and serving",
+    "Details": "This will make it easier to handle and the cheese won't slide off when you cut it.",
+    "RecipeId": "10",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "69",
+    "Name": "",
+    "Description": "Press tofu for 15 minutes and cut into cubes",
+    "Details": "This removes excess water and helps the tofu absorb flavors better.",
+    "RecipeId": "11",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "7",
+    "Name": "",
+    "Description": "Drain the pasta and mix it into the sauce",
+    "Details": "Reserve some pasta water to thin the sauce if needed.",
+    "RecipeId": "1",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "70",
+    "Name": "",
+    "Description": "Heat a pan over medium heat and add oil",
+    "Details": "Use a pan that is large enough to hold all the tofu and vegetables.",
+    "RecipeId": "11",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "71",
+    "Name": "",
+    "Description": "Add the tofu to the pan and cook until browned on all sides",
+    "Details": "This may take 10-15 minutes. Be gentle when flipping the tofu to prevent it from breaking apart.",
+    "RecipeId": "11",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "72",
+    "Name": "",
+    "Description": "Remove the tofu from the pan and set aside",
+    "Details": "",
+    "RecipeId": "11",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "73",
+    "Name": "",
+    "Description": "In the same pan, add more oil if necessary and saute the garlic and ginger until fragrant",
+    "Details": "This should only take about a minute. Don't let them burn or they will become bitter.",
+    "RecipeId": "11",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "74",
+    "Name": "",
+    "Description": "Add the bell peppers and cook until they are just tender",
+    "Details": "This can take about 5 minutes.",
+    "RecipeId": "11",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "75",
+    "Name": "",
+    "Description": "Return the tofu to the pan and add the soy sauce, hot sauce and a splash of water",
+    "Details": "The water helps to create a bit of a sauce. Adjust the amount of soy sauce and hot sauce to your taste.",
+    "RecipeId": "11",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "76",
+    "Name": "",
+    "Description": "Stir everything together and cook for another 2-3 minutes, until everything is well combined and heated through",
+    "Details": "",
+    "RecipeId": "11",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "77",
+    "Name": "",
+    "Description": "Serve the stir-fry over cooked rice, garnished with green onions and sesame seeds",
+    "Details": "You could also serve it over noodles or eat it on its own for a low-carb option.",
+    "RecipeId": "11",
+    "Order": 9
+  },
+  {
+    "RecipeStepId": "78",
+    "Name": "",
+    "Description": "Preheat your oven to 350 degrees and line a baking sheet with parchment paper",
+    "Details": "This is to prevent the cookies from sticking to the baking sheet.",
+    "RecipeId": "12",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "79",
+    "Name": "",
+    "Description": "In a large bowl, combine the butter and both sugars",
+    "Details": "Mix them together until they're light and fluffy. This can take a few minutes with an electric mixer.",
+    "RecipeId": "12",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "8",
+    "Name": "",
+    "Description": "Season with salt and pepper to taste and serve",
+    "Details": "Garnish with fresh parsley if desired.",
+    "RecipeId": "1",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "80",
+    "Name": "",
+    "Description": "Beat in the egg and vanilla extract",
+    "Details": "Make sure these are fully incorporated before moving on to the next step.",
+    "RecipeId": "12",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "81",
+    "Name": "",
+    "Description": "In a separate bowl, whisk together the flour, baking soda, and salt",
+    "Details": "This ensures that the baking soda and salt are evenly distributed throughout the flour.",
+    "RecipeId": "12",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "82",
+    "Name": "",
+    "Description": "Gradually add the dry ingredients to the wet ingredients, mixing just until combined",
+    "Details": "Don't overmix or the cookies will be tough.",
+    "RecipeId": "12",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "83",
+    "Name": "",
+    "Description": "Stir in the chocolate chips and peanuts",
+    "Details": "Again, be sure not to overmix. Just stir until everything is evenly distributed.",
+    "RecipeId": "12",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "84",
+    "Name": "",
+    "Description": "Drop rounded tablespoonfuls of dough onto the prepared baking sheet",
+    "Details": "Leave about 2 inches between each cookie to allow for spreading.",
+    "RecipeId": "12",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "85",
+    "Name": "",
+    "Description": "Bake for 10-12 minutes, or until golden brown around the edges",
+    "Details": "The cookies will still look soft in the middle, but they will firm up as they cool.",
+    "RecipeId": "12",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "86",
+    "Name": "",
+    "Description": "Let the cookies cool on the baking sheet for 5 minutes, then transfer them to a wire rack to cool completely",
+    "Details": "",
+    "RecipeId": "12",
+    "Order": 9
+  },
+  {
+    "RecipeStepId": "87",
+    "Name": "",
+    "Description": "In a large bowl, mix together the flour, sugar, baking powder, baking soda, salt, and cinnamon",
+    "Details": "This step is to ensure all the dry ingredients are evenly distributed throughout the mix.",
+    "RecipeId": "13",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "88",
+    "Name": "",
+    "Description": "In a separate bowl, whisk together the eggs, milk, and vanilla extract",
+    "Details": "Ensure these are well combined before moving on to the next step.",
+    "RecipeId": "13",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "89",
+    "Name": "",
+    "Description": "Make a well in the center of the dry ingredients and pour in the wet ingredients",
+    "Details": "This method helps to evenly incorporate the wet ingredients into the dry.",
+    "RecipeId": "13",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "90",
+    "Name": "",
+    "Description": "Stir until just combined, then fold in the mashed bananas and chopped nuts",
+    "Details": "Do not overmix the batter, as this can make the pancakes tough.",
+    "RecipeId": "13",
+    "Order": 4
+  },
+  {
+    "RecipeStepId": "91",
+    "Name": "",
+    "Description": "Preheat a griddle or large skillet over medium heat and lightly grease it",
+    "Details": "This prevents the pancakes from sticking.",
+    "RecipeId": "13",
+    "Order": 5
+  },
+  {
+    "RecipeStepId": "92",
+    "Name": "",
+    "Description": "Pour 1/4 cup of batter onto the griddle for each pancake",
+    "Details": "Spread the batter out slightly with the back of a spoon to ensure even cooking.",
+    "RecipeId": "13",
+    "Order": 6
+  },
+  {
+    "RecipeStepId": "93",
+    "Name": "",
+    "Description": "Cook until bubbles appear on the surface, then flip and cook until browned on the other side",
+    "Details": "This should take about 2-3 minutes per side.",
+    "RecipeId": "13",
+    "Order": 7
+  },
+  {
+    "RecipeStepId": "94",
+    "Name": "",
+    "Description": "Keep the pancakes warm in a low oven or covered with foil until ready to serve",
+    "Details": "This will help keep the pancakes warm and fresh until it's time to eat.",
+    "RecipeId": "13",
+    "Order": 8
+  },
+  {
+    "RecipeStepId": "95",
+    "Name": "",
+    "Description": "Serve with extra sliced bananas and a drizzle of maple syrup, if desired",
+    "Details": "",
+    "RecipeId": "13",
+    "Order": 9
+  },
+  {
+    "RecipeStepId": "96",
+    "Name": "",
+    "Description": "In a large bowl, combine the shrimp, avocado, tomatoes, and red onion",
+    "Details": "Make sure all ingredients are well distributed for a balanced flavor in every bite.",
+    "RecipeId": "14",
+    "Order": 1
+  },
+  {
+    "RecipeStepId": "97",
+    "Name": "",
+    "Description": "In a small bowl, whisk together the olive oil, lime juice, cilantro, garlic, and salt",
+    "Details": "This will create the dressing for the salad. Adjust the seasonings to your liking.",
+    "RecipeId": "14",
+    "Order": 2
+  },
+  {
+    "RecipeStepId": "98",
+    "Name": "",
+    "Description": "Pour the dressing over the shrimp mixture and toss gently to combine",
+    "Details": "Make sure all the ingredients are coated in the dressing for a flavor-packed bite.",
+    "RecipeId": "14",
+    "Order": 3
+  },
+  {
+    "RecipeStepId": "99",
+    "Name": "",
+    "Description": "Chill the salad in the refrigerator for at least 30 minutes before serving",
+    "Details": "This allows the flavors to meld together. If you're short on time, you can serve it immediately, but the flavors get better with time.",
+    "RecipeId": "14",
+    "Order": 4
   }
 ]

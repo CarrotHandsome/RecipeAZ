@@ -13,6 +13,8 @@ using SixLabors.ImageSharp.Processing;
 using System.IO;
 using static MudBlazor.Colors;
 using Microsoft.EntityFrameworkCore.Diagnostics;
+using System.Drawing.Imaging;
+
 
 namespace RecipeAZ.Pages.RecipeComponents {
     public partial class LayoutComponent {
@@ -61,54 +63,62 @@ namespace RecipeAZ.Pages.RecipeComponents {
         private async Task OnImageUpload(IBrowserFile file) {
             //Console.WriteLine("Uploading image...");
             try {
+                Console.WriteLine("Starting upload...");
                 IBrowserFile uploadedImage = file;
-                if (uploadedImage.Size <= imageSizeMaxBytes) {
-                    string imageFolder = "recipeaz-images";
-                    string fileName = $"{Guid.NewGuid()}{Path.GetExtension(uploadedImage.Name)}";
-                    string folderPath = Path.Combine(env.WebRootPath, imageFolder);
-                    string fullPath = Path.Combine(folderPath, fileName);
 
-                    using var memoryStream = new MemoryStream();
-                    await uploadedImage.OpenReadStream().CopyToAsync(memoryStream);
 
-                    memoryStream.Position = 0; // Reset the memory stream position
-                    using var image = Image.Load(memoryStream);
+                using var memoryStream = new MemoryStream();
+                await uploadedImage.OpenReadStream(imageSizeMaxBytes * 15).CopyToAsync(memoryStream);
+                Console.WriteLine("Opened read stream");
+                memoryStream.Position = 0; // Reset the memory stream position
+                using var image = Image.Load(memoryStream);
+                Console.WriteLine("Loaded image");
+
+                string imageFolder = "recipeaz-images";
+                string fileName = $"{Guid.NewGuid()}{Path.GetExtension(uploadedImage.Name)}";
+                string folderPath = Path.Combine(env.WebRootPath, imageFolder);
+                string fullPath = Path.Combine(folderPath, fileName);
                     
-                    if (image.Width > image.Height * 2) {
-                        //Console.WriteLine("Image too wide");
-                        snackBar.Add("Image width must not be more than double image height.");
-                        return;
-                    }
+                if (!_imageService.AdjustImageToMaxFileSize(image, imageSizeMaxBytes, Path.GetExtension(uploadedImage.Name))) {
+                    Console.WriteLine("Couldn't adjust size");
+                    snackBar.Add("Image could not be resized");
+                    return;
+                }
+                else if (image.Width > image.Height * 2) {
+                    //Console.WriteLine("Image too wide");
+                    snackBar.Add("Image width must not be more than double image height.");
+                    return;
+                } else {
+
+                    Console.WriteLine("Image adjusted");
 
                     if (!Directory.Exists(folderPath)) {
                         Directory.CreateDirectory(folderPath);
                     }
 
                     using (var stream = new FileStream(fullPath, FileMode.Create)) {
-                        await uploadedImage.OpenReadStream(imageSizeMaxBytes).CopyToAsync(stream);
+                        await uploadedImage.OpenReadStream(imageSizeMaxBytes * 15).CopyToAsync(stream);
                         await stream.FlushAsync();
                     }
-                    
+
                     if (!string.IsNullOrEmpty(_recipe.ImagePath)) {
                         string oldImagePath = Path.Combine(env.WebRootPath, _recipe.ImagePath);
-                        List<Recipe> recipesUsingImage = 
+                        List<Recipe> recipesUsingImage =
                             await _recipeService.GetRecipesAsync(r => r.ImagePath == _recipe.ImagePath, "", -1);
                         if (System.IO.File.Exists(oldImagePath)
-                            && oldImagePath != Path.Combine(env.WebRootPath, "recipeaz-images/dd870e50-f702-43c9-8282-b3ed92dd4033.png")
+
+                            && oldImagePath != Path.Combine(env.WebRootPath, "recipeaz-images/recipe_default.png")
+
                             && recipesUsingImage.Count == 0) {
-                                //Console.WriteLine("deleted old image");
-                                System.IO.File.Delete(oldImagePath);
+                            //Console.WriteLine("deleted old image");
+                            System.IO.File.Delete(oldImagePath);
                         }
                     }
                     _recipe.ImagePath = $"{imageFolder}/{fileName}";
                     await _recipeService.SaveRecipeAsync(Id);
-                }
-                else {
-                    //Console.WriteLine("Image too large");
-                    snackBar.Configuration.PositionClass = MudBlazor.Defaults.Classes.Position.TopCenter;
-                    snackBar.Configuration.VisibleStateDuration = 500;
-                    snackBar.Add($"Image file too large. Maximum size is {imageSizeMaxBytes} bytes", MudBlazor.Severity.Error);
-                }                
+                }                    
+                
+                       
             } catch (Exception ex) {
 
                 Logger.LogError(ex, "An error occurred while uploading the image.");
