@@ -18,18 +18,23 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("http://0.0.0.0:80");
+
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
+Console.WriteLine(Environment.GetEnvironmentVariable("DB_PASSWORD"));
 string password = Environment.GetEnvironmentVariable("DB_PASSWORD") ?? "P@$$w0rD";
 string server = Environment.GetEnvironmentVariable("DB_SERVER") ?? "localhost";
-//Console.WriteLine("PASSWORD AND SERVER: " + password + " " + server);
-//Console.WriteLine($"Password: { password  }");
+if (server == "localhost") {
+    builder.WebHost.UseUrls("http://0.0.0.0:5000");
+} else {
+    builder.WebHost.UseUrls("http://0.0.0.0:80");
+}
+
 string connectionString;
 if (OperatingSystem.IsWindows()) {
     connectionString = builder.Configuration.GetConnectionString("RecipeConnection") ?? throw new InvalidOperationException("Connection string 'IdentityContextConnection' not found.");
 } else if (OperatingSystem.IsLinux()) {
-    connectionString = $"Server={server},1433;Database=Recipes;User Id=sa;Password={password};MultipleActiveResultSets=True;TrustServerCertificate=True";
+    connectionString = $"Server=localhost,1433;Database=Recipes;User Id=sa;Password={password};MultipleActiveResultSets=True;TrustServerCertificate=True";
 } else {
     connectionString = string.Empty;
     Console.WriteLine("Running on wrong OS");
