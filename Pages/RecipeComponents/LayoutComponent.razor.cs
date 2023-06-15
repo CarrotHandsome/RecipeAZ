@@ -32,7 +32,7 @@ namespace RecipeAZ.Pages.RecipeComponents {
             //Console.WriteLine("Id: " + Id);
             if (Id == null && User != null) {
                 _recipe = _recipeService.NewRecipe(User);
-                _recipe.ImagePath = "recipeaz-images/dd870e50-f702-43c9-8282-b3ed92dd4033.png";
+                _recipe.ImagePath = "recipeaz-images/recipe_default.png";
                 CanEdit = true;
                 Editing = true;
             } else if (Id == null && User == null) {
